@@ -33,7 +33,6 @@ class DetailsHeader: DetailsCell {
     var icon: UIImageView!
     var seller: UIButton!
     var subtitle: UILabel?
-    var getButton: RoundedButton!
 
     // Optional badges
     var tweakedBadge: PaddingLabel?
@@ -92,13 +91,6 @@ class DetailsHeader: DetailsCell {
         seller.contentHorizontalAlignment = .leading
         seller.theme_setTitleColor(Color.darkGray, forState: .normal)
 
-        // -- GET / Install button --
-        getButton = RoundedButton()
-        getButton.titleLabel?.font = .boldSystemFont(ofSize: 15 ~~ 14)
-        getButton.makeDynamicFont()
-        getButton.theme_tintColor = Color.mainTint
-        getButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 20, bottom: 6, right: 20)
-
         // Configure per type
         switch type {
         case .ios: configureForApp(content)
@@ -112,7 +104,6 @@ class DetailsHeader: DetailsCell {
         contentView.addSubview(icon)
         contentView.addSubview(name)
         contentView.addSubview(seller)
-        contentView.addSubview(getButton)
         if let badge = tweakedBadge { contentView.addSubview(badge) }
         if let badge = ipadOnlyBadge { contentView.addSubview(badge) }
         if let badge = betaBadge { contentView.addSubview(badge) }
@@ -142,7 +133,6 @@ class DetailsHeader: DetailsCell {
             ipadOnlyBadge = buildBadge("iPad only".localized().uppercased())
         }
 
-        configureGetButton()
     }
 
     private func configureForCydiaApp(_ content: Item) {
@@ -168,7 +158,6 @@ class DetailsHeader: DetailsCell {
                              imageTransition: .crossDissolve(0.2))
         }
 
-        configureGetButton()
     }
 
     private func configureForBook(_ content: Item) {
@@ -188,7 +177,6 @@ class DetailsHeader: DetailsCell {
                              imageTransition: .crossDissolve(0.2))
         }
 
-        configureGetButton()
     }
 
     private func configureForAltStoreApp(_ content: Item) {
@@ -219,13 +207,6 @@ class DetailsHeader: DetailsCell {
                              imageTransition: .crossDissolve(0.2))
         }
 
-        configureGetButton()
-    }
-
-    private func configureGetButton() {
-        getButton.setTitle("GET".localized().uppercased(), for: .normal)
-        getButton.addTarget(self, action: #selector(installTapped), for: .touchUpInside)
-        getButton.isEnabled = true
     }
 
     // MARK: - Actions
@@ -234,36 +215,27 @@ class DetailsHeader: DetailsCell {
         delegate?.sellerSelected(title: seller.titleLabel?.text ?? "", type: self.type, devId: self.devId)
     }
 
-    @objc func installTapped(sender: RoundedButton) {
-        delegate?.installClicked(sender: getButton)
-    }
-
     // MARK: - Layout
 
     override func setConstraints() {
         let iconSize: CGFloat = (120 ~~ 100)
         let margin = Global.Size.margin.value
 
-        constrain(icon, name, seller, getButton) { icon, name, seller, getButton in
+        constrain(icon, name, seller) { icon, name, seller in
             // Icon: left-aligned, vertically centered
             icon.width ~== iconSize
             icon.height ~== (type == .books ? iconSize * 1.542 : iconSize)
             icon.leading ~== icon.superview!.leading ~+ margin
             icon.top ~== icon.superview!.top ~+ margin
 
-            // GET button: right side, vertically centered with text block
-            getButton.trailing ~== getButton.superview!.trailing ~- margin
-            getButton.centerY ~== icon.centerY
-            getButton.width ~>= 72
-
-            // Name: right of icon, left of button
+            // Name: right of icon, to trailing margin
             name.leading ~== icon.trailing ~+ (14 ~~ 12)
-            name.trailing ~<= getButton.leading ~- 10
+            name.trailing ~== name.superview!.trailing ~- margin
             name.top ~== icon.top ~+ 2
 
             // Seller: below name
             seller.leading ~== name.leading
-            seller.trailing ~<= getButton.leading ~- 10
+            seller.trailing ~== seller.superview!.trailing ~- margin
             seller.top ~== name.bottom ~+ 2
         }
 

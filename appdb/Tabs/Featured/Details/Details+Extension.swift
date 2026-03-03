@@ -9,7 +9,7 @@
 import UIKit
 import ObjectMapper
 
-// Details cell template
+// Details cell template (kept for VersionsListViewController and other UIKit cells)
 class DetailsCell: UITableViewCell {
     var type: ItemType = .ios
     var identifier: String { "" }
@@ -19,275 +19,79 @@ class DetailsCell: UITableViewCell {
 
 extension Details {
 
-    // Returns content type
-    var contentType: ItemType {
-        if content is App { return .ios }
-        if content is CydiaApp { return .cydia }
-        if content is Book { return .books }
-        return .ios
-    }
+    // MARK: - API: Fetch content dynamically
 
-    // Set up
-    func setUp() {
-        // Register cells
-        for cell in header { tableView.register(type(of: cell), forCellReuseIdentifier: cell.identifier) }
-        for cell in details { tableView.register(type(of: cell), forCellReuseIdentifier: cell.identifier) }
-        tableView.register(DetailsDescription.self, forCellReuseIdentifier: "description")
-        tableView.register(DetailsChangelog.self, forCellReuseIdentifier: "changelog")
-        tableView.register(DetailsReview.self, forCellReuseIdentifier: "review")
-        tableView.register(DetailsDownload.self, forCellReuseIdentifier: "download")
-        tableView.register(DetailsDownloadUnified.self, forCellReuseIdentifier: "downloadUnified")
-        tableView.register(DetailsInfoPills.self, forCellReuseIdentifier: "infopills")
-        tableView.register(DetailsPreviousVersions.self, forCellReuseIdentifier: "previousversions")
-
-        // Initialize 'Share' button
-        shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(self.share))
-        shareButton.isEnabled = false
-
-        if Global.isIpad {
-            // Add 'Dismiss' button for iPad
-            let dismissButton = UIBarButtonItem(title: "Dismiss".localized(), style: .done, target: self, action: #selector(self.dismissAnimated))
-            self.navigationItem.rightBarButtonItems = [dismissButton, shareButton]
-        } else {
-            self.navigationItem.rightBarButtonItems = [shareButton]
-        }
-
-        // Hide separator for empty cells
-        tableView.tableFooterView = UIView()
-
-        // Register for 3D Touch
-        if #available(iOS 9.0, *), traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: tableView)
-        }
-
-        // UI
-        tableView.theme_backgroundColor = Color.veryVeryLightGray
-        tableView.separatorStyle = .none // Let's use self made separators instead
-
-        // Fix random separator margin issues
-        if #available(iOS 9, *) { tableView.cellLayoutMarginsFollowReadableWidth = false }
-
-        // Fix iOS 15 tableview section header padding
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
-    }
-
-    // Get content dynamically
     func getContent<T>(type: T.Type, trackid: String, success: @escaping (_ item: T) -> Void) where T: Item {
         API.search(type: type, trackid: trackid, success: { [weak self] items in
             guard let self = self else { return }
-            if let item = items.first { success(item) } else { self.showErrorMessage(text: "Not found".localized(), secondaryText: "Couldn't find content with id %@ in our database".localizedFormat(trackid)) }
-        }, fail: { error in
-            self.showErrorMessage(text: "Cannot connect".localized(), secondaryText: error)
+            if let item = items.first {
+                success(item)
+            } else {
+                self.detailState.isLoading = false
+                self.detailState.errorTitle = "Not found".localized()
+                self.detailState.errorMessage = "Couldn't find content with id %@ in our database".localizedFormat(trackid)
+            }
+        }, fail: { [weak self] error in
+            self?.detailState.isLoading = false
+            self?.detailState.errorTitle = "Cannot connect".localized()
+            self?.detailState.errorMessage = error
         })
     }
 
     func fetchInfo(type: ItemType, trackid: String) {
         switch type {
         case .ios:
-            self.getContent(type: App.self, trackid: trackid, success: { item in
-                self.content = item
-                self.initializeCells()
-                self.state = .done
-                self.getLinks()
-            })
+            getContent(type: App.self, trackid: trackid) { [weak self] item in
+                self?.content = item
+                self?.onContentLoaded()
+            }
         case .cydia:
-            self.getContent(type: CydiaApp.self, trackid: trackid, success: { item in
-                self.content = item
-                self.initializeCells()
-                self.state = .done
-                self.getLinks()
-            })
+            getContent(type: CydiaApp.self, trackid: trackid) { [weak self] item in
+                self?.content = item
+                self?.onContentLoaded()
+            }
         case .books:
-            self.getContent(type: Book.self, trackid: trackid, success: { item in
-                self.content = item
-                self.initializeCells()
-                self.state = .done
-                self.getLinks()
-            })
+            getContent(type: Book.self, trackid: trackid) { [weak self] item in
+                self?.content = item
+                self?.onContentLoaded()
+            }
         default:
             break
         }
     }
 
-    // Initialize cells
-    func initializeCells() {
-        header = [DetailsHeader(type: contentType, content: content, delegate: self)]
+    // MARK: - API: Fetch links / versions
 
-        details = [
-            DetailsTweakedNotice(originalTrackId: content.itemOriginalTrackid, originalSection: content.itemOriginalSection, delegate: self),
-            DetailsInfoPills(type: contentType, content: content),
-            DetailsScreenshots(type: contentType, screenshots: content.itemScreenshots, delegate: self),
-            DetailsDescription(), // dynamic
-            DetailsChangelog(), // dynamic
-            DetailsRelated(type: contentType, related: content.itemRelatedContent, delegate: self),
-            DetailsInformation(type: contentType, content: content),
-            DetailsDownloadStats(content: content),
-            DetailsPreviousVersions(hasVersions: false, delegate: self) // updated when links load
-        ]
-
-        switch contentType {
-        case .ios: if let app = content as? App {
-            details.append(DetailsExternalLink(text: "Developer Apps".localized(), devId: app.artistId.description, devName: app.seller))
-            if !app.website.isEmpty { details.append(DetailsExternalLink(text: "Developer Website".localized(), url: content.itemWebsite)) }
-            if !app.support.isEmpty { details.append(DetailsExternalLink(text: "Developer Support".localized(), url: content.itemSupport)) }
-            if !app.publisher.isEmpty { details.append(DetailsPublisher(app.publisher)) }
-            }
-        case .cydia: if let app = content as? CydiaApp {
-            details.append(DetailsPublisher("© " + app.developer))
-            }
-        case .books: if let book = content as? Book {
-            details.append(DetailsExternalLink(text: "More by this author".localized(), devId: book.artistId.description, devName: book.author))
-            if !book.publisher.isEmpty { details.append(DetailsPublisher(book.publisher)) } else if !book.author.isEmpty { details.append(DetailsPublisher("© " + book.author)) }
-            }
-        default:
-            break
-        }
-        shareButton.isEnabled = true
-    }
-
-    // Get links
     func getLinks() {
         API.getLinks(universalObjectIdentifier: content.itemUniversalObjectIdentifier, success: { [weak self] items in
             guard let self = self else { return }
 
             self.versions = items
 
-            // Ensure latest version is always at the top
-            if let latest = self.versions.first(where: {$0.number == self.content.itemVersion}) {
+            if let latest = self.versions.first(where: { $0.number == self.content.itemVersion }) {
                 if let index = self.versions.firstIndex(of: latest) {
                     self.versions.remove(at: index)
                     self.versions.insert(latest, at: 0)
                 }
             }
 
-            // Enable links segment
-            self.loadedLinks = true
+            self.detailState.versionsAvailable = !self.versions.isEmpty
         }, fail: { _ in })
-    }
-
-    @objc func dismissAnimated() { dismiss(animated: true) }
-
-    // Details/Reviews/Download segments for books only
-    var itemsForSegmentedControl: [DetailsSelectedSegmentState] {
-        switch contentType {
-        case .books: if let book = content as? Book {
-            if !book.reviews.isEmpty { return [.details, .reviews, .download] }
-            return [.details, .download]
-        }
-        default: break
-        }
-        // Non-books don't use segment control (flat layout), but return a fallback just in case
-        return [.details]
-    }
-
-    // Setting the right estimated height for rows with dynamic content helps with tableview jumping issues
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        // For flat layout, details section is 1 instead of 2
-        let isDetailsSection = useFlatLayout ? (indexPath.section == 1) : (indexPath.section >= 2 && indexForSegment == .details)
-
-        if isDetailsSection {
-            guard details.indices.contains(indexPath.row) else { return 32 }
-            if details[indexPath.row] is DetailsDescription {
-                return 145 ~~ 135
-            } else if details[indexPath.row] is DetailsChangelog {
-                return 115 ~~ 105
-            } else {
-                return 32
-            }
-        }
-
-        if !useFlatLayout {
-            switch indexForSegment {
-            case .reviews:
-                return indexPath.row == content.itemReviews.count ? 32 : 110 ~~ 150
-            default:
-                return 32
-            }
-        }
-
-        return 32
-    }
-
-    // Reload data on rotation to update ElasticLabel text
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-
-        coordinator.animate(alongsideTransition: { (_: UIViewControllerTransitionCoordinatorContext!) -> Void in
-            guard self.tableView != nil else { return }
-            if self.useFlatLayout || self.indexForSegment != .download { self.tableView.reloadData() }
-        }, completion: nil)
     }
 }
 
-// MARK: - iOS 13 Context Menus
+// MARK: - iOS 13 Context Menus (for UIKit previews when pushed from other screens)
 
 @available(iOS 13.0, *)
 extension Details {
-
-    override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-
-        guard let cell = tableView.cellForRow(at: indexPath) as? DetailsRelated else { return nil }
-
-        guard let index = cell.collectionView.indexPathForItem(at: self.view.convert(point, to: cell.collectionView)) else { return nil }
-        guard cell.relatedContent.indices.contains(index.row) else { return nil }
-
-        let indexPathsIdentifiers: [IndexPath] = [indexPath, index]
-
-        return UIContextMenuConfiguration(identifier: indexPathsIdentifiers as NSCopying, previewProvider: { Details(type: self.contentType, trackid: cell.relatedContent[index.row].id) })
-    }
-
-    override func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
-        animator.addCompletion {
-            if let viewController = animator.previewViewController {
-                self.show(viewController, sender: self)
-            }
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-
-        guard let ids = configuration.identifier as? [IndexPath] else { return nil }
-        guard ids.indices.contains(0), ids.indices.contains(1) else { return nil }
-        let firstIndex = ids[0], secondIndex = ids[1]
-
-        guard let cell = tableView.cellForRow(at: firstIndex) as? DetailsRelated else { return nil }
-        guard cell.relatedContent.indices.contains(secondIndex.row) else { return nil }
-
-        let parameters = UIPreviewParameters()
-        parameters.backgroundColor = .clear
-
-        if let collectionViewCell = cell.collectionView.cellForItem(at: secondIndex) {
-            return UITargetedPreview(view: collectionViewCell.contentView, parameters: parameters)
-        }
-
-        return nil
-    }
+    // Context menu previews are handled by parent controllers (HomeHostingController, etc.)
 }
 
-// MARK: - 3D Touch Peek and Pop on icons
+// MARK: - 3D Touch Peek and Pop
 
 extension Details: UIViewControllerPreviewingDelegate {
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        guard let indexPath = tableView.indexPathForRow(at: location) else { return nil }
-        guard let cell = tableView.cellForRow(at: indexPath) as? DetailsRelated else { return nil }
-
-        guard let index = cell.collectionView.indexPathForItem(at: self.view.convert(location, to: cell.collectionView)) else { return nil }
-        guard cell.relatedContent.indices.contains(index.row) else { return nil }
-
-        if let collectionViewCell = cell.collectionView.cellForItem(at: index) as? FeaturedApp {
-            let iconRect = tableView.convert(collectionViewCell.icon.frame, from: collectionViewCell.icon.superview!)
-            if #available(iOS 9.0, *) { previewingContext.sourceRect = iconRect }
-        } else if let collectionViewCell = cell.collectionView.cellForItem(at: index) as? FeaturedBook {
-            let coverRect = tableView.convert(collectionViewCell.cover.frame, from: collectionViewCell.cover.superview!)
-            if #available(iOS 9.0, *) { previewingContext.sourceRect = coverRect }
-        } else {
-            return nil
-        }
-
-        let detailsViewController = Details(type: contentType, trackid: cell.relatedContent[index.row].id)
-        return detailsViewController
+        nil
     }
 
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {

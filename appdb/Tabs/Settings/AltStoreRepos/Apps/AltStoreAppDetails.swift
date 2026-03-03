@@ -7,136 +7,100 @@
 //
 
 import UIKit
-import SafariServices
+import SwiftUI
 import TelemetryClient
 
-class AltStoreAppDetails: LoadingTableView {
-
-    var currentInstallButton: RoundedButton?
+class AltStoreAppDetails: UIHostingController<AnyView> {
 
     var app: AltStoreApp!
-    var descriptionCollapsed = true
-    var changelogCollapsed = true
 
-    var header: [DetailsCell] = []
-    var details: [DetailsCell] = []
+    let detailState = AppDetailState()
 
-    // Init dynamically - fetch info from API
-    convenience init(item: AltStoreApp) {
-        self.init(style: .plain)
+    // MARK: - Init
+
+    init(item: AltStoreApp) {
         self.app = item
+        super.init(rootView: AnyView(EmptyView()))
     }
+
+    @MainActor @preconcurrency required dynamic init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) not supported")
+    }
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.systemBackground
+        setupDetailView()
 
-        if #available(iOS 13.0, *) { } else {
-            // Hide the 'Back' text on back button
-            let backItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-            navigationItem.backBarButtonItem = backItem
+        detailState.content = app
+        detailState.contentType = .altstore
+        detailState.isLoading = false
+    }
+
+    // MARK: - SwiftUI View Setup
+
+    private func setupDetailView() {
+        var detailView = AppDetailView(state: detailState)
+
+        detailView.onInstall = { [weak self] in self?.installAction() }
+        detailView.onShare = { [weak self] in self?.shareAction() }
+        detailView.onDismiss = { [weak self] in self?.dismiss(animated: true) }
+
+        detailView.onScreenshotTap = { [weak self] (index: Int, allLandscape: Bool, mixedClasses: Bool, magic: CGFloat) in
+            guard let self else { return }
+            let vc = DetailsFullScreenshots(self.app.screenshots, index, allLandscape, mixedClasses, magic)
+            let nav = DetailsFullScreenshotsNavController(rootViewController: vc)
+            self.present(nav, animated: true)
         }
 
-        setUp()
-        initializeCells()
+        self.rootView = AnyView(detailView)
     }
 
-    // MARK: - Table view data source
+    // MARK: - Share
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        3
+    func shareAction() {
+        guard let url = URL(string: app.downloadURL) else { return }
+        let activity = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        activity.popoverPresentationController?.sourceView = view
+        activity.popoverPresentationController?.sourceRect = CGRect(x: view.bounds.midX, y: 44, width: 0, height: 0)
+        present(activity, animated: true)
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0: return header.count
-        case 1: return 0
-        default:
-            return details.count
-        }
-    }
+    // MARK: - Install
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0: return header[indexPath.row].height
-        case 1: return 0
-        default:
-            return details[indexPath.row].height
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0: return header[indexPath.row]
-        case 1: return UITableViewCell()
-        default:
-            if details[indexPath.row] is DetailsDescription {
-                if let cell = tableView.dequeueReusableCell(withIdentifier: "description", for: indexPath) as? DetailsDescription {
-                    cell.desc.collapsed = descriptionCollapsed
-                    cell.configure(with: app.description_)
-                    cell.desc.delegated = self
-                    details[indexPath.row] = cell // ugly but needed to update height correctly
-                    return cell
-                } else { return UITableViewCell() }
-            }
-            if details[indexPath.row] is DetailsChangelog {
-                if let cell = tableView.dequeueReusableCell(withIdentifier: "changelog", for: indexPath) as? DetailsChangelog {
-                    cell.desc.collapsed = changelogCollapsed
-                    cell.configure(type: .altstore, changelog: app.whatsnew, updated: app.updated)
-                    cell.desc.delegated = self
-                    details[indexPath.row] = cell // ugly but needed to update height correctly
-                    return cell
-                } else { return UITableViewCell() }
-            }
-            // Otherwise, just return static cells
-            return details[indexPath.row]
-        }
-    }
-
-    // MARK: - Install app
-
-    @objc func install(sender: RoundedButton) {
-        currentInstallButton = sender
-        actualInstall(sender: currentInstallButton!)
-    }
-
-    private func actualInstall(sender: RoundedButton) {
-        func setButtonTitle(_ text: String) {
-            sender.setTitle(text.localized().uppercased(), for: .normal)
-        }
-
+    func installAction() {
         if Preferences.deviceIsLinked {
-            setButtonTitle("Requesting...")
+            detailState.isInstalling = true
 
-            func install(_ app: AltStoreApp, additionalOptions: [String: Any] = [:]) {
+            func install(_ additionalOptions: [String: Any] = [:]) {
                 API.customInstall(ipaUrl: app.downloadURL, iconUrl: app.image, name: app.name, additionalOptions: additionalOptions) { [weak self] result in
                     guard let self = self else { return }
 
                     switch result {
                     case .failure(let error):
                         Messages.shared.showError(message: error.prettified, context: .viewController(self))
-                        delay(0.3) {
-                            setButtonTitle("Install")
-                        }
+                        delay(0.3) { self.detailState.isInstalling = false }
+
                     case .success(let installResult):
                         if #available(iOS 10.0, *) { UINotificationFeedbackGenerator().notificationOccurred(.success) }
 
                         if installResult.installationType == .itmsServices {
-                            setButtonTitle("Signing...")
                             Messages.shared.showSuccess(message: "App is being signed, please wait...".localized(), context: .viewController(self))
                         } else {
-                            setButtonTitle("Requested")
                             Messages.shared.showSuccess(message: "Installation has been queued to your device".localized(), context: .viewController(self))
                         }
 
-                        ObserveQueuedApps.shared.addApp(type: .altstore, linkId: "",
-                                                        name: app.name, image: app.image,
-                                                        bundleId: app.bundleId,
-                                                        commandUUID: installResult.commandUUID,
-                                                        installationType: installResult.installationType.rawValue)
+                        ObserveQueuedApps.shared.addApp(
+                            type: .altstore, linkId: "",
+                            name: self.app.name, image: self.app.image,
+                            bundleId: self.app.bundleId,
+                            commandUUID: installResult.commandUUID,
+                            installationType: installResult.installationType.rawValue
+                        )
 
-                        delay(5) {
-                            setButtonTitle("Install")
-                        }
+                        delay(2) { self.detailState.isInstalling = false }
                     }
                 }
             }
@@ -144,24 +108,19 @@ class AltStoreAppDetails: LoadingTableView {
             if Preferences.askForInstallationOptions {
                 let vc = AdditionalInstallOptionsViewController()
                 let nav = AdditionalInstallOptionsNavController(rootViewController: vc)
-
                 vc.heightDelegate = nav
-
                 let segue = Messages.shared.generateModalSegue(vc: nav, source: self, trackKeyboard: true)
 
-                delay(0.3) {
-                    segue.perform()
-                }
+                delay(0.3) { segue.perform() }
 
-                // If vc.cancelled is true, modal was dismissed either through 'Cancel' button or background tap
-                segue.eventListeners.append { event in
+                segue.eventListeners.append { [weak self] event in
                     if case .didHide = event, vc.cancelled {
-                        setButtonTitle("Install")
+                        self?.detailState.isInstalling = false
                     }
                 }
 
-                vc.onCompletion = { [weak self] (patchIap: Bool, enableGameTrainer: Bool, removePlugins: Bool, enablePushNotifications: Bool, duplicateApp: Bool, newId: String, newName: String, selectedDylibs: [String]) in
-                    guard let self = self else { return }
+                vc.onCompletion = { [weak self] (patchIap, enableGameTrainer, removePlugins, enablePushNotifications, duplicateApp, newId, newName, selectedDylibs) in
+                    guard self != nil else { return }
                     var additionalOptions: [String: Any] = [:]
                     if patchIap { additionalOptions[InstallationFeatureParameter.key(for: "inapp")] = 1 }
                     if enableGameTrainer { additionalOptions[InstallationFeatureParameter.key(for: "trainer")] = 1 }
@@ -170,47 +129,18 @@ class AltStoreAppDetails: LoadingTableView {
                     if duplicateApp && !newId.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "alongside")] = newId }
                     if !newName.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "name")] = newName }
                     if !selectedDylibs.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "inject_dylibs")] = selectedDylibs }
-                    install(self.app, additionalOptions: additionalOptions)
+                    install(additionalOptions)
                 }
             } else {
-                install(self.app)
+                install()
             }
         } else {
-            setButtonTitle("Checking...")
-            delay(0.3) {
+            detailState.isInstalling = true
+            delay(0.3) { [weak self] in
+                guard let self else { return }
                 Messages.shared.showError(message: "Please authorize app from Settings first".localized(), context: .viewController(self))
-                setButtonTitle("Install")
+                self.detailState.isInstalling = false
             }
         }
-    }
-}
-
-////////////////////////////////
-//  PROTOCOL IMPLEMENTATIONS  //
-////////////////////////////////
-
-//
-// MARK: - ElasticLabelDelegate
-// Expand cell when 'more' button is pressed
-//
-extension AltStoreAppDetails: ElasticLabelDelegate {
-    func expand(_ label: ElasticLabel) {
-        let point = label.convert(CGPoint.zero, to: tableView)
-        if let indexPath = tableView.indexPathForRow(at: point) as IndexPath? {
-            if details[indexPath.row] is DetailsDescription { descriptionCollapsed = false } else if details[indexPath.row] is DetailsChangelog { changelogCollapsed = false }
-            tableView.reloadRows(at: [indexPath], with: .none)
-        }
-    }
-}
-
-//
-// MARK: - ScreenshotRedirectionDelegate
-// Present Full screenshots view controller with given index
-//
-extension AltStoreAppDetails: ScreenshotRedirectionDelegate {
-    func screenshotImageSelected(with index: Int, _ allLandscape: Bool, _ mixedClasses: Bool, _ magic: CGFloat) {
-        let vc = DetailsFullScreenshots(app.screenshots, index, allLandscape, mixedClasses, magic)
-        let nav = DetailsFullScreenshotsNavController(rootViewController: vc)
-        present(nav, animated: true)
     }
 }
