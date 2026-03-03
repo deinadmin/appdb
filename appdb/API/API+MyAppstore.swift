@@ -43,8 +43,18 @@ extension API {
 
     static func addToMyAppStore(jobId: String, fileURL: URL, request: @escaping (_ r: Alamofire.UploadRequest) -> Void, completion: @escaping (_ error: String?) -> Void) {
         let parameters = [
-            "job_id": jobId
+            "job_id": jobId,
+            "lt": Preferences.linkToken
         ]
+
+        let fileExists = FileManager.default.fileExists(atPath: fileURL.path)
+        let fileSize = (try? FileManager.default.attributesOfItem(atPath: fileURL.path)[.size] as? Int64) ?? -1
+
+        debugLog("[addToMyAppStore] fileURL: \(fileURL)")
+        debugLog("[addToMyAppStore] fileExists: \(fileExists), fileSize: \(fileSize) bytes")
+        debugLog("[addToMyAppStore] jobId: \(jobId)")
+        debugLog("[addToMyAppStore] lt length: \(Preferences.linkToken.count)")
+        debugLog("[addToMyAppStore] endpoint: \(endpoint + Actions.addIpa.rawValue)")
 
         request(AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(fileURL, withName: "ipa")
@@ -52,44 +62,110 @@ extension API {
                 multipartFormData.append(value.data(using: String.Encoding.utf8)!, withName: key)
             }
         }, to: endpoint + Actions.addIpa.rawValue, method: .post, headers: headersWithCookie).responseJSON { response in
+            debugLog("[addToMyAppStore] HTTP status: \(response.response?.statusCode ?? -1)")
+            if let data = response.data, let raw = String(data: data, encoding: .utf8) {
+                debugLog("[addToMyAppStore] raw response: \(raw)")
+            }
 
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
+                debugLog("[addToMyAppStore] JSON: \(json)")
                 if !json["success"].boolValue {
-                    completion(json["errors"][0]["translated"].stringValue)
+                    let error = json["errors"][0]["translated"].stringValue
+                    debugLog("[addToMyAppStore] API error: \(error)")
+                    completion(error)
                 } else {
+                    debugLog("[addToMyAppStore] success!")
                     completion(nil)
                 }
             case .failure(let error):
+                debugLog("[addToMyAppStore] request failure: \(error)")
                 completion(error.localizedDescription)
             }
         })
     }
 
+    static func addToMyAppStoreFromURL(_ urlString: String, completion: @escaping (_ error: String?) -> Void) {
+        let parameters: [String: String] = [
+            "url": urlString,
+            "lt": Preferences.linkToken,
+            "lang": languageCode
+        ]
+
+        debugLog("[addFromURL] url: \(urlString)")
+        debugLog("[addFromURL] lt length: \(Preferences.linkToken.count)")
+        debugLog("[addFromURL] endpoint: \(endpoint + Actions.addIpa.rawValue)")
+
+        AF.upload(multipartFormData: { multipartFormData in
+            for (key, value) in parameters {
+                multipartFormData.append(value.data(using: .utf8)!, withName: key)
+            }
+        }, to: endpoint + Actions.addIpa.rawValue, method: .post, headers: headersWithCookie).responseJSON { response in
+            debugLog("[addFromURL] HTTP status: \(response.response?.statusCode ?? -1)")
+            if let data = response.data, let raw = String(data: data, encoding: .utf8) {
+                debugLog("[addFromURL] raw response: \(raw)")
+            }
+
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                debugLog("[addFromURL] JSON: \(json)")
+                if !json["success"].boolValue {
+                    let error = json["errors"][0]["translated"].stringValue
+                    debugLog("[addFromURL] API error: \(error)")
+                    completion(error)
+                } else {
+                    debugLog("[addFromURL] success!")
+                    completion(nil)
+                }
+            case .failure(let error):
+                debugLog("[addFromURL] request failure: \(error)")
+                completion(error.localizedDescription)
+            }
+        }
+    }
+
     static func analyzeJob(jobId: String, completion: @escaping (_ error: String?) -> Void) {
+        debugLog("[analyzeJob] checking jobId: \(jobId)")
         AF.request(endpoint + Actions.getIpaAnalyzeJobs.rawValue, parameters: ["lang": languageCode], headers: headersWithCookie)
             .responseJSON { response in
+                if let data = response.data, let raw = String(data: data, encoding: .utf8) {
+                    debugLog("[analyzeJob] raw response: \(raw)")
+                }
+
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
 
                     if !json["success"].boolValue {
-                        completion(json["errors"][0]["translated"].stringValue)
+                        let error = json["errors"][0]["translated"].stringValue
+                        debugLog("[analyzeJob] API error: \(error)")
+                        completion(error)
                     } else {
+                        debugLog("[analyzeJob] jobs count: \(json["data"].count)")
+                        var found = false
                         for i in 0..<json["data"].count {
                             let job = json["data"][i]
+                            debugLog("[analyzeJob] job[\(i)] id=\(job["id"].stringValue) status=\(job["status"].stringValue)")
                             if job["id"].stringValue == jobId {
+                                found = true
                                 if job["status"].stringValue.contains("Success") {
+                                    debugLog("[analyzeJob] job succeeded!")
                                     completion(nil)
                                 } else {
+                                    debugLog("[analyzeJob] job failed with status: \(job["status"].stringValue)")
                                     completion(job["status"].stringValue)
                                 }
                                 break
                             }
                         }
+                        if !found {
+                            debugLog("[analyzeJob] jobId \(jobId) NOT FOUND in response")
+                        }
                     }
                 case .failure(let error):
+                    debugLog("[analyzeJob] request failure: \(error)")
                     completion(error.localizedDescription)
                 }
             }

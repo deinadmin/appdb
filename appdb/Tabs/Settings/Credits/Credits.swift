@@ -34,7 +34,8 @@ class Credits: TableViewController {
 
     lazy var credits: [Credit] = [
         Credit(name: "ned", detail: "Original Developer".localized(), imageName: "ned", type: .developer, handle: .none),
-        Credit(name: "stev3fvcks", detail: "Current Maintainer".localized(), imageName: "stev3fvcks", type: .developer, handle: .website(site: Global.telegram)),
+        Credit(name: "deinadmin", detail: "Current Maintainer".localized(), imageName: "deinadmin", type: .developer, handle: .website(site: "https://github.com/deinadmin")),
+        Credit(name: "stev3fvcks", detail: "Previous Maintainer".localized(), imageName: "stev3fvcks", type: .developer, handle: .website(site: Global.telegram)),
         Credit(name: "View project on GitHub".localized(), imageName: "github", type: .developer, handle: .website(site: Global.githubSite)),
         Credit(name: "Buy me a coffee".localized(), imageName: "bmac", type: .developer, handle: .website(site: Global.donateSite)),
 
@@ -91,7 +92,7 @@ class Credits: TableViewController {
 
         var sections = [StaticSection]()
 
-        sections.append(StaticSection(header: .autoLayoutView(CreditsIconView(text: "appdb v\(Global.appVersion)", imageName: "appdb", easterDelegate: self))))
+        sections.append(StaticSection(header: .autoLayoutView(CreditsIconView(text: "appdb v2.0", imageName: "appdb", easterDelegate: self))))
 
         for (index, creditType) in CreditType.allCases.enumerated() {
             var section = StaticSection(header: .title(creditType.rawValue.localized()), rows: [])

@@ -14,7 +14,7 @@ private typealias AppColor = Color
 
 /// UIKit hosting controller that wraps the SwiftUI HomeView and
 /// bridges navigation actions back into the existing UIKit navigation stack.
-class HomeHostingController: UIViewController, UIPopoverPresentationControllerDelegate {
+class HomeHostingController: UIViewController {
 
     private var hostingController: UIHostingController<AnyView>?
 
@@ -26,22 +26,14 @@ class HomeHostingController: UIViewController, UIPopoverPresentationControllerDe
 
         title = "Home".localized()
 
-        // Categories button (kept from original Featured)
-        let categoriesButton = UIBarButtonItem(
-            title: "Categories".localized(),
+        // Repos button
+        let reposButton = UIBarButtonItem(
+            image: UIImage(systemName: "list.bullet.below.rectangle"),
             style: .plain,
             target: self,
-            action: #selector(presentCategories)
+            action: #selector(presentReposSheet)
         )
-        navigationItem.leftBarButtonItem = categoriesButton
-        navigationItem.leftBarButtonItem?.isEnabled = false
-
-        // No wishes wand button — removed per redesign
-
-        // Load genres and enable categories button on completion
-        API.listGenres(completion: { [weak self] in
-            self?.navigationItem.leftBarButtonItem?.isEnabled = true
-        })
+        navigationItem.leftBarButtonItem = reposButton
 
         // Set up the SwiftUI view
         if #available(iOS 15.0, *) {
@@ -178,22 +170,10 @@ class HomeHostingController: UIViewController, UIPopoverPresentationControllerDe
 
     // MARK: - Navigation
 
-    @objc private func presentCategories(_ sender: AnyObject) {
-        let categoriesViewController = Categories()
-        categoriesViewController.delegate = self
-        let nav = UINavigationController(rootViewController: categoriesViewController)
-        nav.modalPresentationStyle = .popover
-        nav.preferredContentSize = CGSize(width: 350, height: 500)
-        if let popover = nav.popoverPresentationController {
-            popover.delegate = self
-            popover.theme_backgroundColor = AppColor.popoverArrowColor
-            if let view = sender.value(forKey: "view") as? UIView {
-                popover.sourceView = view
-                popover.sourceRect = view.bounds
-            }
-        }
-        present(nav, animated: true, completion: nil)
-        TelemetryManager.send(Global.Telemetry.openedCategories.rawValue)
+    @objc private func presentReposSheet() {
+        let sheet = UIHostingController(rootView: EditRepositoriesView())
+        sheet.modalPresentationStyle = .formSheet
+        present(sheet, animated: true)
     }
 
     private func pushDetails(for content: Item) {
@@ -237,21 +217,5 @@ class HomeHostingController: UIViewController, UIPopoverPresentationControllerDe
         }
     }
 
-    // MARK: - UIPopoverPresentationControllerDelegate
-
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        .automatic
-    }
 }
 
-// MARK: - ChangeCategory Protocol
-
-extension HomeHostingController: ChangeCategory {
-    func openCategories(_ sender: AnyObject) {
-        presentCategories(sender)
-    }
-
-    func reloadViewAfterCategoryChange(id: String, type: ItemType) {
-        homeViewModel?.reloadAfterCategoryChange(id: id, type: type)
-    }
-}

@@ -33,7 +33,7 @@ enum Global {
     static let mainSite: String = "https://appdb.to/"
     static let refCode: String = "fc2b87d32abe29180b9da168d5a599e8"
 
-    static let githubSite: String = "https://github.com/n3d1117/appdb"
+    static let githubSite: String = "https://github.com/deinadmin/appdb"
     static let donateSite: String = "https://www.buymeacoffee.com/ne_do"
     static let signingCertsEmbedUrl: String = "https://api.signingcerts.com/v1/products/?embed=html"
     static let signingCertsUdidApi: String = "https://api.signingcerts.com/v1/appdb-udid/"

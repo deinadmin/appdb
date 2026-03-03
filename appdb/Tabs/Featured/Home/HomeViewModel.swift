@@ -53,7 +53,7 @@ final class HomeViewModel: ObservableObject {
 
     /// Banner image names (local assets)
     let bannerImages: [String] = {
-        var banners = ["main_banner", "tweaked_apps_banner", "unc0ver_banner", "delta_banner"]
+        var banners = ["update_banner", "main_banner", "tweaked_apps_banner", "delta_banner"]
         if Global.isRtl { banners = [banners.first!] + banners.dropFirst().reversed() }
         return banners
     }()

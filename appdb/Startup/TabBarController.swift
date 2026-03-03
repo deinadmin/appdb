@@ -28,10 +28,14 @@ class TabBarController: UITabBarController {
             UINavigationController(rootViewController: Downloads())
         }
 
+        let libraryTab = UITab(title: "Library".localized(), image: UIImage(systemName: "books.vertical.fill"), identifier: "library") { _ in
+            UINavigationController(rootViewController: MyLibraryHostingController())
+        }
+
         let settingsTab = UITab(title: "Settings".localized(), image: UIImage(named: "settings"), identifier: "settings") { _ in
             UINavigationController(rootViewController: Settings())
         }
 
-        tabs = [homeTab, searchTab, downloadsTab, settingsTab]
+        tabs = [homeTab, searchTab, downloadsTab, libraryTab, settingsTab]
     }
 }
