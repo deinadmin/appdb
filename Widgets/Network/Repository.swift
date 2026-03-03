@@ -50,9 +50,9 @@ extension APIResource {
 extension APIResource {
     func type(from type: ContentType) -> String {
         switch type {
-        case .ios: return "ios"
-        case .cydia: return "cydia"
-        case .books: return "books"
+        case .ios: return "official_app"
+        case .cydia: return "repo_app"
+        case .books: return "official_app" // books removed in v1.7, fallback to official
         case .unknown: return ""
         }
     }
@@ -73,6 +73,14 @@ extension APIResource {
         case .paid: return "1"
         case .free: return "2"
         case .unknown: return ""
+        }
+    }
+    func priceQueryItems(from type: ContentPrice) -> [URLQueryItem] {
+        switch type {
+        case .paid: return [URLQueryItem(name: "cents_min", value: "1")]
+        case .free: return [URLQueryItem(name: "cents_max", value: "0")]
+        case .any: return []
+        case .unknown: return []
         }
     }
 }

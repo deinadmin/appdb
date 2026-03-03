@@ -9,39 +9,8 @@
 import Alamofire
 import SwiftyJSON
 
+// In v1.7, validate_voucher and activate_pro endpoints are removed.
+// Voucher functionality is no longer available.
 extension API {
-
-    static func activateVoucher(voucher: String, success: @escaping () -> Void, fail: @escaping (_ error: String) -> Void) {
-        AF.request(endpoint + Actions.activatePro.rawValue, parameters: ["voucher": voucher, "lang": languageCode], headers: headersWithCookie)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                if !json["success"].boolValue {
-                    fail(json["errors"][0]["translated"].stringValue)
-                } else {
-                    success()
-                }
-            case .failure(let error):
-                fail(error.localizedDescription)
-            }
-        }
-    }
-
-    static func validateVoucher(voucher: String, success: @escaping () -> Void, fail: @escaping (_ error: String) -> Void) {
-        AF.request(endpoint + Actions.validatePro.rawValue, parameters: ["voucher": voucher, "lang": languageCode], headers: headersWithCookie)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                if !json["success"].boolValue {
-                    fail(json["errors"][0]["translated"].stringValue)
-                } else {
-                    success()
-                }
-            case .failure(let error):
-                fail(error.localizedDescription)
-            }
-        }
-    }
+    // Voucher methods removed in v1.7 API migration
 }

@@ -27,32 +27,36 @@ extension DetailsHeaderDelegate {
 
 class DetailsHeader: DetailsCell {
 
+    // MARK: - Views
+
     var name: UILabel!
     var icon: UIImageView!
     var seller: UIButton!
-    var tweaked: UILabel?
-    var ipadOnly: UILabel?
-    var stars: CosmosView?
-    var additionalInfo: UILabel?
+    var subtitle: UILabel?
+    var getButton: RoundedButton!
 
-    var installButton: RoundedButton?
+    // Optional badges
+    var tweakedBadge: PaddingLabel?
+    var ipadOnlyBadge: PaddingLabel?
+    var betaBadge: PaddingLabel?
 
     var devId: String = ""
     weak var delegate: DetailsHeaderDelegate?
 
-    private var _height = (132 ~~ 102) + Global.Size.margin.value
-    private var _heightAltStore = (162 ~~ 132) + Global.Size.margin.value
-    private var _heightBooks = round((132 ~~ 102) * 1.542) + Global.Size.margin.value
+    // MARK: - Height
+
+    private var _height: CGFloat = (120 ~~ 100) + Global.Size.margin.value * 2
+    private var _heightBooks: CGFloat = round((100 ~~ 80) * 1.542) + Global.Size.margin.value * 2
     override var height: CGFloat {
         switch type {
-        case .ios, .cydia: return _height
         case .books: return _heightBooks
-        case .altstore: return _heightAltStore
-        default: return 0
+        default: return _height
         }
     }
 
     override var identifier: String { "header" }
+
+    // MARK: - Init
 
     convenience init(type: ItemType, content: Item, delegate: DetailsHeaderDelegate) {
         self.init(style: .default, reuseIdentifier: "header")
@@ -65,280 +69,232 @@ class DetailsHeader: DetailsCell {
         separatorInset.left = 10000
         layoutMargins = .zero
 
-        // UI
+        // Background
         theme_backgroundColor = Color.veryVeryLightGray
         setBackgroundColor(Color.veryVeryLightGray)
 
-        // Name
-        name = UILabel()
-        name.theme_textColor = Color.title
-        name.font = .systemFont(ofSize: 18.5 ~~ 16.5)
-        name.numberOfLines = type == .books ? 4 : 3
-        name.makeDynamicFont()
-
-        // Icon
+        // -- Icon --
         icon = UIImageView()
         icon.layer.borderWidth = 1 / UIScreen.main.scale
         icon.layer.theme_borderColor = Color.borderCgColor
+        icon.clipsToBounds = true
 
+        // -- Name --
+        name = UILabel()
+        name.theme_textColor = Color.title
+        name.font = .systemFont(ofSize: 20 ~~ 18, weight: .semibold)
+        name.numberOfLines = 2
+        name.makeDynamicFont()
+
+        // -- Seller (subtitle button) --
+        seller = UIButton(type: .system)
+        seller.titleLabel?.font = .systemFont(ofSize: 14 ~~ 13)
+        seller.contentHorizontalAlignment = .leading
+        seller.theme_setTitleColor(Color.darkGray, forState: .normal)
+
+        // -- GET / Install button --
+        getButton = RoundedButton()
+        getButton.titleLabel?.font = .boldSystemFont(ofSize: 15 ~~ 14)
+        getButton.makeDynamicFont()
+        getButton.theme_tintColor = Color.mainTint
+        getButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 20, bottom: 6, right: 20)
+
+        // Configure per type
         switch type {
-        case .ios: if let app = content as? App {
-            name.text = app.name.decoded
-            seller = ButtonFactory.createChevronButton(text: app.seller.isEmpty ? "Unknown".localized() : app.seller, color: Color.darkGray, size: (15 ~~ 13), bold: false)
-            seller.addTarget(self, action: #selector(self.sellerTapped), for: .touchUpInside)
-            icon.layer.cornerRadius = Global.cornerRadius(from: (130 ~~ 100))
-
-            if app.itemHasStars {
-                stars = buildStars()
-                stars!.rating = app.numberOfStars
-                stars!.text = app.numberOfRating
-            }
-
-            if app.screenshotsIphone.isEmpty && !app.screenshotsIpad.isEmpty {
-                ipadOnly = buildPaddingLabel()
-                ipadOnly!.text = "iPad only".localized().uppercased()
-            }
-
-            if let url = URL(string: app.image) {
-                icon.af.setImage(withURL: url, placeholderImage: #imageLiteral(resourceName: "placeholderIcon"), filter: Global.roundedFilter(from: (130 ~~ 100)), imageTransition: .crossDissolve(0.2))
-            }
-
-            self.devId = app.artistId.description
-        }
-        case .cydia: if let cydiaApp = content as? CydiaApp {
-            name.text = cydiaApp.name.decoded
-            if !cydiaApp.developer.isEmpty {
-                seller = ButtonFactory.createChevronButton(text: cydiaApp.developer, color: Color.darkGray, size: (15 ~~ 13), bold: false)
-                seller.addTarget(self, action: #selector(self.sellerTapped), for: .touchUpInside)
-            }
-
-            tweaked = buildPaddingLabel()
-            tweaked!.text = API.categoryFromId(id: cydiaApp.categoryId.description, type: .cydia).uppercased()
-
-            icon.layer.cornerRadius = Global.cornerRadius(from: (130 ~~ 100))
-            if let url = URL(string: cydiaApp.image) {
-                icon.af.setImage(withURL: url, placeholderImage: #imageLiteral(resourceName: "placeholderIcon"), filter: Global.roundedFilter(from: (130 ~~ 100)), imageTransition: .crossDissolve(0.2))
-            }
-
-            self.devId = cydiaApp.developerId.description
-        }
-        case .books: if let book = content as? Book {
-            name.text = book.name.decoded
-            if !book.author.isEmpty {
-                seller = ButtonFactory.createChevronButton(text: book.author, color: Color.darkGray, size: (15 ~~ 13), bold: false)
-                seller.addTarget(self, action: #selector(self.sellerTapped), for: .touchUpInside)
-            }
-            icon.layer.cornerRadius = 0
-
-            if book.itemHasStars {
-                stars = buildStars()
-                stars!.rating = book.numberOfStars
-                stars!.text = book.numberOfRating
-            }
-
-            if !book.published.isEmpty {
-                additionalInfo = UILabel()
-                additionalInfo!.theme_textColor = Color.darkGray
-                additionalInfo!.font = .systemFont(ofSize: (14 ~~ 12))
-                additionalInfo!.numberOfLines = 1
-                additionalInfo!.text = book.published
-                additionalInfo!.makeDynamicFont()
-
-                if !book.printLenght.isEmpty {
-                    additionalInfo!.text = additionalInfo!.text! + Global.bulletPoint + book.printLenght
-                }
-            }
-
-            if let url = URL(string: book.image) {
-                icon.af.setImage(withURL: url, placeholderImage: #imageLiteral(resourceName: "placeholderCover"), imageTransition: .crossDissolve(0.2))
-            }
-
-            self.devId = book.artistId.description
-        }
-        case .altstore: if let altstoreApp = content as? AltStoreApp {
-            name.text = altstoreApp.name
-
-            icon.layer.cornerRadius = Global.cornerRadius(from: (130 ~~ 100))
-            if let url = URL(string: altstoreApp.image) {
-                icon.af.setImage(withURL: url, placeholderImage: #imageLiteral(resourceName: "placeholderIcon"), filter: Global.roundedFilter(from: (130 ~~ 100)), imageTransition: .crossDissolve(0.2))
-            }
-
-            if !altstoreApp.developer.isEmpty {
-                seller = UIButton(type: .custom)
-                seller.titleLabel?.text = altstoreApp.developer
-                seller.titleLabel?.font = UIFont.systemFont(ofSize: (15 ~~ 13))
-                seller.titleLabel?.theme_textColor = Color.darkGray
-                seller.setTitle(altstoreApp.developer, for: .normal)
-                seller.theme_setTitleColor(Color.darkGray, forState: .normal)
-            }
-
-            if altstoreApp.beta {
-                tweaked = buildPaddingLabel()
-                tweaked!.text = "Beta Version".localized()
-            }
-
-            installButton = RoundedButton()
-            installButton!.titleLabel?.font = .boldSystemFont(ofSize: 13)
-            installButton!.makeDynamicFont()
-            installButton!.setTitle("Install".localized().uppercased(), for: .normal)
-            installButton!.theme_tintColor = Color.softGreen
-            installButton!.addTarget(self, action: #selector(installTapped), for: .touchUpInside)
-            installButton!.isEnabled = true
-        }
-        default:
-            break
+        case .ios: configureForApp(content)
+        case .cydia: configureForCydiaApp(content)
+        case .books: configureForBook(content)
+        case .altstore: configureForAltStoreApp(content)
+        default: break
         }
 
-        contentView.addSubview(name)
+        // Add subviews
         contentView.addSubview(icon)
-        if let seller = seller { contentView.addSubview(seller) }
-        if let tweaked = tweaked { contentView.addSubview(tweaked) }
-        if let stars = stars { contentView.addSubview(stars) }
-        if let ipadOnly = ipadOnly { contentView.addSubview(ipadOnly) }
-        if let additional = additionalInfo { contentView.addSubview(additional) }
-        if let installButton = installButton { contentView.addSubview(installButton) }
+        contentView.addSubview(name)
+        contentView.addSubview(seller)
+        contentView.addSubview(getButton)
+        if let badge = tweakedBadge { contentView.addSubview(badge) }
+        if let badge = ipadOnlyBadge { contentView.addSubview(badge) }
+        if let badge = betaBadge { contentView.addSubview(badge) }
+        if let sub = subtitle { contentView.addSubview(sub) }
 
         setConstraints()
     }
+
+    // MARK: - Per-type configuration
+
+    private func configureForApp(_ content: Item) {
+        guard let app = content as? App else { return }
+        name.text = app.name.decoded
+        seller.setTitle(app.seller.isEmpty ? "Unknown".localized() : app.seller, for: .normal)
+        seller.addTarget(self, action: #selector(sellerTapped), for: .touchUpInside)
+        devId = app.artistId.description
+
+        icon.layer.cornerRadius = Global.cornerRadius(from: (120 ~~ 100))
+        if let url = URL(string: app.image) {
+            icon.af.setImage(withURL: url, placeholderImage: #imageLiteral(resourceName: "placeholderIcon"),
+                             filter: Global.roundedFilter(from: (120 ~~ 100)),
+                             imageTransition: .crossDissolve(0.2))
+        }
+
+        // iPad only badge
+        if app.screenshotsIphone.isEmpty && !app.screenshotsIpad.isEmpty {
+            ipadOnlyBadge = buildBadge("iPad only".localized().uppercased())
+        }
+
+        configureGetButton()
+    }
+
+    private func configureForCydiaApp(_ content: Item) {
+        guard let app = content as? CydiaApp else { return }
+        name.text = app.name.decoded
+
+        if !app.developer.isEmpty {
+            seller.setTitle(app.developer, for: .normal)
+            seller.addTarget(self, action: #selector(sellerTapped), for: .touchUpInside)
+        }
+        devId = app.developerId.description
+
+        // Category badge
+        let catName = !app.categoryName.isEmpty ? app.categoryName : API.categoryFromId(id: app.categoryId.description, type: .cydia)
+        if !catName.isEmpty {
+            tweakedBadge = buildBadge(catName.uppercased())
+        }
+
+        icon.layer.cornerRadius = Global.cornerRadius(from: (120 ~~ 100))
+        if let url = URL(string: app.image) {
+            icon.af.setImage(withURL: url, placeholderImage: #imageLiteral(resourceName: "placeholderIcon"),
+                             filter: Global.roundedFilter(from: (120 ~~ 100)),
+                             imageTransition: .crossDissolve(0.2))
+        }
+
+        configureGetButton()
+    }
+
+    private func configureForBook(_ content: Item) {
+        guard let book = content as? Book else { return }
+        name.text = book.name.decoded
+        name.numberOfLines = 3
+
+        if !book.author.isEmpty {
+            seller.setTitle(book.author, for: .normal)
+            seller.addTarget(self, action: #selector(sellerTapped), for: .touchUpInside)
+        }
+        devId = book.artistId.description
+
+        icon.layer.cornerRadius = 6
+        if let url = URL(string: book.image) {
+            icon.af.setImage(withURL: url, placeholderImage: #imageLiteral(resourceName: "placeholderCover"),
+                             imageTransition: .crossDissolve(0.2))
+        }
+
+        configureGetButton()
+    }
+
+    private func configureForAltStoreApp(_ content: Item) {
+        guard let app = content as? AltStoreApp else { return }
+        name.text = app.name
+
+        if !app.developer.isEmpty {
+            seller.setTitle(app.developer, for: .normal)
+        }
+
+        if !app.subtitle.isEmpty {
+            subtitle = UILabel()
+            subtitle!.text = app.subtitle
+            subtitle!.theme_textColor = Color.darkGray
+            subtitle!.font = .systemFont(ofSize: 13 ~~ 12)
+            subtitle!.numberOfLines = 1
+            subtitle!.makeDynamicFont()
+        }
+
+        if app.beta {
+            betaBadge = buildBadge("Beta Version".localized())
+        }
+
+        icon.layer.cornerRadius = Global.cornerRadius(from: (120 ~~ 100))
+        if let url = URL(string: app.image) {
+            icon.af.setImage(withURL: url, placeholderImage: #imageLiteral(resourceName: "placeholderIcon"),
+                             filter: Global.roundedFilter(from: (120 ~~ 100)),
+                             imageTransition: .crossDissolve(0.2))
+        }
+
+        configureGetButton()
+    }
+
+    private func configureGetButton() {
+        getButton.setTitle("GET".localized().uppercased(), for: .normal)
+        getButton.addTarget(self, action: #selector(installTapped), for: .touchUpInside)
+        getButton.isEnabled = true
+    }
+
+    // MARK: - Actions
 
     @objc func sellerTapped() {
         delegate?.sellerSelected(title: seller.titleLabel?.text ?? "", type: self.type, devId: self.devId)
     }
 
     @objc func installTapped(sender: RoundedButton) {
-        delegate?.installClicked(sender: sender)
+        delegate?.installClicked(sender: getButton)
     }
+
+    // MARK: - Layout
 
     override func setConstraints() {
-        if let seller = seller {
-            constrain(name, seller, icon) { name, seller, icon in
-                icon.width ~== (130 ~~ 100)
+        let iconSize: CGFloat = (120 ~~ 100)
+        let margin = Global.Size.margin.value
 
-                switch type {
-                case .ios, .cydia: icon.height ~== icon.width
-                case .books: icon.height ~== icon.width ~* 1.542
-                default: break
-                }
+        constrain(icon, name, seller, getButton) { icon, name, seller, getButton in
+            // Icon: left-aligned, vertically centered
+            icon.width ~== iconSize
+            icon.height ~== (type == .books ? iconSize * 1.542 : iconSize)
+            icon.leading ~== icon.superview!.leading ~+ margin
+            icon.top ~== icon.superview!.top ~+ margin
 
-                icon.leading ~== icon.superview!.leading ~+ Global.Size.margin.value
-                icon.top ~== icon.superview!.top ~+ Global.Size.margin.value
+            // GET button: right side, vertically centered with text block
+            getButton.trailing ~== getButton.superview!.trailing ~- margin
+            getButton.centerY ~== icon.centerY
+            getButton.width ~>= 72
 
-                name.leading ~== icon.trailing ~+ (15 ~~ 12)
-                name.trailing ~== name.superview!.trailing ~- Global.Size.margin.value
-                name.top ~== icon.top ~+ 3
+            // Name: right of icon, left of button
+            name.leading ~== icon.trailing ~+ (14 ~~ 12)
+            name.trailing ~<= getButton.leading ~- 10
+            name.top ~== icon.top ~+ 2
 
-                seller.leading ~== name.leading
-                seller.top ~== name.bottom ~+ 3
-                seller.trailing ~<= seller.superview!.trailing ~- Global.Size.margin.value
-            }
-        } else {
-            constrain(name, icon) { name, icon in
-                icon.width ~== (130 ~~ 100)
+            // Seller: below name
+            seller.leading ~== name.leading
+            seller.trailing ~<= getButton.leading ~- 10
+            seller.top ~== name.bottom ~+ 2
+        }
 
-                switch type {
-                case .ios, .cydia: icon.height ~== icon.width
-                case .books: icon.height ~== icon.width ~* 1.542
-                default: break
-                }
-
-                icon.leading ~== icon.superview!.leading ~+ Global.Size.margin.value
-                icon.top ~== icon.superview!.top ~+ Global.Size.margin.value
-
-                name.leading ~== icon.trailing ~+ (15 ~~ 12)
-                name.trailing ~== name.superview!.trailing ~- Global.Size.margin.value
-                name.top ~== icon.top ~+ 3
+        // Optional badges below seller
+        if let badge = tweakedBadge ?? ipadOnlyBadge ?? betaBadge {
+            constrain(badge, seller) { badge, seller in
+                badge.leading ~== seller.leading
+                badge.top ~== seller.bottom ~+ 6
             }
         }
 
-        if let tweaked = tweaked, type == .cydia || type == .altstore {
-            if let seller = seller {
-                constrain(tweaked, seller) { tweaked, seller in
-                    tweaked.leading ~== seller.leading
-                    tweaked.trailing ~<= tweaked.superview!.trailing ~- Global.Size.margin.value
-                    tweaked.top ~== seller.bottom ~+ (7 ~~ 6)
-                }
-            } else {
-                constrain(tweaked, name) { tweaked, name in
-                    tweaked.leading ~== name.leading
-                    tweaked.trailing ~<= tweaked.superview!.trailing ~- Global.Size.margin.value
-                    tweaked.top ~== name.bottom ~+ (7 ~~ 6)
-                }
-            }
-        }
-
-        if let installButton = installButton {
-            if let tweaked = tweaked {
-                constrain(installButton, tweaked) { installButton, tweaked in
-                    installButton.trailing ~== installButton.superview!.trailing ~- Global.Size.margin.value
-                    installButton.top ~== tweaked.bottom ~+ (7 ~~ 6)
-                }
-            } else  if let seller = seller {
-                constrain(installButton, seller) { installButton, seller in
-                    installButton.trailing ~== installButton.superview!.trailing ~- Global.Size.margin.value
-                    installButton.top ~== seller.bottom ~+ (7 ~~ 6)
-                }
-            } else {
-                constrain(installButton, name) { installButton, name in
-                    installButton.trailing ~== installButton.superview!.trailing ~- Global.Size.margin.value
-                    installButton.top ~== name.bottom ~+ (7 ~~ 6)
-                }
-            }
-        }
-
-        if let stars = stars, (type == .ios || type == .books) {
-            constrain(stars, seller) { stars, seller in
-                stars.leading ~== seller.leading
-                stars.trailing ~<= stars.superview!.trailing ~- Global.Size.margin.value
-
-                if type == .books, let additional = additionalInfo {
-                    constrain(additional) { additional in
-                        additional.leading ~== seller.leading
-                        additional.trailing ~<= additional.superview!.trailing ~- Global.Size.margin.value
-                        additional.top ~== seller.bottom ~+ (7 ~~ 6)
-                        stars.top ~== additional.bottom ~+ (7 ~~ 6)
-                    }
-                } else {
-                    stars.top ~== seller.bottom ~+ (7 ~~ 6)
-                }
-            }
-        }
-
-        if let ipadOnly = ipadOnly, type == .ios {
-            if let stars = stars {
-                constrain(ipadOnly, stars) { ipadOnly, stars in
-                    ipadOnly.leading ~== stars.leading
-                    ipadOnly.trailing ~<= ipadOnly.superview!.trailing ~- Global.Size.margin.value
-                    ipadOnly.top ~== stars.bottom ~+ (7 ~~ 6)
-                    ipadOnly.bottom ~<= ipadOnly.superview!.bottom
-                }
-            } else {
-                constrain(ipadOnly, seller) { ipadOnly, seller in
-                    ipadOnly.leading ~== seller.leading
-                    ipadOnly.trailing ~<= ipadOnly.superview!.trailing ~- Global.Size.margin.value
-                    ipadOnly.top ~== seller.bottom + (7 ~~ 6)
-                }
+        // Subtitle for AltStore apps
+        if let sub = subtitle {
+            constrain(sub, seller) { sub, seller in
+                sub.leading ~== seller.leading
+                sub.trailing ~<= sub.superview!.trailing ~- Global.Size.margin.value
+                sub.top ~== seller.bottom ~+ 2
             }
         }
     }
 
-    private func buildStars() -> CosmosView {
-        let stars = CosmosView()
-        stars.settings.starSize = 12
-        stars.settings.updateOnTouch = false
-        stars.settings.totalStars = 5
-        stars.settings.fillMode = .half
-        stars.settings.textMargin = 2
-        stars.settings.starMargin = 0
-        return stars
-    }
+    // MARK: - Helpers
 
-    private func buildPaddingLabel() -> PaddingLabel {
+    private func buildBadge(_ text: String) -> PaddingLabel {
         let label = PaddingLabel()
         label.theme_textColor = Color.invertedTitle
-        label.font = .systemFont(ofSize: 10.0, weight: .semibold)
+        label.font = .systemFont(ofSize: 9, weight: .semibold)
         label.makeDynamicFont()
         label.layer.backgroundColor = UIColor.gray.cgColor
-        label.layer.cornerRadius = 6
+        label.layer.cornerRadius = 4
+        label.text = text
         return label
     }
 }

@@ -53,6 +53,9 @@ class Book: Item {
     // Artist ID
     var artistId: Int = 0
 
+    // v1.7 universal object identifier
+    var universalObjectIdentifier: String = ""
+
     // Copyright
     var publisher: String = ""
 
@@ -73,13 +76,16 @@ class Book: Item {
         name <- map["name"]
         id <- map["id"]
         image <- map["image"]
+        image <- map["icon_uri"]  // v1.7 search_index / universal_gateway
         price <- map["price"]
         categoryId <- map["genre_id"]
         author <- map["pname"]
+        author <- map["developer_name"]  // v1.7
         updated <- map["added"]
         description_ <- map["description"]
         artistId <- map["artist_id"]
         lastParseItunes <- map["last_parse_itunes"]
+        universalObjectIdentifier <- map["universal_object_identifier"]
 
         if let data = lastParseItunes.data(using: .utf8), let itunesParse = try? JSON(data: data) {
             // Information

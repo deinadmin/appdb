@@ -107,21 +107,32 @@ class AltStoreAppDetails: LoadingTableView {
         if Preferences.deviceIsLinked {
             setButtonTitle("Requesting...")
 
-            func install(_ app: AltStoreApp, additionalOptions: [AdditionalInstallationParameters: Any] = [:]) {
-                API.customInstall(ipaUrl: app.downloadURL, type: .altstore, iconUrl: app.image, bundleId: app.bundleId, name: app.name,  additionalOptions: additionalOptions) { [weak self] error in
+            func install(_ app: AltStoreApp, additionalOptions: [String: Any] = [:]) {
+                API.customInstall(ipaUrl: app.downloadURL, iconUrl: app.image, name: app.name, additionalOptions: additionalOptions) { [weak self] result in
                     guard let self = self else { return }
 
-                    if let error = error {
+                    switch result {
+                    case .failure(let error):
                         Messages.shared.showError(message: error.prettified, context: .viewController(self))
                         delay(0.3) {
                             setButtonTitle("Install")
                         }
-                    } else {
-                        setButtonTitle("Requested")
-
+                    case .success(let installResult):
                         if #available(iOS 10.0, *) { UINotificationFeedbackGenerator().notificationOccurred(.success) }
 
-                        Messages.shared.showSuccess(message: "Installation has been queued to your device".localized(), context: .viewController(self))
+                        if installResult.installationType == .itmsServices {
+                            setButtonTitle("Signing...")
+                            Messages.shared.showSuccess(message: "App is being signed, please wait...".localized(), context: .viewController(self))
+                        } else {
+                            setButtonTitle("Requested")
+                            Messages.shared.showSuccess(message: "Installation has been queued to your device".localized(), context: .viewController(self))
+                        }
+
+                        ObserveQueuedApps.shared.addApp(type: .altstore, linkId: "",
+                                                        name: app.name, image: app.image,
+                                                        bundleId: app.bundleId,
+                                                        commandUUID: installResult.commandUUID,
+                                                        installationType: installResult.installationType.rawValue)
 
                         delay(5) {
                             setButtonTitle("Install")
@@ -151,14 +162,14 @@ class AltStoreAppDetails: LoadingTableView {
 
                 vc.onCompletion = { [weak self] (patchIap: Bool, enableGameTrainer: Bool, removePlugins: Bool, enablePushNotifications: Bool, duplicateApp: Bool, newId: String, newName: String, selectedDylibs: [String]) in
                     guard let self = self else { return }
-                    var additionalOptions: [AdditionalInstallationParameters: Any] = [:]
-                    if patchIap { additionalOptions[.inApp] = 1 }
-                    if enableGameTrainer { additionalOptions[.trainer] = 1 }
-                    if removePlugins { additionalOptions[.removePlugins] = 1 }
-                    if enablePushNotifications { additionalOptions[.pushNotifications] = 1 }
-                    if duplicateApp && !newId.isEmpty { additionalOptions[.alongside] = newId }
-                    if !newName.isEmpty { additionalOptions[.name] = newName }
-                    if !selectedDylibs.isEmpty { additionalOptions[.injectDylibs] = selectedDylibs }
+                    var additionalOptions: [String: Any] = [:]
+                    if patchIap { additionalOptions[InstallationFeatureParameter.key(for: "inapp")] = 1 }
+                    if enableGameTrainer { additionalOptions[InstallationFeatureParameter.key(for: "trainer")] = 1 }
+                    if removePlugins { additionalOptions[InstallationFeatureParameter.key(for: "remove_plugins")] = 1 }
+                    if enablePushNotifications { additionalOptions[InstallationFeatureParameter.key(for: "push")] = 1 }
+                    if duplicateApp && !newId.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "alongside")] = newId }
+                    if !newName.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "name")] = newName }
+                    if !selectedDylibs.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "inject_dylibs")] = selectedDylibs }
                     install(self.app, additionalOptions: additionalOptions)
                 }
             } else {

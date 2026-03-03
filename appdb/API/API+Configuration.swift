@@ -35,13 +35,8 @@ extension API {
                     } else {
 
                         let data = json["data"]
-                        // checkRevocation(completion: { isRevoked, revokedOn in
-                            Preferences.set(.appsync, to: data["appsync"].stringValue == "yes")
                             Preferences.set(.ignoreCompatibility, to: data["ignore_compatibility"].stringValue == "yes")
                             Preferences.set(.askForInstallationOptions, to: data["ask_for_installation_options"].stringValue == "yes")
-
-                            // Preferences.set(.revoked, to: isRevoked)
-                            // Preferences.set(.revokedOn, to: revokedOn)
 
                             if !data["p12_password"].stringValue.isEmpty, !data["p12"].stringValue.isEmpty, !data["provision"].stringValue.isEmpty {
                                 Preferences.set(.usesCustomDeveloperIdentity, to: true)
@@ -53,7 +48,6 @@ extension API {
                             Preferences.set(.deviceName, to: data["name"].stringValue)
                             Preferences.set(.deviceVersion, to: data["ios_version"].stringValue)
 
-                            // Preferences.set(.isPlus, to: data["is_plus"].stringValue == "yes")
                             let plusUntil = data["plus_till"].stringValue.unixToDate
                             Preferences.set(.isPlus, to: plusUntil.timeIntervalSince1970 > Date().timeIntervalSince1970)
                             Preferences.set(.plusUntil, to: data["plus_till"].stringValue)
@@ -68,15 +62,11 @@ extension API {
                             Preferences.set(.plusProvider, to: data["plus_provider"].stringValue)
                             Preferences.set(.plusSupportUri, to: data["plus_support_uri"].stringValue)
 
-                            Preferences.set(.disableRevocationChecks, to: data["disable_protection_checks"].stringValue == "yes")
-                            Preferences.set(.forceDisablePRO, to: data["is_pro_disabled"].stringValue == "yes")
+                            Preferences.set(.useRevokedCerts, to: data["use_revoked_certs"].stringValue == "yes")
                             Preferences.set(.signingIdentityType, to: data["signing_identity_type"].stringValue)
                             Preferences.set(.optedOutFromEmails, to: data["is_opted_out_from_emails"].stringValue == "yes")
 
                             success()
-                        // }, fail: { error in
-                        //    fail(error)
-                        // })
                     }
                 case .failure(let error):
                     fail(error.localizedDescription)
@@ -99,11 +89,9 @@ extension API {
                         // Update values
                         for (key, value) in params {
                             switch key {
-                            case .appsync: Preferences.set(.appsync, to: value == "yes")
                             case .askForOptions: Preferences.set(.askForInstallationOptions, to: value == "yes")
                             case .ignoreCompatibility: Preferences.set(.ignoreCompatibility, to: value == "yes")
-                            case .disableProtectionChecks: Preferences.set(.disableRevocationChecks, to: value == "yes")
-                            case .forceDisablePRO: Preferences.set(.forceDisablePRO, to: value == "yes")
+                            case .useRevokedCerts: Preferences.set(.useRevokedCerts, to: value == "yes")
                             case .clearDevEntity: break
                             case .signingIdentityType: Preferences.set(.signingIdentityType, to: value)
                             case .enterpriseCertId: Preferences.set(.enterpriseCertId, to: value)
@@ -117,17 +105,4 @@ extension API {
                 }
             }
     }
-
-    /*static func checkRevocation(completion: @escaping (_ revoked: Bool, _ revokedOn: String) -> Void, fail: @escaping (_ error: String) -> Void) {
-        AF.request(endpoint + Actions.checkRevoke.rawValue, headers: headersWithCookie)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                completion(!json["success"].boolValue, json["data"].stringValue)
-            case .failure(let error):
-                fail(error.localizedDescription)
-            }
-        }
-    }*/
 }

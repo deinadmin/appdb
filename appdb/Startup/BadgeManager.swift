@@ -10,7 +10,6 @@ import UIKit
 
 enum BadgeableTabs: Int {
     case downloads = 2 // third tab
-    case updates = 4 // fifth tab
 }
 
 protocol BadgeManager {

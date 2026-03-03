@@ -26,6 +26,8 @@ struct DeviceStatusItem: Mappable, Matchable {
     var statusShort: String = ""
     var statusText: String = ""
     var linkId: String = ""
+    var manifestUri: String = ""
+    var downloadUri: String = ""
 
     mutating func mapping(map: Map) {
         uuid <- map["uuid"]
@@ -46,6 +48,10 @@ struct DeviceStatusItem: Mappable, Matchable {
             statusShort = params["sign"]["status"].stringValue
             statusText = params["sign"]["status_text"].stringValue
             if statusText.hasSuffix("\n") { statusText = statusText.trimTrailingWhitespace() }
+
+            // v1.7: itms-services installation URIs
+            manifestUri = params["manifest_uri"].stringValue
+            downloadUri = params["download_uri"].stringValue
         }
     }
 

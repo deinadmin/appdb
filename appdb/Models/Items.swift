@@ -12,6 +12,8 @@ import ObjectMapper
 class Item: Hashable, Mappable {
 
     required init?(map: Map) { }
+    /// Plain initializer for programmatic construction
+    init() { }
     func mapping(map: Map) { }
 
     var id: Int = 0

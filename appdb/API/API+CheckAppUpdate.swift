@@ -16,16 +16,25 @@ extension API {
         let trackid: String = "1900000538"
         let currentVersion: String = Global.appVersion
 
-        API.search(type: CydiaApp.self, trackid: trackid, success: { apps in
-            if let app = apps.first {
-                if app.version.compare(currentVersion, options: .numeric) == .orderedDescending {
-                    API.getLinks(type: .cydia, trackid: trackid, success: { versions in
-                        if let firstLink = versions.first(where: { $0.number == app.version })?.links.first {
-                            success(app, firstLink.id)
-                        }
-                    }, fail: { _ in })
+        // v1.7: Use universal_gateway to get content details and installation ticket
+        API.getUniversalGateway(universalObjectIdentifier: trackid) { error, data in
+            guard let data = data else { return }
+
+            let objectData = data["object"]
+            let version = objectData["version"].stringValue
+
+            if version.compare(currentVersion, options: .numeric) == .orderedDescending {
+                // Build a CydiaApp from the gateway response for display purposes
+                let app = CydiaApp()
+                app.name = objectData["name"].stringValue
+                app.version = version
+
+                // v1.7: installation_ticket serves as the link id for install
+                let installationTicket = data["installation_ticket"].stringValue
+                if !installationTicket.isEmpty {
+                    success(app, installationTicket)
                 }
             }
-        }, fail: { _ in })
+        }
     }
 }

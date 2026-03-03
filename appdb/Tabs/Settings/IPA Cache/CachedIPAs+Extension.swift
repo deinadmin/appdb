@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import UniformTypeIdentifiers
 
+// Note: This extension is no longer used in v1.7.
+// IPA cache has been replaced by Installation History (see IPACache.swift).
 extension CachedIPAs {
 
     convenience init() {
@@ -17,26 +18,5 @@ extension CachedIPAs {
         } else {
             self.init(style: .grouped)
         }
-    }
-
-    func setUp() {
-
-        tableView.tableFooterView = UIView()
-        tableView.theme_backgroundColor = Color.tableViewBackgroundColor
-        tableView.theme_separatorColor = Color.borderColor
-
-        tableView.cellLayoutMarginsFollowReadableWidth = true
-
-        tableView.register(SimpleStaticCell.self, forCellReuseIdentifier: "cell")
-        tableView.rowHeight = 45
-
-        if #available(iOS 13.0, *) { } else {
-            // Hide the 'Back' text on back button
-            let backItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-            navigationItem.backBarButtonItem = backItem
-        }
-
-        state = .loading
-        animated = true
     }
 }

@@ -68,7 +68,7 @@ extension API {
     }
 
     static func analyzeJob(jobId: String, completion: @escaping (_ error: String?) -> Void) {
-        AF.request(endpoint + Actions.analyzeIpa.rawValue, parameters: ["lang": languageCode], headers: headersWithCookie)
+        AF.request(endpoint + Actions.getIpaAnalyzeJobs.rawValue, parameters: ["lang": languageCode], headers: headersWithCookie)
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):

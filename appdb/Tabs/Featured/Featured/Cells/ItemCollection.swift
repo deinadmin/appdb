@@ -211,7 +211,6 @@ class ItemCollection: FeaturedCell {
                 case .iosNew: getItems(type: App.self, order: .added)
                 case .iosPaid: getItems(type: App.self, order: .month, price: .paid)
                 case .iosPopular: getItems(type: App.self, order: .week, price: .free)
-                case .books: getItems(type: Book.self, order: .month)
                 default: break
                 }
             }
@@ -270,12 +269,6 @@ class ItemCollection: FeaturedCell {
                 case .cydia: getItems(type: CydiaApp.self, order: .added, genre: id)
                 default: break
                 }
-            case .books:
-                currentBooksCategory = id
-                switch Featured.CellType(rawValue: identifier)! {
-                case .books: getItems(type: Book.self, order: .month, genre: id)
-                default: break
-                }
             default:
                 break
             }
@@ -286,12 +279,10 @@ class ItemCollection: FeaturedCell {
 
     private var currentIosCategory: String = "0"
     private var currentCydiaCategory: String = "0"
-    private var currentBooksCategory: String = "0"
 
     var currentCategory: String {
         switch currentType {
         case .cydia: return currentCydiaCategory
-        case .books: return currentBooksCategory
         default: return currentIosCategory
         }
     }
@@ -301,7 +292,6 @@ class ItemCollection: FeaturedCell {
         guard let type = Featured.CellType(rawValue: identifier) else { return .ios }
         switch type {
         case .cydia: return .cydia
-        case .books: return .books
         default: return .ios
         }
     }
@@ -322,7 +312,6 @@ class ItemCollection: FeaturedCell {
         switch type {
         case .iosPaid: return .month
         case .iosPopular: return .week
-        case .books: return .month
         default: return .added
         }
     }

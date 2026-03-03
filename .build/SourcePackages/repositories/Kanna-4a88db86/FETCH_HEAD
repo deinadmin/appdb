@@ -1,0 +1,186 @@
+e40433fc8f5902165c215f8d5eb96d376c24110d	not-for-merge	branch 'clean_linux_IANACharSetName' of https://github.com/tid-kijyun/Kanna
+50b2fa6c8d2341a693b5256624257c58c4502142	not-for-merge	branch 'feature/v3.0.0' of https://github.com/tid-kijyun/Kanna
+81ce91fd485b637517c340c73590a9b59ac9f7d5	not-for-merge	branch 'feature/v4.0.0' of https://github.com/tid-kijyun/Kanna
+a6dd49f459ae4f1fcd95dd695dceae10657d1c29	not-for-merge	branch 'feature/v5.2.1' of https://github.com/tid-kijyun/Kanna
+650238706f3322f510c7b75036990cb6576f9dd3	not-for-merge	branch 'feature/v5.2.2' of https://github.com/tid-kijyun/Kanna
+9d36c9b6a8fbd49382865d16ef3a6247c8ee339c	not-for-merge	branch 'feature/xcode15' of https://github.com/tid-kijyun/Kanna
+290e728f9d07365d307b8df5b1e3625575b5f5df	not-for-merge	branch 'fix/out-of-bounds-access' of https://github.com/tid-kijyun/Kanna
+8ef0b92a761b04db55eadf40d5895633b8292c47	not-for-merge	branch 'fix/parent-crash-on-unlinked-node' of https://github.com/tid-kijyun/Kanna
+5fb18bdddca3b6bbcfef28399b42e0f7687fb995	not-for-merge	branch 'fixed/xcode-9.1' of https://github.com/tid-kijyun/Kanna
+9f695d8639c333dc45be9aedf33eef8bde0048ba	not-for-merge	branch 'gh-pages' of https://github.com/tid-kijyun/Kanna
+3c73af6d3859d9240db60aef233941a715387744	not-for-merge	branch 'master' of https://github.com/tid-kijyun/Kanna
+109249451c32e14dac541bfbfeaa91b4dcb47a87	not-for-merge	branch 'swift3.0' of https://github.com/tid-kijyun/Kanna
+e8e7c1aa84a97e4834814cb6cab5de0c982993bd	not-for-merge	branch 'swift5' of https://github.com/tid-kijyun/Kanna
+63b013b3a865fe5c4292d83a7f3656322fede0c7	not-for-merge	'refs/pull/107/head' of https://github.com/tid-kijyun/Kanna
+a63e88a10d9c190dcc94117b301cce2ff8f400bc	not-for-merge	'refs/pull/110/head' of https://github.com/tid-kijyun/Kanna
+dac3dd913d47c05671597468956bf16196b0fd88	not-for-merge	'refs/pull/119/head' of https://github.com/tid-kijyun/Kanna
+1e4f2619a3af8956e3f73763797e3d32a333b29b	not-for-merge	'refs/pull/119/merge' of https://github.com/tid-kijyun/Kanna
+229680f12f26cf88300db95532440bbbf1db6e0c	not-for-merge	'refs/pull/123/head' of https://github.com/tid-kijyun/Kanna
+7df10f249ff4c50cf32517f926dbfd59ea2d4341	not-for-merge	'refs/pull/137/head' of https://github.com/tid-kijyun/Kanna
+94dc78e05e1f38a5233e1056b781bdaf314c52ea	not-for-merge	'refs/pull/138/head' of https://github.com/tid-kijyun/Kanna
+a6a8393a34c7faa4f007c8275db19812b732fccf	not-for-merge	'refs/pull/139/head' of https://github.com/tid-kijyun/Kanna
+62c93d1ed43f30f75fc369cf7ab0986f44adc762	not-for-merge	'refs/pull/141/head' of https://github.com/tid-kijyun/Kanna
+15e75ee806da507df9246ed9ac0c4a338293fead	not-for-merge	'refs/pull/143/head' of https://github.com/tid-kijyun/Kanna
+f22996add90b30e25edbfb17da60542eb8f0e594	not-for-merge	'refs/pull/147/head' of https://github.com/tid-kijyun/Kanna
+202f154b3b3bf19a164965ae0ab242a1f435c356	not-for-merge	'refs/pull/151/head' of https://github.com/tid-kijyun/Kanna
+11829b76e9941547a70dd3d95bfbfe28456d3a3b	not-for-merge	'refs/pull/153/head' of https://github.com/tid-kijyun/Kanna
+050f378c8ded3381eb093c117e96a96381f22a47	not-for-merge	'refs/pull/153/merge' of https://github.com/tid-kijyun/Kanna
+d01a346983084f2cddcec661dc13af570d52cda6	not-for-merge	'refs/pull/154/head' of https://github.com/tid-kijyun/Kanna
+8d08d0c5e7dbd069136008d94b6cf1a9c1578499	not-for-merge	'refs/pull/155/head' of https://github.com/tid-kijyun/Kanna
+a60eec4e97a337a7ebb3caedf5d4c431bab34c55	not-for-merge	'refs/pull/156/head' of https://github.com/tid-kijyun/Kanna
+58e3513d20cd16fe8b9ff16b5a2b481fcd643499	not-for-merge	'refs/pull/160/head' of https://github.com/tid-kijyun/Kanna
+770972a532f942b0585a63bffd6cf8b6848d9a05	not-for-merge	'refs/pull/161/head' of https://github.com/tid-kijyun/Kanna
+5fb18bdddca3b6bbcfef28399b42e0f7687fb995	not-for-merge	'refs/pull/164/head' of https://github.com/tid-kijyun/Kanna
+d84fbb13a20fa0bbf69ea2d6dc431591cb1d90aa	not-for-merge	'refs/pull/166/head' of https://github.com/tid-kijyun/Kanna
+a3412b0586dfadf5c58048c7d69cfc7961e3d53d	not-for-merge	'refs/pull/166/merge' of https://github.com/tid-kijyun/Kanna
+42feca3895c54a946f2f06bf568a6758a4c6faf6	not-for-merge	'refs/pull/172/head' of https://github.com/tid-kijyun/Kanna
+48d5ea7d932d369246201b7b7c6abb30b0071100	not-for-merge	'refs/pull/172/merge' of https://github.com/tid-kijyun/Kanna
+e555c86d8d28ded1859444b1438952ae5c0604fe	not-for-merge	'refs/pull/174/head' of https://github.com/tid-kijyun/Kanna
+04608eb1032e2a1afbae443303b81fca257cf92e	not-for-merge	'refs/pull/174/merge' of https://github.com/tid-kijyun/Kanna
+24beb04c9588baae7bb2f8bc208da2d3c776e727	not-for-merge	'refs/pull/177/head' of https://github.com/tid-kijyun/Kanna
+2e6feda1a32e178b7e5fd4c24c5495c4ee0262cd	not-for-merge	'refs/pull/179/head' of https://github.com/tid-kijyun/Kanna
+afc484adb3e1b1328220e5c5f66945ddc8cbc8dd	not-for-merge	'refs/pull/181/head' of https://github.com/tid-kijyun/Kanna
+81ce91fd485b637517c340c73590a9b59ac9f7d5	not-for-merge	'refs/pull/182/head' of https://github.com/tid-kijyun/Kanna
+bd491ac49d667c765c898dd771ea1b71490377a4	not-for-merge	'refs/pull/183/head' of https://github.com/tid-kijyun/Kanna
+5223472b52fc7243d80d658b18baf263988ee5d2	not-for-merge	'refs/pull/185/head' of https://github.com/tid-kijyun/Kanna
+37a67f712b5d1025c6b094f082371d80bfd58668	not-for-merge	'refs/pull/187/head' of https://github.com/tid-kijyun/Kanna
+b51e4332e9c47ef59bdb203e1adadfe6e71ec825	not-for-merge	'refs/pull/187/merge' of https://github.com/tid-kijyun/Kanna
+fcd353fae4a97f7315e813375786b57ce88209e4	not-for-merge	'refs/pull/188/head' of https://github.com/tid-kijyun/Kanna
+358a6758a78b59743cda3bff7d15d3aa8a34bf3e	not-for-merge	'refs/pull/190/head' of https://github.com/tid-kijyun/Kanna
+a4ef371a4673b8e2bab4decbcb57cd3c479b7606	not-for-merge	'refs/pull/194/head' of https://github.com/tid-kijyun/Kanna
+7d2b390c1b830e79b53f410ebd95a93a1872eddf	not-for-merge	'refs/pull/196/head' of https://github.com/tid-kijyun/Kanna
+adca7c492021e17b897b342b44634434a52d4fe1	not-for-merge	'refs/pull/197/head' of https://github.com/tid-kijyun/Kanna
+e0cd1463c1215b0e94eb238a16142f90f1632cca	not-for-merge	'refs/pull/199/head' of https://github.com/tid-kijyun/Kanna
+ca4c02e77308941b31d18ab993b087aad7ea2afc	not-for-merge	'refs/pull/2/head' of https://github.com/tid-kijyun/Kanna
+3bfe456cb027adf3e87909bd0bdd965dc6c6233f	not-for-merge	'refs/pull/201/head' of https://github.com/tid-kijyun/Kanna
+25a0ba102f632e9dcc366e7e2e48731a03faaff1	not-for-merge	'refs/pull/205/head' of https://github.com/tid-kijyun/Kanna
+82ef17c7b1dcd4fa59755e5b944670d46de41a73	not-for-merge	'refs/pull/207/head' of https://github.com/tid-kijyun/Kanna
+f57a7e99c3357df466de06c49aeceb01c5cff475	not-for-merge	'refs/pull/211/head' of https://github.com/tid-kijyun/Kanna
+e8e7c1aa84a97e4834814cb6cab5de0c982993bd	not-for-merge	'refs/pull/212/head' of https://github.com/tid-kijyun/Kanna
+bea8508c4fd0c146e4a21e55b34eb50ef15f03d7	not-for-merge	'refs/pull/216/head' of https://github.com/tid-kijyun/Kanna
+64189a7f26f4e798b211a8030350dd06ca18ae6c	not-for-merge	'refs/pull/217/head' of https://github.com/tid-kijyun/Kanna
+811b7b193d00951fe310b0408be5c86c53c3a471	not-for-merge	'refs/pull/218/head' of https://github.com/tid-kijyun/Kanna
+ba7e1b84665766eecb5f751b911caa804b2569ee	not-for-merge	'refs/pull/22/head' of https://github.com/tid-kijyun/Kanna
+6c4391142adf314833dcaacaf60f2e917e67166c	not-for-merge	'refs/pull/22/merge' of https://github.com/tid-kijyun/Kanna
+41980c16a716dfe9c236e4bd48767844fd19233f	not-for-merge	'refs/pull/220/head' of https://github.com/tid-kijyun/Kanna
+4eb3b34d7ee3b250dee36fa1e6395270bd8bad79	not-for-merge	'refs/pull/222/head' of https://github.com/tid-kijyun/Kanna
+25e31e078cec7f2cf7ad5d07649cdd024a77c415	not-for-merge	'refs/pull/225/head' of https://github.com/tid-kijyun/Kanna
+91e286f1a33222158fd37becd00a07bac169a727	not-for-merge	'refs/pull/228/head' of https://github.com/tid-kijyun/Kanna
+e14841ae194aa62d98d2ac376980dce8390d6013	not-for-merge	'refs/pull/23/head' of https://github.com/tid-kijyun/Kanna
+f2708b41c1c4ae0db8428e5f63998f50a88ea25b	not-for-merge	'refs/pull/230/head' of https://github.com/tid-kijyun/Kanna
+a6dd49f459ae4f1fcd95dd695dceae10657d1c29	not-for-merge	'refs/pull/233/head' of https://github.com/tid-kijyun/Kanna
+650238706f3322f510c7b75036990cb6576f9dd3	not-for-merge	'refs/pull/235/head' of https://github.com/tid-kijyun/Kanna
+377ae43873da106296a5b0965cef6dc8523fbc3d	not-for-merge	'refs/pull/238/head' of https://github.com/tid-kijyun/Kanna
+ef48c20fcf564e928d63ad6fbae0f7b7f3f928df	not-for-merge	'refs/pull/24/head' of https://github.com/tid-kijyun/Kanna
+609ad792e64da9ba9ed08dcd8f63f01b75efeb1c	not-for-merge	'refs/pull/24/merge' of https://github.com/tid-kijyun/Kanna
+216e39d95c970183f4596728bbf8a7b33a04cc79	not-for-merge	'refs/pull/241/head' of https://github.com/tid-kijyun/Kanna
+ab934e8ebcdbc8a4eac1e7d41c444d8f78f042c7	not-for-merge	'refs/pull/244/head' of https://github.com/tid-kijyun/Kanna
+2d935fdc0a9699cf7cceb7628e1ffe4228b56d03	not-for-merge	'refs/pull/246/head' of https://github.com/tid-kijyun/Kanna
+e17066475a556cb499104509686f240d78b0fff8	not-for-merge	'refs/pull/249/head' of https://github.com/tid-kijyun/Kanna
+42774b4ce72ca298cf3d2e44dc639cfe9efdc54d	not-for-merge	'refs/pull/250/head' of https://github.com/tid-kijyun/Kanna
+e56ee3332de8bc2367a62b56c0c93036c27036f4	not-for-merge	'refs/pull/251/head' of https://github.com/tid-kijyun/Kanna
+5d9412ef65826b3f63782f0f13fc540b91a57ab6	not-for-merge	'refs/pull/254/head' of https://github.com/tid-kijyun/Kanna
+c4400961a32ad49eba4c6e5177954c8031db83f9	not-for-merge	'refs/pull/255/head' of https://github.com/tid-kijyun/Kanna
+600115a07e3de24253fd0107c823feca5cfee588	not-for-merge	'refs/pull/256/head' of https://github.com/tid-kijyun/Kanna
+c494574f5e33440524c5de9061a48187c2713d4d	not-for-merge	'refs/pull/258/head' of https://github.com/tid-kijyun/Kanna
+4c7a9d6f4d1938345d299b0ed8c8c5d623cec5b7	not-for-merge	'refs/pull/259/head' of https://github.com/tid-kijyun/Kanna
+eec53a70b13375d60572a70562836b61d133ef0f	not-for-merge	'refs/pull/260/head' of https://github.com/tid-kijyun/Kanna
+c050bdab59786f75ac0169f559da479789ed575e	not-for-merge	'refs/pull/264/head' of https://github.com/tid-kijyun/Kanna
+fe51924b98c5488ac5ed5dcfd03784cb223a9865	not-for-merge	'refs/pull/265/head' of https://github.com/tid-kijyun/Kanna
+f1d67ac057ab40374822097f00ac69ac04cb5a2d	not-for-merge	'refs/pull/266/head' of https://github.com/tid-kijyun/Kanna
+5ad0d5066f7d89a3c0e41adac528d88e5e02cfed	not-for-merge	'refs/pull/267/head' of https://github.com/tid-kijyun/Kanna
+1615746bc47888ea477ca1d10196758ec20fb364	not-for-merge	'refs/pull/268/head' of https://github.com/tid-kijyun/Kanna
+1481fbdb2afdf3ae883459bdf47948abc387dd10	not-for-merge	'refs/pull/269/head' of https://github.com/tid-kijyun/Kanna
+0acdd3e2a66c38c24bd2a63b97d6d244175b1dd3	not-for-merge	'refs/pull/270/head' of https://github.com/tid-kijyun/Kanna
+69d9678735418cf06253b7f4aa44021b4ab72e34	not-for-merge	'refs/pull/271/head' of https://github.com/tid-kijyun/Kanna
+d2eaf846201eea94ad4d7a5bdef8810d531316f5	not-for-merge	'refs/pull/273/head' of https://github.com/tid-kijyun/Kanna
+68ae1735b7aaed4ddb1e2e389c40ecd8f0e06cae	not-for-merge	'refs/pull/274/head' of https://github.com/tid-kijyun/Kanna
+cfc7689924e70dbbf3074b1c75a305c8d97ea076	not-for-merge	'refs/pull/275/head' of https://github.com/tid-kijyun/Kanna
+75f510c73fdad6c929021babb4a250adbd0a2930	not-for-merge	'refs/pull/276/head' of https://github.com/tid-kijyun/Kanna
+a3cc3de2a7ddc61f615c72b3be37dfc36da551ba	not-for-merge	'refs/pull/277/head' of https://github.com/tid-kijyun/Kanna
+fed9d584e3fc4145bf3e64a209346224ef7f7836	not-for-merge	'refs/pull/278/head' of https://github.com/tid-kijyun/Kanna
+290e728f9d07365d307b8df5b1e3625575b5f5df	not-for-merge	'refs/pull/279/head' of https://github.com/tid-kijyun/Kanna
+0bb1db83deea99ca82fbf5e928dea422bd8a8324	not-for-merge	'refs/pull/280/head' of https://github.com/tid-kijyun/Kanna
+bb52c6cb8fcd7778934ceaefa4d6c828e54548eb	not-for-merge	'refs/pull/281/head' of https://github.com/tid-kijyun/Kanna
+abee5bb7473858074c2f410996872127d1069902	not-for-merge	'refs/pull/282/head' of https://github.com/tid-kijyun/Kanna
+07944cf58a6be4cf2008ba7be1f0cfad61eb0dbd	not-for-merge	'refs/pull/283/head' of https://github.com/tid-kijyun/Kanna
+23590422e090a9f7138d817125a6b53b1e37bc13	not-for-merge	'refs/pull/284/head' of https://github.com/tid-kijyun/Kanna
+3a8d17a0fc4b97897df6c9f5d0b133cb9ca56bd0	not-for-merge	'refs/pull/285/head' of https://github.com/tid-kijyun/Kanna
+7f6070b40c85d7719411227fed64b5dee84a4b9c	not-for-merge	'refs/pull/286/head' of https://github.com/tid-kijyun/Kanna
+08a95251519638f8ba432c614a02378af0dd05f8	not-for-merge	'refs/pull/287/head' of https://github.com/tid-kijyun/Kanna
+8ef0b92a761b04db55eadf40d5895633b8292c47	not-for-merge	'refs/pull/288/head' of https://github.com/tid-kijyun/Kanna
+89f1b9d53e86fb484605c0e193b21d7ff0f0ae98	not-for-merge	'refs/pull/289/head' of https://github.com/tid-kijyun/Kanna
+56ba9774249a75af8a689f9f69ab0725cfeee8ba	not-for-merge	'refs/pull/29/head' of https://github.com/tid-kijyun/Kanna
+1879ca3dc1d62454f8671f61b82d45bf345b52e5	not-for-merge	'refs/pull/3/head' of https://github.com/tid-kijyun/Kanna
+85efc70205fec547a29fc653c0fdabd0f1ac38d3	not-for-merge	'refs/pull/3/merge' of https://github.com/tid-kijyun/Kanna
+8ca5955d42df27211e21f0cb7d245f08bf2dfc87	not-for-merge	'refs/pull/35/head' of https://github.com/tid-kijyun/Kanna
+c7537df010bbbccccc9882cc731098670d2be866	not-for-merge	'refs/pull/35/merge' of https://github.com/tid-kijyun/Kanna
+4d365e89fb5817970526bb3c0866b49627b9e5c5	not-for-merge	'refs/pull/38/head' of https://github.com/tid-kijyun/Kanna
+e9250eb0a9cddbad78210dda413e5bfe9ca5fff5	not-for-merge	'refs/pull/44/head' of https://github.com/tid-kijyun/Kanna
+5ea340f8badedbbf85f3e910c9022a38685d5b00	not-for-merge	'refs/pull/53/head' of https://github.com/tid-kijyun/Kanna
+6bc75a635c9fec53f700755c2bce2acaf10a3e19	not-for-merge	'refs/pull/54/head' of https://github.com/tid-kijyun/Kanna
+8a2da4d6d15515813a0c71880b09cf680dc69f6b	not-for-merge	'refs/pull/56/head' of https://github.com/tid-kijyun/Kanna
+8a159c3dc55cc19947276782c4b983e27e30f79a	not-for-merge	'refs/pull/57/head' of https://github.com/tid-kijyun/Kanna
+7f84ced34bf8202addef19d9a076a7da05dc7f2e	not-for-merge	'refs/pull/58/head' of https://github.com/tid-kijyun/Kanna
+6f75fabd690ce0b3778b1af26c845c97fa0b97f3	not-for-merge	'refs/pull/6/head' of https://github.com/tid-kijyun/Kanna
+d92ced1e7ac2e3b66871bfc8cc0bcfc9fdf442d7	not-for-merge	'refs/pull/66/head' of https://github.com/tid-kijyun/Kanna
+a7ad1cdf2393545ba5f46b0e48ee5f54b66604c0	not-for-merge	'refs/pull/7/head' of https://github.com/tid-kijyun/Kanna
+7f21f358ec903307c43a13ddc5e8c30a759f5146	not-for-merge	'refs/pull/74/head' of https://github.com/tid-kijyun/Kanna
+4fd9fda6ccd7be5b4ba14c323f7237d9060644a2	not-for-merge	'refs/pull/77/head' of https://github.com/tid-kijyun/Kanna
+ca66a5cdca6f599956479680936f8b47caaa7b11	not-for-merge	'refs/pull/78/head' of https://github.com/tid-kijyun/Kanna
+1230a0b9f41db9bfc4467326fef6105b39925dde	not-for-merge	'refs/pull/79/head' of https://github.com/tid-kijyun/Kanna
+5f5da39b41d5190fa86bccd46e3b4e03a46c7e21	not-for-merge	'refs/pull/8/head' of https://github.com/tid-kijyun/Kanna
+2198d48af7a520ad066261f8eb47f15195800bb2	not-for-merge	'refs/pull/80/head' of https://github.com/tid-kijyun/Kanna
+6df622e69e9bd0c0e77f7d0ad93259c899345b8f	not-for-merge	'refs/pull/81/head' of https://github.com/tid-kijyun/Kanna
+ee5eb17d68de0664f372417f6ac03fd37d19a8f1	not-for-merge	'refs/pull/82/head' of https://github.com/tid-kijyun/Kanna
+bbc8f09632f83a2134a5b65775950262cf604e06	not-for-merge	'refs/pull/84/head' of https://github.com/tid-kijyun/Kanna
+5a04d28394bea42201f21fbdee9a9df8b6391bd2	not-for-merge	'refs/pull/85/head' of https://github.com/tid-kijyun/Kanna
+92dc19cf26202fb491a77b92994fe01b755519da	not-for-merge	'refs/pull/86/head' of https://github.com/tid-kijyun/Kanna
+63849f1ee0951cb417370a7bc4625d0846a69c8d	not-for-merge	'refs/pull/88/head' of https://github.com/tid-kijyun/Kanna
+da80e8331d8efe0446dc940207e6dad0d71b0cec	not-for-merge	'refs/pull/92/head' of https://github.com/tid-kijyun/Kanna
+739a42ad70ad4d399d1256540b6405de63a4fa7f	not-for-merge	'refs/pull/95/head' of https://github.com/tid-kijyun/Kanna
+c1d7108ac1b66b69668b80a6b5413a3689c44d44	not-for-merge	'refs/pull/95/merge' of https://github.com/tid-kijyun/Kanna
+109249451c32e14dac541bfbfeaa91b4dcb47a87	not-for-merge	'refs/pull/96/head' of https://github.com/tid-kijyun/Kanna
+d970a40ce3fa594f2ec111775c48865fe05255f5	not-for-merge	tag '0.0.1' of https://github.com/tid-kijyun/Kanna
+f206db908fbe8480482035a350a5203eaf3f25d7	not-for-merge	tag '0.1.0' of https://github.com/tid-kijyun/Kanna
+7ff146496df8b2e621a0c7ebe2a62fe96d6469b8	not-for-merge	tag '0.1.1' of https://github.com/tid-kijyun/Kanna
+5642a2af02427b6cdfa2d3d3ca060fc371ed3670	not-for-merge	tag '0.1.2' of https://github.com/tid-kijyun/Kanna
+bdd71691c51f4a69cace090e685e3289e9fe6bbb	not-for-merge	tag '0.1.3' of https://github.com/tid-kijyun/Kanna
+c50ef52f358777adade052fdbda0a1d9dfe10afb	not-for-merge	tag '0.1.4' of https://github.com/tid-kijyun/Kanna
+69018cf30304ccfba0d307f2aec7cb83ba382ba0	not-for-merge	tag '0.1.5' of https://github.com/tid-kijyun/Kanna
+4180575995fe1a579efea7e858bc38ed4c7de856	not-for-merge	tag '1.0.0' of https://github.com/tid-kijyun/Kanna
+8f09af22371e93d4f3d92af3a9f35b2b9bf34495	not-for-merge	tag '1.0.1' of https://github.com/tid-kijyun/Kanna
+98a0d42a34e30a4dce28aa69e4f3d25d6c5f4e8f	not-for-merge	tag '1.0.2' of https://github.com/tid-kijyun/Kanna
+01edad9149f06b30bb389bc8c2d8600bff06c389	not-for-merge	tag '1.0.3' of https://github.com/tid-kijyun/Kanna
+6434100535a557ec3bb9d950998ede7ecd25243e	not-for-merge	tag '1.0.4' of https://github.com/tid-kijyun/Kanna
+44a6be007e7f932aafc89f2aa858c1cad71f24ef	not-for-merge	tag '1.0.5' of https://github.com/tid-kijyun/Kanna
+66455c9da8ef091f8fd7bf8f56ef0fbb03cfb979	not-for-merge	tag '1.0.6' of https://github.com/tid-kijyun/Kanna
+41cc8ab9e499adfe29b306b5f39863c3541b7d81	not-for-merge	tag '1.1.0' of https://github.com/tid-kijyun/Kanna
+fa019011b2d2340091101047420044569ef809d4	not-for-merge	tag '1.1.1' of https://github.com/tid-kijyun/Kanna
+e8055ac38368dc7ef44d63d2fb4aac74ffea164e	not-for-merge	tag '2.0.0' of https://github.com/tid-kijyun/Kanna
+0bad55e0662be507df1f44d3a8a0122c2a601b88	not-for-merge	tag '2.0.1' of https://github.com/tid-kijyun/Kanna
+5a1c46539094fdf5bcd52f443d18fc0228f1348c	not-for-merge	tag '2.0.2' of https://github.com/tid-kijyun/Kanna
+04678aab216773acd89126288cf2cfccf4d94099	not-for-merge	tag '2.0.3' of https://github.com/tid-kijyun/Kanna
+7f3590166eb28701573443826fe012416650ec05	not-for-merge	tag '2.1.0' of https://github.com/tid-kijyun/Kanna
+f78ae8d8f0f8114228a57cbc5bd3095c8e2897c6	not-for-merge	tag '2.1.1' of https://github.com/tid-kijyun/Kanna
+962dc11a335bbce7c96545f11fd9f6816e83c3f1	not-for-merge	tag '2.2.0' of https://github.com/tid-kijyun/Kanna
+2446979c1ba69f290aa3b5f028191a0120010da5	not-for-merge	tag '2.2.1' of https://github.com/tid-kijyun/Kanna
+50b2fa6c8d2341a693b5256624257c58c4502142	not-for-merge	tag '3.0.0' of https://github.com/tid-kijyun/Kanna
+44b169e1698d596f2eed698d8a67558fb0542b2a	not-for-merge	tag '4.0.0' of https://github.com/tid-kijyun/Kanna
+5541695ce429124b7902fcaeff32f146ba99399e	not-for-merge	tag '4.0.1' of https://github.com/tid-kijyun/Kanna
+aec73a69619cf9bb540002a17793fb54633f372d	not-for-merge	tag '4.0.2' of https://github.com/tid-kijyun/Kanna
+0534d5d4917410870fcac8907e06f69b58a23417	not-for-merge	tag '4.0.3' of https://github.com/tid-kijyun/Kanna
+9b8f73f8c8e145dc496565bbf878a709793e7ba3	not-for-merge	tag '5.0.0' of https://github.com/tid-kijyun/Kanna
+e924895293df11fcce85249a61ffbd92ca539ab3	not-for-merge	tag '5.2.0' of https://github.com/tid-kijyun/Kanna
+ac2a7f38bbb66e46ff32a0091867425a23b8827c	not-for-merge	tag '5.2.1' of https://github.com/tid-kijyun/Kanna
+609367a2cd84827a33383cf7923cb4fe8f69ee0a	not-for-merge	tag '5.2.2' of https://github.com/tid-kijyun/Kanna
+4a80ebe93b6966d5083394fcaaaff57a2fcec935	not-for-merge	tag '5.2.3' of https://github.com/tid-kijyun/Kanna
+c657fb9f5827ef138068215c76ad0bb62bbc92da	not-for-merge	tag '5.2.4' of https://github.com/tid-kijyun/Kanna
+9732b7b55acfd2bb89e517834a8d152faa27be27	not-for-merge	tag '5.2.5' of https://github.com/tid-kijyun/Kanna
+126bdc9600e30b4a8aeb8d14088953c16aebf495	not-for-merge	tag '5.2.6' of https://github.com/tid-kijyun/Kanna
+f9e4922223dd0d3dfbf02ca70812cf5531fc0593	not-for-merge	tag '5.2.7' of https://github.com/tid-kijyun/Kanna
+41c3d28ea0eac07e4551b28def9de1ede702e739	not-for-merge	tag '5.3.0' of https://github.com/tid-kijyun/Kanna
+b268172556b01770424271db3df63768e18d1f19	not-for-merge	tag '6.0.0' of https://github.com/tid-kijyun/Kanna
+a23a4584f8e7de07cab420ae4d51eee553dd988d	not-for-merge	tag '6.0.1' of https://github.com/tid-kijyun/Kanna
+7919579047809fe82f430ace4bb144c8debe8fdc	not-for-merge	tag '6.0.2' of https://github.com/tid-kijyun/Kanna
+3c73af6d3859d9240db60aef233941a715387744	not-for-merge	tag '6.1.0' of https://github.com/tid-kijyun/Kanna

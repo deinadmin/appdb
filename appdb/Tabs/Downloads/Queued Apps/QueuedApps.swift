@@ -107,7 +107,14 @@ class QueuedApps: LoadingCollectionView {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard !isLoading, let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "queuedDownloadsCell", for: indexPath) as? QueuedDownloadsCell else { return UICollectionViewCell() }
-        cell.configure(with: requestedApps[indexPath.row])
+        let app = requestedApps[indexPath.row]
+        cell.configure(with: app)
+        cell.onInstallTapped = { [weak self] in
+            guard let self = self else { return }
+            guard self.requestedApps.indices.contains(indexPath.row) else { return }
+            let currentApp = self.requestedApps[indexPath.row]
+            ObserveQueuedApps.shared.openManifest(for: currentApp)
+        }
         return cell
     }
 }

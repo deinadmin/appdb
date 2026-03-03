@@ -1,0 +1,251 @@
+{
+  "object" : {
+    "artifacts" : [
+
+    ],
+    "dependencies" : [
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "alamofire",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/Alamofire/Alamofire",
+          "name" : "Alamofire"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "3f99050e75bbc6fe71fc323adabb039756680016",
+            "version" : "5.11.1"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "Alamofire"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "alamofireimage",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/Alamofire/AlamofireImage",
+          "name" : "AlamofireImage"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "1eaf3b6c6882bed10f6e7b119665599dd2329aa1",
+            "version" : "4.3.0"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "AlamofireImage"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "alamofirenetworkactivityindicator",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/Alamofire/AlamofireNetworkActivityIndicator",
+          "name" : "AlamofireNetworkActivityIndicator"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "392bed083e8d193aca16bfa684ee24e4bcff0510",
+            "version" : "3.1.0"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "AlamofireNetworkActivityIndicator"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "bulletinboard",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/alexisakers/BulletinBoard",
+          "name" : "BulletinBoard"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "e8ba81d25e41e5d24d6a4f404ed28443d728723b",
+            "version" : "5.0.0"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "BulletinBoard"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "cosmos",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/evgenyneu/Cosmos",
+          "name" : "Cosmos"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "cce521e734d0090494bd4afab5fd2e2f2465c1af",
+            "version" : "23.0.0"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "Cosmos"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "deepdiff",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/onmyway133/DeepDiff",
+          "name" : "DeepDiff"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "2639b3a11054d666a4c5ec1b7dd2808e437f3289",
+            "version" : "2.3.3"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "DeepDiff"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "kanna",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/tid-kijyun/Kanna",
+          "name" : "Kanna"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "41c3d28ea0eac07e4551b28def9de1ede702e739",
+            "version" : "5.3.0"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "Kanna"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "localize-swift",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/marmelroy/Localize-Swift",
+          "name" : "Localize-Swift"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "0aa221fed0512772eaad04171d966b8d77b15212",
+            "version" : "3.2.0"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "Localize-Swift"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "objectmapper",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/tristanhimmelman/ObjectMapper",
+          "name" : "ObjectMapper"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "6021c6035e83a306047348666f6400dc61445d3b",
+            "version" : "4.4.3"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "ObjectMapper"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "swiftclient",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/AppTelemetry/SwiftClient",
+          "name" : "SwiftClient"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "d20ccc4b8266cf739eede58cdfc7e9c6ffb41cda",
+            "version" : "1.5.1"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "SwiftClient"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "swifter",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/httpswift/swifter",
+          "name" : "swifter"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "9483a5d459b45c3ffd059f7b55f9638e268632fd",
+            "version" : "1.5.0"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "swifter"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "swiftmessages",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/SwiftKickMobile/SwiftMessages",
+          "name" : "SwiftMessages"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "62e12e138fc3eedf88c7553dd5d98712aa119f40",
+            "version" : "9.0.9"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "SwiftMessages"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "swiftyjson",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/SwiftyJSON/SwiftyJSON",
+          "name" : "SwiftyJSON"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "af76cf3ef710b6ca5f8c05f3a31307d44a3c5828",
+            "version" : "5.0.2"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "SwiftyJSON"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "zipfoundation",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/weichsel/ZIPFoundation",
+          "name" : "ZIPFoundation"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "22787ffb59de99e5dc1fbfe80b19c97a904ad48d",
+            "version" : "0.9.20"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "ZIPFoundation"
+      }
+    ],
+    "prebuilts" : [
+
+    ]
+  },
+  "version" : 7
+}

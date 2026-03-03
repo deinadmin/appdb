@@ -163,22 +163,31 @@ class AppUpdateController: UITableViewController {
 
         setButtonTitle("Requesting...")
 
-        API.install(id: sender.linkId, type: .cydia) { [weak self] error in
+        API.install(id: sender.linkId, type: .cydia) { [weak self] result in
             guard let self = self else { return }
 
-            if let error = error {
+            switch result {
+            case .failure(let error):
                 Messages.shared.showError(message: error.prettified, context: .viewController(self))
                 delay(0.3) {
                     setButtonTitle("Update")
                 }
-            } else {
-                setButtonTitle("Requested")
-
+            case .success(let installResult):
                 if #available(iOS 10.0, *) { UINotificationFeedbackGenerator().notificationOccurred(.success) }
 
-                Messages.shared.showSuccess(message: "Installation has been queued to your device".localized())
+                if installResult.installationType == .itmsServices {
+                    setButtonTitle("Signing...")
+                    Messages.shared.showSuccess(message: "App is being signed, please wait...".localized())
+                } else {
+                    setButtonTitle("Requested")
+                    Messages.shared.showSuccess(message: "Installation has been queued to your device".localized())
+                }
 
-                ObserveQueuedApps.shared.addApp(type: .cydia, linkId: sender.linkId, name: self.updatedApp.name, image: self.updatedApp.image, bundleId: self.updatedApp.bundleId)
+                ObserveQueuedApps.shared.addApp(type: .cydia, linkId: sender.linkId,
+                                                name: self.updatedApp.name, image: self.updatedApp.image,
+                                                bundleId: self.updatedApp.bundleId,
+                                                commandUUID: installResult.commandUUID,
+                                                installationType: installResult.installationType.rawValue)
 
                 delay(5) { setButtonTitle("Install") }
             }

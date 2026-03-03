@@ -67,6 +67,9 @@ class App: Item {
     var website: String = ""
     var support: String = ""
 
+    // v1.7 universal object identifier
+    var universalObjectIdentifier: String = ""
+
     // Ratings
     var numberOfRating: String = ""
     var numberOfStars: Double = 0.0
@@ -86,6 +89,7 @@ class App: Item {
         name <- map["name"]
         id <- map["id"]
         image <- map["image"]
+        image <- map["icon_uri"]  // v1.7 search_index / universal_gateway
         bundleId <- map["bundle_id"]
         version <- map["version"]
         price <- map["price"]
@@ -99,6 +103,12 @@ class App: Item {
         website <- map["pwebsite"]
         support <- map["psupport"]
         pname <- map["pname"]
+
+        // v1.7 universal_gateway field names
+        website <- map["website_uri"]
+        support <- map["support_uri"]
+        pname <- map["developer_name"]
+        universalObjectIdentifier <- map["universal_object_identifier"]
 
         // Information
 
@@ -132,8 +142,7 @@ class App: Item {
             publisher = "© " + pname
         }
 
-        // Screenshots
-
+        // Screenshots (v1.6 format: JSON string)
         if let data = screenshotsData.data(using: .utf8), let screenshotsParse = try? JSON(data: data) {
             var tmpScreens = [Screenshot]()
             for i in 0..<screenshotsParse["iphone"].count {
@@ -152,6 +161,66 @@ class App: Item {
                     type: "ipad"
                 ))
             }; screenshotsIpad = tmpScreensIpad
+        }
+
+        // v1.7 screenshots: screenshots_uris_by_os_type (from universal_gateway)
+        if let screenshotsByOS = map.JSON["screenshots_uris_by_os_type"] as? [String: Any] {
+            if screenshotsIphone.isEmpty, let iosScreens = screenshotsByOS["ios"] as? [String] {
+                screenshotsIphone = iosScreens.map { Screenshot(src: $0, class_: guessScreenshotOrientation(from: $0), type: "iphone") }
+            }
+            if screenshotsIpad.isEmpty, let ipadScreens = screenshotsByOS["ipados"] as? [String] {
+                screenshotsIpad = ipadScreens.map { Screenshot(src: $0, class_: guessScreenshotOrientation(from: $0), type: "ipad") }
+            }
+            // Fallback to universal screenshots
+            if screenshotsIphone.isEmpty, let universalScreens = screenshotsByOS["universal"] as? [String] {
+                screenshotsIphone = universalScreens.map { Screenshot(src: $0, class_: guessScreenshotOrientation(from: $0), type: "iphone") }
+            }
+        }
+
+        // v1.7 search_index: genre_name as category fallback
+        if category == nil, let genreName = map.JSON["genre_name"] as? String, !genreName.isEmpty {
+            category = Category(name: genreName, id: genreId.description)
+        }
+
+        // v1.7: developer_name / seller fallback
+        if seller.isEmpty, let devName = map.JSON["developer_name"] as? String {
+            seller = devName
+            if publisher.isEmpty { publisher = "© " + devName }
+        }
+
+        // v1.7 fallbacks for fields that may be empty when lastParseItunes is unavailable
+
+        // Size: use size_hr from universal_gateway
+        if size.isEmpty, let sizeHr = map.JSON["size_hr"] as? String, !sizeHr.isEmpty {
+            size = sizeHr
+        }
+
+        // Published/Updated date: use updated_at (unix timestamp string)
+        if published.isEmpty, let updatedAt = map.JSON["updated_at"] as? String, !updatedAt.isEmpty {
+            published = updatedAt.unixToString
+        }
+
+        // Price: convert price_cents_eur (euro cents string) to display string
+        if price.isEmpty, let priceCents = map.JSON["price_cents_eur"] as? String {
+            if priceCents == "0" {
+                price = "Free".localized()
+            } else if let cents = Int(priceCents), cents > 0 {
+                price = String(format: "€%.2f", Double(cents) / 100.0)
+            }
+        }
+
+        // Compatibility: build from granular min_*_version fields
+        if compatibility.isEmpty {
+            var parts = [String]()
+            if let v = map.JSON["min_ios_version"] as? String { parts.append("iOS \(v)+") }
+            if let v = map.JSON["min_ipados_version"] as? String { parts.append("iPadOS \(v)+") }
+            if let v = map.JSON["min_macos_version"] as? String { parts.append("macOS \(v)+") }
+            if let v = map.JSON["min_tvos_version"] as? String { parts.append("tvOS \(v)+") }
+            if let v = map.JSON["min_watchos_version"] as? String { parts.append("watchOS \(v)+") }
+            if let v = map.JSON["min_visionos_version"] as? String { parts.append("visionOS \(v)+") }
+            if !parts.isEmpty {
+                compatibility = parts.joined(separator: ", ")
+            }
         }
 
         clicksDay <- map["clicks_day"]

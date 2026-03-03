@@ -156,6 +156,12 @@
 "Trending iOS Apps" = "Популярные iOS приложения";
 "Trending Cydia Apps" = "Популярные Cydia приложения";
 "Trending Books" = "Популярные книги";
+"App Store" = "App Store";
+"Third Party" = "Сторонние";
+"Search App Store" = "Искать в App Store";
+"Search Third Party Apps" = "Искать сторонние приложения";
+"Trending App Store Apps" = "Популярные приложения App Store";
+"Trending Third Party Apps" = "Популярные сторонние приложения";
 "No results found" = "Ничего не найдено";
 "No results were found for '%@'" = "Ничего не найдено по запросу '%@'";
 "Please search at least two characters" = "Введите по крайне мере 2 символа";

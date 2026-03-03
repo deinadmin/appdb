@@ -76,9 +76,9 @@ struct AppsWidgetsEntryView: View {
 
     var typeString: String {
         switch entry.configuration.type {
-        case .ios: return "iOS".localized()
-        case .cydia: return "Cydia".localized()
-        case .books: return "Books".localized()
+        case .ios: return "App Store".localized()
+        case .cydia: return "Third Party".localized()
+        case .books: return "App Store".localized() // books removed in v1.7, fallback to App Store
         case .unknown: return ""
         }
     }

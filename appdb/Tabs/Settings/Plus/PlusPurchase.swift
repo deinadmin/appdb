@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import WebKit
+import SwiftyJSON
 
-/** not in use for now */
+/** not in use for now — updated for v1.7 get_subscriptions */
 
 class PlusPurchase: LoadingTableView {
 
@@ -19,7 +19,7 @@ class PlusPurchase: LoadingTableView {
         return bgColorView
     }()
 
-    private var purchaseOptions: [PlusPurchaseOption] = [] {
+    private var subscriptions: [JSON] = [] {
         didSet {
             tableView.spr_endRefreshing()
             state = .done
@@ -37,11 +37,11 @@ class PlusPurchase: LoadingTableView {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Purchase PLUS".localized()
+        title = "Subscriptions".localized()
 
-        tableView.register(PlusPurchaseCell.self, forCellReuseIdentifier: "purchaseOption")
-        tableView.estimatedRowHeight = 85
-        tableView.rowHeight = 85
+        tableView.register(SimpleSubtitleCell.self, forCellReuseIdentifier: "subscriptionCell")
+        tableView.estimatedRowHeight = 60
+        tableView.rowHeight = UITableView.automaticDimension
 
         tableView.theme_separatorColor = Color.borderColor
         tableView.theme_backgroundColor = Color.tableViewBackgroundColor
@@ -62,7 +62,7 @@ class PlusPurchase: LoadingTableView {
 
         // Refresh action
         tableView.spr_setIndicatorHeader { [weak self] in
-            self?.fetchPurchaseOptions()
+            self?.fetchSubscriptions()
         }
 
         tableView.spr_beginRefreshing()
@@ -70,17 +70,15 @@ class PlusPurchase: LoadingTableView {
 
     @objc func dismissAnimated() { dismiss(animated: true) }
 
-    fileprivate func fetchPurchaseOptions() {
-        API.getPlusPurchaseOptions { [weak self] purchaseOptions in
+    fileprivate func fetchSubscriptions() {
+        API.getSubscriptions(success: { [weak self] items in
             guard let self = self else { return }
-
-            self.purchaseOptions = purchaseOptions.sorted { $0.price.lowercased() < $1.price.lowercased() }
-        } fail: { [weak self] error in
+            self.subscriptions = items
+        }, fail: { [weak self] error in
             guard let self = self else { return }
-
-            self.purchaseOptions = []
-            self.showErrorMessage(text: "An error has occurred".localized(), secondaryText: error.localized(), animated: false)
-        }
+            self.subscriptions = []
+            self.showErrorMessage(text: "An error has occurred".localized(), secondaryText: error, animated: false)
+        })
     }
 
     // MARK: - Table View data source
@@ -90,43 +88,52 @@ class PlusPurchase: LoadingTableView {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        purchaseOptions.count
+        subscriptions.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "purchaseOption", for: indexPath) as? PlusPurchaseCell {
-            guard purchaseOptions.indices.contains(indexPath.row) else { return UITableViewCell() }
-            let purchaseOption = purchaseOptions[indexPath.row]
-            cell.configure(with: purchaseOption)
-            return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "subscriptionCell", for: indexPath)
+        guard subscriptions.indices.contains(indexPath.row) else { return UITableViewCell() }
+        let subscription = subscriptions[indexPath.row]
+
+        cell.textLabel?.text = subscription["name"].stringValue
+        cell.textLabel?.theme_textColor = Color.title
+        cell.textLabel?.numberOfLines = 0
+
+        var detail = subscription["price"].stringValue
+        let type = subscription["type"].stringValue
+        if !type.isEmpty {
+            detail += " • " + type
         }
-        return UITableViewCell()
+        cell.detailTextLabel?.text = detail
+        cell.detailTextLabel?.theme_textColor = Color.darkGray
+        cell.detailTextLabel?.numberOfLines = 0
+
+        cell.accessoryType = .disclosureIndicator
+        return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard purchaseOptions.indices.contains(indexPath.row) else { return }
-        let purchaseOption = purchaseOptions[indexPath.row]
-        if purchaseOption.html.isEmpty {
-            UIApplication.shared.open(URL(string: purchaseOption.link)!, options: [:], completionHandler: nil)
-        } else {
-            let purchaseWeb = PlusPurchaseWeb(with: purchaseOption)
-            navigationController!.pushViewController(purchaseWeb, animated: true)
-            purchaseWeb.loadWebView()
+        guard subscriptions.indices.contains(indexPath.row) else { return }
+        let subscription = subscriptions[indexPath.row]
+        let link = subscription["link"].stringValue
+        if !link.isEmpty, let url = URL(string: link) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if purchaseOptions.isEmpty { return nil }
+        if subscriptions.isEmpty { return nil }
 
-        let view = UpdatesSectionHeader(showsButton: true)
-        view.configure(with: "Available PLUS subscriptions".localized())
+        let view = SectionHeaderView(showsButton: true)
+        view.configure(with: "Available subscriptions".localized())
         view.helpButton.addTarget(self, action: #selector(self.showHelp), for: .touchUpInside)
         return view
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        purchaseOptions.isEmpty ? 0 : (60 ~~ 50)
+        subscriptions.isEmpty ? 0 : (60 ~~ 50)
     }
 
     @objc func showHelp() {

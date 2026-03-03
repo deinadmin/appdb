@@ -12,7 +12,6 @@ import Foundation
 extension Defaults.Keys {
     static let theme = Key<Int>("theme", default: Global.isDarkSystemAppearance ? 1 : 0)
     static let didSpecifyPreferredLanguage = Key<Bool>("didSpecifyPreferredLanguage", default: false)
-    static let appsync = Key<Bool>("appsync", default: false)
     static let ignoreCompatibility = Key<Bool>("ignoreCompatibility", default: false)
     static let askForInstallationOptions = Key<Bool>("askForInstallationOptions", default: false)
     static let showBadgeForUpdates = Key<Bool>("showBadgeForUpdates", default: true)
@@ -27,8 +26,7 @@ extension Defaults.Keys {
     static let deviceName = Key<String>("deviceName", default: "")
     static let deviceVersion = Key<String>("deviceVersion", default: "")
     static let enableIapPatch = Key<Bool>("enableIapPatch", default: false)
-    static let disableRevocationChecks = Key<Bool>("disableRevocationChecks", default: false)
-    static let forceDisablePRO = Key<Bool>("forceDisablePRO", default: false)
+    static let useRevokedCerts = Key<Bool>("useRevokedCerts", default: false)
     static let enableTrainer = Key<Bool>("enableTrainer", default: false)
     static let signingIdentityType = Key<String>("signingIdentityType", default: "auto")
     static let signingWith = Key<String>("signing_with", default: "")
@@ -141,10 +139,6 @@ enum Preferences {
         defaults[.didSpecifyPreferredLanguage]
     }
 
-    static var appsync: Bool {
-        defaults[.appsync]
-    }
-
     static var ignoresCompatibility: Bool {
         defaults[.ignoreCompatibility]
     }
@@ -201,12 +195,8 @@ enum Preferences {
         defaults[.enableIapPatch]
     }
 
-    static var disableRevocationChecks: Bool {
-        defaults[.disableRevocationChecks]
-    }
-
-    static var forceDisablePRO: Bool {
-        defaults[.forceDisablePRO]
+    static var useRevokedCerts: Bool {
+        defaults[.useRevokedCerts]
     }
 
     static var enableTrainer: Bool {
@@ -270,7 +260,6 @@ extension Preferences {
         removeKeychainData()
 
         // Remove normal keys
-        UserDefaults.standard.removeObject(forKey: Defaults.Keys.appsync.name)
         UserDefaults.standard.removeObject(forKey: Defaults.Keys.askForInstallationOptions.name)
         UserDefaults.standard.removeObject(forKey: Defaults.Keys.ignoreCompatibility.name)
         UserDefaults.standard.removeObject(forKey: Defaults.Keys.showBadgeForUpdates.name)
@@ -280,8 +269,7 @@ extension Preferences {
         UserDefaults.standard.removeObject(forKey: Defaults.Keys.deviceName.name)
         UserDefaults.standard.removeObject(forKey: Defaults.Keys.deviceVersion.name)
         UserDefaults.standard.removeObject(forKey: Defaults.Keys.enableIapPatch.name)
-        UserDefaults.standard.removeObject(forKey: Defaults.Keys.disableRevocationChecks.name)
-        UserDefaults.standard.removeObject(forKey: Defaults.Keys.forceDisablePRO.name)
+        UserDefaults.standard.removeObject(forKey: Defaults.Keys.useRevokedCerts.name)
         UserDefaults.standard.removeObject(forKey: Defaults.Keys.enableTrainer.name)
         UserDefaults.standard.removeObject(forKey: Defaults.Keys.signingIdentityType.name)
         UserDefaults.standard.removeObject(forKey: Defaults.Keys.optedOutFromEmails.name)

@@ -23,33 +23,16 @@ extension API {
                     var genres: [Genre] = []
                     let data = json["data"]
 
-                    // Default genres
-                    genres.append(Genre(category: "ios", id: "0", name: "All Categories".localized()))
-                    genres.append(Genre(category: "cydia", id: "0", name: "All Categories".localized()))
-                    genres.append(Genre(category: "books", id: "0", name: "All Categories".localized()))
+                    // In v1.7, only "official" genres are returned as a flat array
+                    genres.append(Genre(category: "official", id: "0", name: "All Categories".localized()))
 
-                    // Cydia genres
-                    for value in data["cydia"].arrayValue {
+                    for value in data.arrayValue {
                         genres.append(
-                            Genre(category: "cydia", id: value["id"].intValue.description, name: value["name"].stringValue, amount: value["content_amount"].stringValue)
+                            Genre(category: "official", id: value["id"].stringValue, name: value["name"].stringValue, amount: value["content_amount"].stringValue)
                         )
                     }
 
-                    // iOS Genres
-                    for value in data["ios"].arrayValue {
-                        genres.append(
-                            Genre(category: "ios", id: value["id"].stringValue, name: value["name"].stringValue, amount: value["content_amount"].stringValue)
-                        )
-                    }
-
-                    // Books Genres
-                    for value in data["books"].arrayValue {
-                        genres.append(
-                            Genre(category: "books", id: value["id"].stringValue, name: value["name"].stringValue, amount: value["content_amount"].stringValue)
-                        )
-                    }
-
-                    // Remove delete genres
+                    // Remove deleted genres
                     if let index = Preferences.genres.firstIndex(where: { !genres.contains($0) }) {
                         Preferences.remove(.genres, at: index)
                     }
@@ -58,12 +41,10 @@ extension API {
 
                     // Save genres
                     for (index, var genre) in genres.enumerated() {
-                        guard let type = ItemType(rawValue: genre.category) else { return }
-
                         if let index = Preferences.genres.firstIndex(where: { $0.compound == genre.compound }) {
                             // Genre exists
                             if Preferences.genres[index].icon.isEmpty {
-                                getIcon(id: genre.id, type: type, completion: { icon in
+                                getIcon(genreId: genre.id, completion: { icon in
                                     genre.icon = icon
                                     Preferences.remove(.genres, at: index)
                                     Preferences.append(.genres, element: genre)
@@ -71,7 +52,7 @@ extension API {
                             }
                         } else {
                             // Genre does not exist
-                            getIcon(id: genre.id, type: type, completion: { icon in
+                            getIcon(genreId: genre.id, completion: { icon in
                                 genre.icon = icon
                                 Preferences.append(.genres, element: genre)
                             })
@@ -88,13 +69,13 @@ extension API {
             }
     }
 
-    static func getIcon(id: String, type: ItemType, completion: @escaping (String) -> Void) {
-        AF.request(endpoint + Actions.search.rawValue, parameters: ["type": type.rawValue, "genre": id, "order": Order.all.rawValue, "lang": languageCode], headers: headers)
+    static func getIcon(genreId: String, completion: @escaping (String) -> Void) {
+        AF.request(endpoint + Actions.searchIndex.rawValue, parameters: ["genre_id": genreId, "lang": languageCode, "length": 1], headers: headers)
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
-                    completion(json["data"][0]["image"].stringValue)
+                    completion(json["data"][0]["icon_uri"].stringValue)
                 case .failure:
                     completion("")
                 }
@@ -102,7 +83,8 @@ extension API {
     }
 
     static func categoryFromId(id: String, type: ItemType) -> String {
-        if let genre = Preferences.genres.first(where: { $0.category == type.rawValue && $0.id == id }) {
+        // In v1.7, genres are unified under "official" category
+        if let genre = Preferences.genres.first(where: { $0.id == id }) {
             return genre.name
         } else {
             return ""
@@ -110,7 +92,8 @@ extension API {
     }
 
     static func idFromCategory(name: String, type: ItemType) -> String {
-        if let genre = Preferences.genres.first(where: { $0.category == type.rawValue && $0.name == name }) {
+        // In v1.7, genres are unified under "official" category
+        if let genre = Preferences.genres.first(where: { $0.name == name }) {
             return genre.id
         } else {
             return ""

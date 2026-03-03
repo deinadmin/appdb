@@ -25,6 +25,7 @@ struct AltStoreRepo: Mappable {
     var totalApps: Int = 0
     var addedAt: String = ""
     var lastCheckedAt: String = ""
+    var contentsUri: String = ""
     var contents: AltStoreRepoContents?
     var apps: [AltStoreApp]? = []
 
@@ -48,6 +49,7 @@ struct AltStoreRepo: Mappable {
         totalApps <- map["total_apps"]
         addedAt <- map["added_at"]
         lastCheckedAt <- map["last_checked_at"]
+        contentsUri <- map["contents_uri"]
         contents <- map["contents"]
         isPublic <- map["is_public"]
         apps = contents?.apps

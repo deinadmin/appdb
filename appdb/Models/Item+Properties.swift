@@ -17,25 +17,38 @@ extension Item {
         if let app = self as? App { return app.id.description }
         if let cydiaApp = self as? CydiaApp { return cydiaApp.id.description }
         if let book = self as? Book { return book.id.description }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.bundleId }
         return ""
+    }
+
+    /// v1.7 universal object identifier — used for universal_gateway and install calls.
+    /// Falls back to itemId if not set (e.g. for items loaded from v1.6 style data).
+    var itemUniversalObjectIdentifier: String {
+        if let app = self as? App, !app.universalObjectIdentifier.isEmpty { return app.universalObjectIdentifier }
+        if let cydiaApp = self as? CydiaApp, !cydiaApp.universalObjectIdentifier.isEmpty { return cydiaApp.universalObjectIdentifier }
+        if let book = self as? Book, !book.universalObjectIdentifier.isEmpty { return book.universalObjectIdentifier }
+        return itemId
     }
 
     var itemName: String {
         if let app = self as? App { return app.name.decoded }
         if let cydiaApp = self as? CydiaApp { return cydiaApp.name.decoded }
         if let book = self as? Book { return book.name.decoded }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.name }
         return ""
     }
 
     var itemVersion: String {
         if let app = self as? App { return app.version }
         if let cydiaApp = self as? CydiaApp { return cydiaApp.version }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.version }
         return ""
     }
 
     var itemBundleId: String {
         if let app = self as? App { return app.bundleId }
         if let cydiaApp = self as? CydiaApp { return cydiaApp.bundleId }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.bundleId }
         return ""
     }
 
@@ -50,12 +63,14 @@ extension Item {
             if cydiaApp.screenshotsIphone.isEmpty { return Array(cydiaApp.screenshotsIpad) }
             return Array((cydiaApp.screenshotsIpad ~~ cydiaApp.screenshotsIphone))
         }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.screenshots }
         return []
     }
 
     var itemScreenshotsIphone: [Screenshot] {
         if let app = self as? App { return Array(app.screenshotsIphone) }
         if let cydiaApp = self as? CydiaApp { return Array(cydiaApp.screenshotsIphone) }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.screenshots }
         return []
     }
 
@@ -79,18 +94,62 @@ extension Item {
         if let app = self as? App { return app.description_ }
         if let cydiaApp = self as? CydiaApp { return cydiaApp.description_ }
         if let book = self as? Book { return book.description_ }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.description_ }
         return ""
     }
 
     var itemChangelog: String {
         if let app = self as? App { return app.whatsnew }
         if let cydiaApp = self as? CydiaApp { return cydiaApp.whatsnew }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.whatsnew }
         return ""
     }
 
     var itemUpdatedDate: String {
         if let app = self as? App { return app.published }
-        if let cydiaApp = self as? CydiaApp { return cydiaApp.updated }
+        if let cydiaApp = self as? CydiaApp { return cydiaApp.updated.unixToString }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.updated }
+        return ""
+    }
+
+    // MARK: - v1.7 detail fields
+
+    var itemSize: String {
+        if let app = self as? App { return app.size }
+        if let cydiaApp = self as? CydiaApp { return cydiaApp.size }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.formattedSize }
+        return ""
+    }
+
+    var itemPrice: String {
+        if let app = self as? App { return app.price }
+        if let cydiaApp = self as? CydiaApp { return cydiaApp.price }
+        return ""
+    }
+
+    var itemCompatibility: String {
+        if let app = self as? App { return app.compatibility }
+        if let cydiaApp = self as? CydiaApp { return cydiaApp.compatibility }
+        return ""
+    }
+
+    var itemCategoryName: String {
+        if let app = self as? App { return app.category?.name ?? "" }
+        if let cydiaApp = self as? CydiaApp {
+            if !cydiaApp.categoryName.isEmpty { return cydiaApp.categoryName }
+            return API.categoryFromId(id: cydiaApp.categoryId.description, type: .cydia)
+        }
+        if let book = self as? Book { return API.categoryFromId(id: book.categoryId.description, type: .books) }
+        return ""
+    }
+
+    var itemRated: String {
+        if let app = self as? App { return app.rated }
+        return ""
+    }
+
+    var itemLanguages: String {
+        if let app = self as? App { return app.languages }
         return ""
     }
 
@@ -123,6 +182,7 @@ extension Item {
         if let app = self as? App { return app.seller }
         if let cydiaApp = self as? CydiaApp { return cydiaApp.developer }
         if let book = self as? Book { return book.author }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.developer }
         return ""
     }
 
@@ -130,6 +190,7 @@ extension Item {
         if let app = self as? App { return app.image }
         if let cydiaApp = self as? CydiaApp { return cydiaApp.image }
         if let book = self as? Book { return book.image }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.image }
         return ""
     }
 

@@ -174,21 +174,28 @@ extension Library {
 
                 queue.async {
 
-                    guard let plist = IPAFileManager.shared.base64ToJSONInfoPlist(from: ipa) else {
-                        DispatchQueue.main.async {
-                            cell.updateText(ipa.size)
-                            IPAFileManager.shared.stopServer()
-                        }
-                        return
-                    }
+                    let name = String(ipa.filename.dropLast(4))
 
-                    API.requestInstallJB(plist: plist, icon: " ", link: link, completion: { error in
+                    API.customInstall(ipaUrl: link, iconUrl: " ", name: name, completion: { result in
                         DispatchQueue.main.async {
                             cell.updateText(ipa.size)
-                            if let error = error {
+                            switch result {
+                            case .failure(let error):
                                 Messages.shared.showError(message: error.prettified)
                                 IPAFileManager.shared.stopServer()
-                            } else {
+                            case .success(let installResult):
+                                if installResult.installationType == .itmsServices {
+                                    Messages.shared.showSuccess(message: "App is being signed, please wait...".localized())
+                                } else {
+                                    Messages.shared.showSuccess(message: "Installation has been queued to your device".localized())
+                                }
+
+                                ObserveQueuedApps.shared.addApp(type: .myAppstore, linkId: "",
+                                                                name: name, image: "",
+                                                                bundleId: "",
+                                                                commandUUID: installResult.commandUUID,
+                                                                installationType: installResult.installationType.rawValue)
+
                                 // Allowing up to 3 mins for app to install...
                                 delay(180) { IPAFileManager.shared.stopServer() }
                             }
@@ -265,24 +272,45 @@ extension Library {
             sender.setTitle(text.localized().uppercased(), for: .normal)
         }
 
+        // Guard: installation_ticket must be present (from /get_ipas/ response)
+        guard !sender.linkId.isEmpty else {
+            // Try to show the specific failure reason from the API
+            if myAppstoreIpas.indices.contains(sender.tag), !myAppstoreIpas[sender.tag].noInstallationTicketReason.isEmpty {
+                Messages.shared.showError(message: myAppstoreIpas[sender.tag].noInstallationTicketReason.prettified)
+            } else {
+                Messages.shared.showError(message: "This app cannot be installed at this time".localized())
+            }
+            return
+        }
+
         if Preferences.deviceIsLinked {
             setButtonTitle("Requesting...")
 
-            func install(_ additionalOptions: [AdditionalInstallationParameters: Any] = [:]) {
-                API.install(id: sender.linkId, type: .myAppstore, additionalOptions: additionalOptions) { [weak self] error in
+            func install(_ additionalOptions: [String: Any] = [:]) {
+                API.install(id: sender.linkId, type: .myAppstore, additionalOptions: additionalOptions) { [weak self] result in
                     guard let self = self else { return }
 
-                    if let error = error {
+                    switch result {
+                    case .failure(let error):
                         Messages.shared.showError(message: error.prettified)
                         delay(0.3) { setButtonTitle("Install") }
-                    } else {
-                        setButtonTitle("Requested")
-
+                    case .success(let installResult):
                         if #available(iOS 10.0, *) { UINotificationFeedbackGenerator().notificationOccurred(.success) }
 
-                        Messages.shared.showSuccess(message: "Installation has been queued to your device".localized())
+                        if installResult.installationType == .itmsServices {
+                            setButtonTitle("Signing...")
+                            Messages.shared.showSuccess(message: "App is being signed, please wait...".localized())
+                        } else {
+                            setButtonTitle("Requested")
+                            Messages.shared.showSuccess(message: "Installation has been queued to your device".localized())
+                        }
 
-                        ObserveQueuedApps.shared.addApp(type: .myAppstore, linkId: sender.linkId, name: self.myAppstoreIpas[sender.tag].name, image: "", bundleId: self.myAppstoreIpas[sender.tag].bundleId)
+                        ObserveQueuedApps.shared.addApp(type: .myAppstore, linkId: sender.linkId,
+                                                        name: self.myAppstoreIpas[sender.tag].name,
+                                                        image: self.myAppstoreIpas[sender.tag].iconUri,
+                                                        bundleId: self.myAppstoreIpas[sender.tag].bundleId,
+                                                        commandUUID: installResult.commandUUID,
+                                                        installationType: installResult.installationType.rawValue)
 
                         delay(5) { setButtonTitle("Install") }
                     }
@@ -309,14 +337,14 @@ extension Library {
                 }
 
                 vc.onCompletion = { (patchIap: Bool, enableGameTrainer: Bool, removePlugins: Bool, enablePushNotifications: Bool, duplicateApp: Bool, newId: String, newName: String, selectedDylibs: [String]) in
-                    var additionalOptions: [AdditionalInstallationParameters: Any] = [:]
-                    if patchIap { additionalOptions[.inApp] = 1 }
-                    if enableGameTrainer { additionalOptions[.trainer] = 1 }
-                    if removePlugins { additionalOptions[.removePlugins] = 1 }
-                    if enablePushNotifications { additionalOptions[.pushNotifications] = 1 }
-                    if duplicateApp && !newId.isEmpty { additionalOptions[.alongside] = newId }
-                    if !newName.isEmpty { additionalOptions[.name] = newName }
-                    if !selectedDylibs.isEmpty { additionalOptions[.injectDylibs] = selectedDylibs }
+                    var additionalOptions: [String: Any] = [:]
+                    if patchIap { additionalOptions[InstallationFeatureParameter.key(for: "inapp")] = 1 }
+                    if enableGameTrainer { additionalOptions[InstallationFeatureParameter.key(for: "trainer")] = 1 }
+                    if removePlugins { additionalOptions[InstallationFeatureParameter.key(for: "remove_plugins")] = 1 }
+                    if enablePushNotifications { additionalOptions[InstallationFeatureParameter.key(for: "push")] = 1 }
+                    if duplicateApp && !newId.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "alongside")] = newId }
+                    if !newName.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "name")] = newName }
+                    if !selectedDylibs.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "inject_dylibs")] = selectedDylibs }
                     install(additionalOptions)
                 }
             } else {

@@ -18,23 +18,11 @@ class AdvancedOptions: TableViewController {
                 detailText: Preferences.signingIdentityType.capitalizingFirstLetter(), selection: { [unowned self] _ in
                     self.push(SigningTypeChooser())
                 }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self),
-            StaticRow(text: "Disable Revocation Checks".localized(), accessory: .switchToggle(value: Preferences.disableRevocationChecks) { newValue in
-                API.setConfiguration(params: [.disableProtectionChecks: newValue ? "yes" : "no"], success: {}, fail: { _ in })
-            }, cellClass: SimpleStaticCell.self),
-            StaticRow(text: "Force Disable PRO".localized(), accessory: .switchToggle(value: Preferences.forceDisablePRO) { newValue in
-                API.setConfiguration(params: [.forceDisablePRO: newValue ? "yes" : "no"], success: {}, fail: { _ in })
-            }, cellClass: SimpleStaticCell.self),
             StaticRow(text: "Opt-out from emails".localized(), accessory: .switchToggle(value: Preferences.optedOutFromEmails) { newValue in
                 API.setConfiguration(params: [.optedOutFromEmails: newValue ? "yes" : "no"], success: {}, fail: { _ in })
             }, cellClass: SimpleStaticCell.self)
         ]),
         StaticSection(rows: [
-            /*StaticRow(text: "Check Revocation".localized(), selection: { [unowned self] _ in
-                            self.checkRevocationStatus()
-                        }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self),*/
-            StaticRow(text: "Email Link Code".localized(), selection: { [unowned self] _ in
-                self.emailLinkCode()
-            }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self),
             StaticRow(text: "List apps managed by appdb".localized(), selection: { [unowned self] _ in
                 self.listAppsManagedByAppdb()
             }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self)
@@ -151,19 +139,6 @@ extension AdvancedOptions {
             })
         }*/
 
-    fileprivate func emailLinkCode() {
-        let title = "Enter Email".localized()
-        let message = "Enter below the email address where the link code will be sent:".localized()
-        let placeholder = "name@example.com".localized()
-        presentEmailInputAlertController(title: title, message: message, placeholder: placeholder, actionTitle: "Send".localized(), action: { email in
-            API.emailLinkCode(email: email, success: {
-                Messages.shared.showSuccess(message: "Email was sent successfully!".localized(), context: .viewController(self))
-            }, fail: { error in
-                Messages.shared.showError(message: error.prettified, context: .viewController(self))
-            })
-        })
-    }
-
     fileprivate func listAppsManagedByAppdb() {
         let listAppsManagedByAppdbViewController = ListAppsManagedByAppdb()
         self.navigationController?.pushViewController(listAppsManagedByAppdbViewController, animated: true)
@@ -189,45 +164,6 @@ extension AdvancedOptions {
             self.present(alertController, animated: true)
         }
     }
-}
-
-extension AdvancedOptions {
-    func presentEmailInputAlertController(title: String, message: String, placeholder: String, actionTitle: String, action: @escaping (_ text: String) -> Void) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert, adaptive: true)
-        alert.addTextField(configurationHandler: { textField in
-            //textField.addTarget(self, action: #selector(self.voucherTextChanged), for: .editingChanged)
-            textField.placeholder = placeholder
-            textField.keyboardType = .emailAddress
-            textField.theme_keyboardAppearance = [.light, .dark, .dark]
-            textField.clearButtonMode = .whileEditing
-        })
-
-        alert.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
-
-        let load = UIAlertAction(title: actionTitle, style: .default, handler: { _ in
-            guard let text = alert.textFields?[0].text else { return }
-            action(text)
-        })
-
-        alert.addAction(load)
-        //load.isEnabled = false
-
-        DispatchQueue.main.async {
-            self.present(alert, animated: true)
-        }
-    }
-
-    /*@objc func voucherTextChanged(sender: UITextField) {
-        var responder: UIResponder = sender
-        while !(responder is UIAlertController) { responder = responder.next! }
-        if let alert = responder as? UIAlertController {
-            if let text = sender.text, !text.isEmpty {
-                (alert.actions[1] as UIAlertAction).isEnabled = true
-            } else {
-                (alert.actions[1] as UIAlertAction).isEnabled = false
-            }
-        }
-    }*/
 }
 
 extension AdvancedOptions: ChangedSigningType {

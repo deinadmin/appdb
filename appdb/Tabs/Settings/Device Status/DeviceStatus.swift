@@ -174,23 +174,23 @@ class DeviceStatus: LoadingTableView {
         return UITableViewCell()
     }
 
-    // Option to Fix or Retry command with given UUID
+    // Option to Cancel or Retry command with given UUID
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if statuses[indexPath.row].status == "failed_fixable" {
-            presentControllerToRetryOrFixCommand(index: indexPath, canFix: true)
+            presentControllerToRetryOrCancelCommand(index: indexPath, canCancel: true)
         } else if retriableCommands.contains(statuses[indexPath.row].status) {
-            presentControllerToRetryOrFixCommand(index: indexPath)
+            presentControllerToRetryOrCancelCommand(index: indexPath)
         }
     }
 
-    private func presentControllerToRetryOrFixCommand(index: IndexPath, canFix: Bool = false) {
+    private func presentControllerToRetryOrCancelCommand(index: IndexPath, canCancel: Bool = false) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet, adaptive: true)
 
-        if canFix {
-            let fix = UIAlertAction(title: "Fix".localized(), style: .default) { _ in
-                API.fixCommand(uuid: self.statuses[index.row].uuid)
+        if canCancel {
+            let cancelCommand = UIAlertAction(title: "Cancel Command".localized(), style: .destructive) { _ in
+                API.cancelCommand(uuid: self.statuses[index.row].uuid)
             }
-            alertController.addAction(fix)
+            alertController.addAction(cancelCommand)
         }
 
         let retry = UIAlertAction(title: "Retry".localized(), style: .default) { _ in

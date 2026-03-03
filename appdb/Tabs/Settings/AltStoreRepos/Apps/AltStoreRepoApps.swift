@@ -106,20 +106,45 @@ class AltStoreRepoApps: LoadingTableView {
     }
 
     private func loadContent() {
-        API.getAltStoreRepo(id: String(repo.id), success: { [weak self] _repo in
+        API.getRepo(id: String(repo.id), success: { [weak self] _repo in
             guard let self = self else { return }
 
             self.repo = _repo
 
-            if _repo.apps != nil && !_repo.apps!.isEmpty {
-                self.apps = _repo.apps!
+            // v1.7: apps are no longer inline — fetch from contents_uri
+            if !_repo.contentsUri.isEmpty {
+                API.getRepoContents(contentsUri: _repo.contentsUri, success: { [weak self] contents in
+                    guard let self = self else { return }
+                    if !contents.apps.isEmpty {
+                        self.apps = contents.apps
+                    }
+                    self.state = .done
+                    self.tableView.spr_endRefreshing()
+                    self.tableView.reloadData()
+                }, fail: { [weak self] error in
+                    guard let self = self else { return }
+                    // Fallback: check inline contents (in case API returns them)
+                    if let inlineApps = _repo.apps, !inlineApps.isEmpty {
+                        self.apps = inlineApps
+                    }
+                    self.state = .done
+                    self.tableView.spr_endRefreshing()
+                    self.tableView.reloadData()
+                    if self.apps.isEmpty {
+                        self.showErrorMessage(text: "Cannot load apps".localized(), secondaryText: error, animated: false)
+                    }
+                })
+            } else if let inlineApps = _repo.apps, !inlineApps.isEmpty {
+                // Fallback for inline contents (v1.6 style or if API ever returns them)
+                self.apps = inlineApps
+                self.state = .done
+                self.tableView.spr_endRefreshing()
+                self.tableView.reloadData()
+            } else {
+                self.state = .done
+                self.tableView.spr_endRefreshing()
+                self.tableView.reloadData()
             }
-
-            print("apps: \(self.apps)")
-
-            self.state = .done
-            self.tableView.spr_endRefreshing()
-            self.tableView.reloadData()
         }, fail: { error in
             self.tableView.spr_endRefreshing()
             self.tableView.reloadData()

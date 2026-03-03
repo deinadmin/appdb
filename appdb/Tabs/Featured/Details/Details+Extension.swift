@@ -37,6 +37,8 @@ extension Details {
         tableView.register(DetailsReview.self, forCellReuseIdentifier: "review")
         tableView.register(DetailsDownload.self, forCellReuseIdentifier: "download")
         tableView.register(DetailsDownloadUnified.self, forCellReuseIdentifier: "downloadUnified")
+        tableView.register(DetailsInfoPills.self, forCellReuseIdentifier: "infopills")
+        tableView.register(DetailsPreviousVersions.self, forCellReuseIdentifier: "previousversions")
 
         // Initialize 'Share' button
         shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(self.share))
@@ -115,12 +117,14 @@ extension Details {
 
         details = [
             DetailsTweakedNotice(originalTrackId: content.itemOriginalTrackid, originalSection: content.itemOriginalSection, delegate: self),
+            DetailsInfoPills(type: contentType, content: content),
             DetailsScreenshots(type: contentType, screenshots: content.itemScreenshots, delegate: self),
             DetailsDescription(), // dynamic
             DetailsChangelog(), // dynamic
             DetailsRelated(type: contentType, related: content.itemRelatedContent, delegate: self),
             DetailsInformation(type: contentType, content: content),
-            DetailsDownloadStats(content: content)
+            DetailsDownloadStats(content: content),
+            DetailsPreviousVersions(hasVersions: false, delegate: self) // updated when links load
         ]
 
         switch contentType {
@@ -145,7 +149,7 @@ extension Details {
 
     // Get links
     func getLinks() {
-        API.getLinks(type: contentType, trackid: content.itemId, success: { [weak self] items in
+        API.getLinks(universalObjectIdentifier: content.itemUniversalObjectIdentifier, success: { [weak self] items in
             guard let self = self else { return }
 
             self.versions = items
@@ -165,7 +169,7 @@ extension Details {
 
     @objc func dismissAnimated() { dismiss(animated: true) }
 
-    // Details/Reviews for details segment
+    // Details/Reviews/Download segments for books only
     var itemsForSegmentedControl: [DetailsSelectedSegmentState] {
         switch contentType {
         case .books: if let book = content as? Book {
@@ -173,13 +177,18 @@ extension Details {
             return [.details, .download]
         }
         default: break
-        }; return [.details, .download]
+        }
+        // Non-books don't use segment control (flat layout), but return a fallback just in case
+        return [.details]
     }
 
     // Setting the right estimated height for rows with dynamic content helps with tableview jumping issues
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexForSegment {
-        case .details:
+        // For flat layout, details section is 1 instead of 2
+        let isDetailsSection = useFlatLayout ? (indexPath.section == 1) : (indexPath.section >= 2 && indexForSegment == .details)
+
+        if isDetailsSection {
+            guard details.indices.contains(indexPath.row) else { return 32 }
             if details[indexPath.row] is DetailsDescription {
                 return 145 ~~ 135
             } else if details[indexPath.row] is DetailsChangelog {
@@ -187,11 +196,18 @@ extension Details {
             } else {
                 return 32
             }
-        case .reviews:
-            return indexPath.row == content.itemReviews.count ? 32 : 110 ~~ 150
-        default:
-            return 32
         }
+
+        if !useFlatLayout {
+            switch indexForSegment {
+            case .reviews:
+                return indexPath.row == content.itemReviews.count ? 32 : 110 ~~ 150
+            default:
+                return 32
+            }
+        }
+
+        return 32
     }
 
     // Reload data on rotation to update ElasticLabel text
@@ -200,7 +216,7 @@ extension Details {
 
         coordinator.animate(alongsideTransition: { (_: UIViewControllerTransitionCoordinatorContext!) -> Void in
             guard self.tableView != nil else { return }
-            if self.indexForSegment != .download { self.tableView.reloadData() }
+            if self.useFlatLayout || self.indexForSegment != .download { self.tableView.reloadData() }
         }, completion: nil)
     }
 }

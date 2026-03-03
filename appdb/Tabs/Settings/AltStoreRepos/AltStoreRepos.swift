@@ -100,8 +100,8 @@ class AltStoreRepos: LoadingTableView {
     }
 
     func getRepos(done: @escaping (_ error: String?) -> Void) {
-        API.getAltStoreRepos(isPublic: false, success: { _privateRepos in
-            API.getAltStoreRepos(isPublic: true, success: { [weak self] _publicRepos in
+        API.getRepos(isPublic: false, success: { _privateRepos in
+            API.getRepos(isPublic: true, success: { [weak self] _publicRepos in
                 guard let self = self else { return }
 
                 self.privateRepos = _privateRepos
@@ -155,7 +155,7 @@ class AltStoreRepos: LoadingTableView {
     // MARK: - Section header view
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UpdatesSectionHeader(showsButton: false)
+        let view = SectionHeaderView(showsButton: false)
         var text: String!
         if section == 0 {
             if privateRepos.isEmpty { return nil }
@@ -193,7 +193,7 @@ class AltStoreRepos: LoadingTableView {
             let item = repos[indexPath.row]
 
             if !item.isPublic {
-                API.deleteAltStoreRepo(id: String(item.id)) {
+                API.deleteRepo(id: String(item.id)) {
                     Messages.shared.showSuccess(message: "The repository was deleted successfully".localized(), context: .viewController(self))
                     self.loadRepos()
                 } fail: { error in

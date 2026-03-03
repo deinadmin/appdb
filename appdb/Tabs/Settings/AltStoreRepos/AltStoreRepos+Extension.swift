@@ -72,7 +72,7 @@ extension AltStoreRepos {
 
         let addAction = UIAlertAction(title: "Add repo".localized(), style: .default, handler: { _ in
             guard let text = alertController.textFields?[0].text else { return }
-            API.addAltStoreRepo(url: text) { item in
+            API.addRepo(url: text) { item in
                 Messages.shared.showSuccess(message: "Repository was added successfully".localized(), context: .viewController(self))
                 self.loadRepos()
             } fail: { error in

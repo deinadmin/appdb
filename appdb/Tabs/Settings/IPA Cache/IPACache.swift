@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class IPACache: LoadingTableView {
 
-    var status: IPACacheStatus? {
+    var historyRecords: [JSON] = [] {
         didSet {
             self.tableView.spr_endRefreshing()
             self.state = .done
@@ -28,10 +29,11 @@ class IPACache: LoadingTableView {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "IPA Cache".localized()
+        title = "Installation History".localized()
 
-        tableView.register(SimpleStaticCell.self, forCellReuseIdentifier: "cell")
-        tableView.estimatedRowHeight = 50
+        tableView.register(SimpleSubtitleCell.self, forCellReuseIdentifier: "historyCell")
+        tableView.estimatedRowHeight = 60
+        tableView.rowHeight = UITableView.automaticDimension
 
         tableView.theme_separatorColor = Color.borderColor
         tableView.theme_backgroundColor = Color.tableViewBackgroundColor
@@ -53,21 +55,21 @@ class IPACache: LoadingTableView {
 
         // Refresh action
         tableView.spr_setIndicatorHeader { [weak self] in
-            self?.fetchStatus()
+            self?.fetchHistory()
         }
 
         tableView.spr_beginRefreshing()
     }
 
-    private func fetchStatus() {
-        API.getIPACacheStatus { [weak self] status in
+    private func fetchHistory() {
+        API.getInstallationHistory(success: { [weak self] items in
             guard let self = self else { return }
-            self.status = status
-        } fail: { [weak self] error in
+            self.historyRecords = items
+        }, fail: { [weak self] error in
             guard let self = self else { return }
-            self.status = nil
-            self.showErrorMessage(text: "Cannot connect".localized(), secondaryText: error.localizedDescription, animated: false)
-        }
+            self.historyRecords = []
+            self.showErrorMessage(text: "Cannot connect".localized(), secondaryText: error, animated: false)
+        })
     }
 
     @objc func dismissAnimated() { dismiss(animated: true) }
@@ -75,113 +77,71 @@ class IPACache: LoadingTableView {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        status == nil ? 0 : 2
+        historyRecords.isEmpty ? 0 : 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        status == nil
-            ? 0
-            : section == 0 ? 1 : 5
+        historyRecords.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? SimpleStaticCell, let status = status {
-            if (indexPath.section == 0) {
-                cell.textLabel?.text = "Cached IPAs".localized()
-                cell.detailTextLabel?.text = "\(status.ipas.count)"
-                cell.textLabel?.theme_textColor = Color.title
-                cell.selectionStyle = .default
-                cell.accessoryType = .disclosureIndicator
-            } else {
-                switch indexPath.row {
-                case 0:
-                    cell.textLabel?.text = "Size".localized()
-                    cell.detailTextLabel?.text = status.sizeHr + " / " + status.sizeLimitHr
-                    cell.textLabel?.theme_textColor = Color.title
-                    cell.selectionStyle = .none
-                case 1:
-                    cell.textLabel?.text = "In Update".localized()
-                    cell.detailTextLabel?.text = status.inUpdate == 1 ? "Yes".localized() : "No".localized()
-                    cell.textLabel?.theme_textColor = Color.title
-                    cell.selectionStyle = .none
-                case 2:
-                    cell.textLabel?.text = "Reinstall everything".localized()
-                    cell.detailTextLabel?.text = nil
-                    cell.textLabel?.theme_textColor = Color.mainTint
-                    cell.selectionStyle = .default
-                case 3:
-                    cell.textLabel?.text = "Clear IPA cache".localized()
-                    cell.detailTextLabel?.text = nil
-                    cell.textLabel?.theme_textColor = Color.mainTint
-                    cell.selectionStyle = .default
-                case 4:
-                    cell.textLabel?.text = "Re-validate IPA cache".localized()
-                    cell.detailTextLabel?.text = nil
-                    cell.textLabel?.theme_textColor = Color.mainTint
-                    cell.selectionStyle = .default
-                default: break
-                }
-            }
-            return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath)
+        let record = historyRecords[indexPath.row]
+
+        let objectName = record["object"]["name"].stringValue
+        let version = record["version"].stringValue
+        let deviceName = record["device_name"].stringValue
+        let queuedAt = record["queued_at"].stringValue
+        let errorMsg = record["error"].string
+
+        // Title: app name + version
+        var title = objectName
+        if !version.isEmpty {
+            title += " (\(version))"
         }
-        return UITableViewCell()
+        cell.textLabel?.text = title
+        cell.textLabel?.theme_textColor = Color.title
+        cell.textLabel?.numberOfLines = 0
+
+        // Subtitle: device + date + error
+        var subtitle = ""
+        if !deviceName.isEmpty {
+            let deviceModel = record["device_model"].stringValue
+            subtitle += deviceModel.isEmpty ? deviceName : "\(deviceName) (\(deviceModel))"
+        }
+        if !queuedAt.isEmpty {
+            if !subtitle.isEmpty { subtitle += " • " }
+            subtitle += queuedAt
+        }
+        if let errorMsg = errorMsg, !errorMsg.isEmpty {
+            if !subtitle.isEmpty { subtitle += "\n" }
+            subtitle += "Error: ".localized() + errorMsg
+        }
+        cell.detailTextLabel?.text = subtitle
+        cell.detailTextLabel?.theme_textColor = Color.darkGray
+        cell.detailTextLabel?.numberOfLines = 0
+
+        cell.selectionStyle = .none
+        cell.accessoryType = .none
+
+        return cell
     }
 
-    // MARK: - Section header view
-
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            return nil
-        }
-        let view = UpdatesSectionHeader(showsButton: section == 0)
-        view.configure(with: "IPA cache status for current device".localized())
-        view.helpButton.addTarget(self, action: #selector(self.showHelp), for: .touchUpInside)
-        return view
+        nil
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        status == nil ? 0 : (60 ~~ 50)
+        historyRecords.isEmpty ? 0 : 10
     }
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        status == nil
-            ? nil
-            : section == 0 ? status?.updatedAt : ""
-    }
+    // Reload data on rotation
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 0 && status != nil {
-            let cachedIPAsVc = CachedIPAs()
-            cachedIPAsVc.cachedIPAs = status!.ipas
-            navigationController?.pushViewController(cachedIPAsVc, animated: true)
-        } else {
-            switch indexPath.row {
-            case 2:
-                API.reinstallEverything(success: {
-                    Messages.shared.showSuccess(message: "Success".localized(), context: .viewController(self))
-                }, fail: { error in
-                    Messages.shared.showError(message: error.prettified, context: .viewController(self))
-                })
-            case 3:
-                API.clearIpaCache {
-                    Messages.shared.showSuccess(message: "Success".localized(), context: .viewController(self))
-                }
-            case 4:
-                API.revalidateIpaCache {
-                    Messages.shared.showSuccess(message: "Success".localized(), context: .viewController(self))
-                }
-            default:
-                break
-            }
-        }
-    }
-
-    @objc func showHelp() {
-        let message = "appdb saves all installed IPA files for your device to cache, so you can easily restore all your apps after device reset or revocation. Cache is stored per device, and will be deleted if you will unlink your device. If you restored your device and missing appdb profile, you can visit device status page and tap \"Update profile\" button to install it, or link device via email by tapping \"Just link new device\" in message from appdb.\n\nNote: IPA files does not contain app data, if you want to keep your app data, backup device via Finder or iTunes, Remove revoked apps, Install apps from cache and then restore backup from Finder or iTunes.".localized()
-        let alertController = UIAlertController(title: "IPA cache status for current device".localized(), message: message, preferredStyle: .alert, adaptive: true)
-        let okAction = UIAlertAction(title: "OK".localized(), style: .cancel)
-        alertController.addAction(okAction)
-        self.present(alertController, animated: true)
+        coordinator.animate(alongsideTransition: { (_: UIViewControllerTransitionCoordinatorContext!) -> Void in
+            guard self.tableView != nil else { return }
+            if !self.historyRecords.isEmpty { self.tableView.reloadData() }
+        }, completion: nil)
     }
 }

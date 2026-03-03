@@ -18,7 +18,9 @@ class MyAppStoreCell: UICollectionViewCell {
     func configure(with app: MyAppStoreApp) {
         name.text = app.name + " (\(app.version))"
         bundleId.text = app.bundleId
-        installButton.linkId = app.id.description
+        // v1.7: use installation_ticket from /get_ipas/ for installing via type: "universal"
+        installButton.linkId = app.installationTicket
+        installButton.isEnabled = !app.installationTicket.isEmpty
     }
 
     required init?(coder aDecoder: NSCoder) {

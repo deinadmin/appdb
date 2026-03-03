@@ -21,6 +21,17 @@ extension Search {
     }
 
     func pushDetailsController(with content: Item) {
+        if let altStoreApp = content as? AltStoreApp {
+            let vc = AltStoreAppDetails(item: altStoreApp)
+            if Global.isIpad {
+                let nav = DismissableModalNavController(rootViewController: vc)
+                nav.modalPresentationStyle = .formSheet
+                navigationController?.present(nav, animated: true)
+            } else {
+                navigationController?.pushViewController(vc, animated: true)
+            }
+            return
+        }
         let detailsViewController = Details(content: content)
         if Global.isIpad {
             let nav = DismissableModalNavController(rootViewController: detailsViewController)
@@ -122,6 +133,173 @@ extension Search {
         })
     }
 
+    // MARK: - Merged Third Party search (API results + repo apps)
+
+    /// Searches "Third Party" by combining appdb search_index results with apps
+    /// from public and user repos. Only used for page 1 — pagination uses the
+    /// standard `searchAndUpdate` because repo results are finite and merged once.
+    func searchThirdPartyMerged(query: String) {
+        results = []
+        collectionView.spr_resetNoMoreData()
+
+        let group = DispatchGroup()
+        var apiItems: [CydiaApp] = []
+        var repoItems: [AltStoreApp] = []
+        var apiError: String?
+
+        // 1) API search_index call
+        group.enter()
+        API.search(type: CydiaApp.self, q: query, page: 1, success: { items in
+            apiItems = items
+            group.leave()
+        }, fail: { error in
+            apiError = error
+            group.leave()
+        })
+
+        // 2) Fetch repos (public + user's private) and search their contents
+        group.enter()
+        fetchRepoApps(matching: query) { apps in
+            repoItems = apps
+            group.leave()
+        }
+
+        group.notify(queue: .main) { [weak self] in
+            guard let self = self else { return }
+
+            // If API failed and we got no repo results either, show error
+            if let error = apiError, repoItems.isEmpty {
+                delay(0.3) {
+                    self.state = .error(first: "Cannot connect".localized(), second: error, animated: true)
+                }
+                return
+            }
+
+            // Collect bundle IDs from API results to deduplicate
+            var seenBundleIds = Set<String>()
+            for item in apiItems {
+                if !item.bundleId.isEmpty {
+                    seenBundleIds.insert(item.bundleId.lowercased())
+                }
+            }
+
+            // Filter out repo apps whose bundle ID already appeared in API results
+            let uniqueRepoItems = repoItems.filter { app in
+                guard !app.bundleId.isEmpty else { return true }
+                return !seenBundleIds.contains(app.bundleId.lowercased())
+            }
+
+            // Merge: API results first, then unique repo apps
+            let merged: [Item] = (apiItems as [Item]) + (uniqueRepoItems as [Item])
+
+            if merged.isEmpty {
+                delay(0.3) {
+                    self.state = .error(first: "No results found".localized(),
+                                        second: "No results were found for '%@'".localizedFormat(query),
+                                        animated: true)
+                }
+                return
+            }
+
+            var tmp: [SearchCell] = []
+            for item in merged {
+                self.results.append(item)
+                switch self.detectScreenshotsOrder(from: item) {
+                case .none: tmp.append(NoScreenshotsSearchCell())
+                case .noneBook: tmp.append(NoScreenshotsSearchCellBook())
+                case .noneBookStars: tmp.append(NoScreenshotsSearchCellBookWithStars())
+                case .onePortraitIphone: tmp.append(PortraitScreenshotSearchCelliPhone())
+                case .onePortraitIphoneStars: tmp.append(PortraitScreenshotSearchCellWithStarsiPhone())
+                case .onePortraitIpad: tmp.append(PortraitScreenshotSearchCelliPad())
+                case .onePortraitIpadStars: tmp.append(PortraitScreenshotSearchCellWithStarsiPad())
+                case .oneLandscapeIphone: tmp.append(LandscapeScreenshotSearchCelliPhone())
+                case .oneLandscapeIphoneStars: tmp.append(LandscapeScreenshotSearchCellWithStarsiPhone())
+                case .oneLandscapeIpad: tmp.append(LandscapeScreenshotSearchCelliPad())
+                case .oneLandscapeIpadStars: tmp.append(LandscapeScreenshotSearchCellWithStarsiPad())
+                case .twoPortraitIphone: tmp.append(TwoPortraitScreenshotsSearchCelliPhone())
+                case .twoPortraitIphoneStars: tmp.append(TwoPortraitScreenshotsSearchCellWithStarsiPhone())
+                case .twoPortraitIpad: tmp.append(TwoPortraitScreenshotsSearchCelliPad())
+                case .twoPortraitIpadStars: tmp.append(TwoPortraitScreenshotsSearchCellWithStarsiPad())
+                case .threePortraitIphone: tmp.append(ThreePortraitScreenshotsSearchCelliPhone())
+                case .threePortraitIphoneStars: tmp.append(ThreePortraitScreenshotsSearchCellWithStarsiPhone())
+                case .threePortraitIpad: tmp.append(ThreePortraitScreenshotsSearchCelliPad())
+                case .threePortraitIpadStars: tmp.append(ThreePortraitScreenshotsSearchCellWithStarsiPad())
+                case .mixedOneIphone: tmp.append(MixedScreenshotsSearchCellOneiPhone())
+                case .mixedOneIphoneStars: tmp.append(MixedScreenshotsSearchCellOneWithStarsiPhone())
+                case .mixedOneIpad: tmp.append(MixedScreenshotsSearchCellOneiPad())
+                case .mixedOneIpadStars: tmp.append(MixedScreenshotsSearchCellOneWithStarsiPad())
+                case .mixedTwoIphone: tmp.append(MixedScreenshotsSearchCellTwoiPhone())
+                case .mixedTwoIphoneStars: tmp.append(MixedScreenshotsSearchCellTwoWithStarsiPhone())
+                case .mixedTwoIpad: tmp.append(MixedScreenshotsSearchCellTwoiPad())
+                case .mixedTwoIpadStars: tmp.append(MixedScreenshotsSearchCellTwoWithStarsiPad())
+                }
+            }
+
+            delay(0.3) {
+                self.resultCells = tmp
+                self.switchLayout(phase: .showResults, animated: true, reload: true)
+                // API results may paginate; repo results are already fully merged.
+                // If API returned fewer than 25, no more API pages.
+                if apiItems.count < 25 {
+                    self.collectionView.spr_endRefreshingWithNoMoreData()
+                }
+            }
+        }
+    }
+
+    /// Fetches apps from all repos (public + user's private) and filters by query.
+    private func fetchRepoApps(matching query: String, completion: @escaping ([AltStoreApp]) -> Void) {
+        let lowercaseQuery = query.lowercased()
+        let repoGroup = DispatchGroup()
+        var allRepoApps: [AltStoreApp] = []
+        let lock = NSLock()
+
+        // Fetch both public and private repos in parallel
+        for isPublic in [true, false] {
+            repoGroup.enter()
+            API.getRepos(isPublic: isPublic, success: { repos in
+                let contentsGroup = DispatchGroup()
+                for repo in repos {
+                    guard !repo.contentsUri.isEmpty else { continue }
+                    contentsGroup.enter()
+                    API.getRepoContents(contentsUri: repo.contentsUri, success: { contents in
+                        let matched = contents.apps.filter { app in
+                            app.name.lowercased().contains(lowercaseQuery) ||
+                            app.bundleId.lowercased().contains(lowercaseQuery) ||
+                            app.developer.lowercased().contains(lowercaseQuery)
+                        }
+                        if !matched.isEmpty {
+                            lock.lock()
+                            allRepoApps.append(contentsOf: matched)
+                            lock.unlock()
+                        }
+                        contentsGroup.leave()
+                    }, fail: { _ in
+                        contentsGroup.leave()
+                    })
+                }
+                contentsGroup.notify(queue: .main) {
+                    repoGroup.leave()
+                }
+            }, fail: { _ in
+                repoGroup.leave()
+            })
+        }
+
+        repoGroup.notify(queue: .main) {
+            // Deduplicate repo apps by bundle ID (keep first occurrence)
+            var seen = Set<String>()
+            let unique = allRepoApps.filter { app in
+                guard !app.bundleId.isEmpty else { return true }
+                let key = app.bundleId.lowercased()
+                if seen.contains(key) { return false }
+                seen.insert(key)
+                return true
+            }
+            completion(unique)
+        }
+    }
+
     enum CellType {
         case none, noneBook, noneBookStars, // No screenshots
 
@@ -139,7 +317,7 @@ extension Search {
     func detectScreenshotsOrder(from item: Item) -> CellType {
         if item is Book {
             return item.itemHasStars ? .noneBookStars : .noneBook
-        } else if item is App || item is CydiaApp {
+        } else if item is App || item is CydiaApp || item is AltStoreApp {
             var isIpad = false
             var screenshots: [Screenshot] = []
             if item.itemScreenshotsIpad.isEmpty {
@@ -286,7 +464,13 @@ extension Search {
         guard currentPhase == .showResults else { return nil }
         guard results.indices.contains(indexPath.row) else { return nil }
         let item = results[indexPath.row]
-        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: { Details(content: item) })
+        let previewProvider: () -> UIViewController? = {
+            if let altStoreApp = item as? AltStoreApp {
+                return AltStoreAppDetails(item: altStoreApp)
+            }
+            return Details(content: item)
+        }
+        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: previewProvider)
     }
 
     override func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
@@ -328,6 +512,9 @@ extension Search: UIViewControllerPreviewingDelegate {
         guard results.indices.contains(indexPath.row) else { return nil }
         previewingContext.sourceRect = cell.frame
         let item = results[indexPath.row]
+        if let altStoreApp = item as? AltStoreApp {
+            return AltStoreAppDetails(item: altStoreApp)
+        }
         let vc = Details(content: item)
         return vc
     }
@@ -437,8 +624,8 @@ class SmallTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "id", for: indexPath)
         switch indexPath.row {
-        case 0: cell.textLabel?.text = "iOS".localized()
-        case 1: cell.textLabel?.text = "Cydia".localized()
+        case 0: cell.textLabel?.text = "App Store".localized()
+        case 1: cell.textLabel?.text = "Third Party".localized()
         default: cell.textLabel?.text = "Books".localized()
         }
         cell.accessoryType = indexPath.row == selectedType ? .checkmark : .none

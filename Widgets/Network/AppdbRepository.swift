@@ -53,12 +53,12 @@ struct AppdbSearchResource: APIResource {
     var queryItems: [URLQueryItem]?
 
     init(_ contentType: ContentType, _ sortOrder: SortOrder, _ contentPrice: ContentPrice) {
-        methodPath = "/v1.6/search/"
-        queryItems = [
-            URLQueryItem(name: "type", value: type(from: contentType)),
-            URLQueryItem(name: "price", value: price(from: contentPrice)),
-            URLQueryItem(name: "order", value: order(from: sortOrder))
+        methodPath = "/v1.7/search_index/"
+        var items = [
+            URLQueryItem(name: "type", value: type(from: contentType))
         ]
+        items.append(contentsOf: priceQueryItems(from: contentPrice))
+        queryItems = items
     }
 }
 
@@ -76,7 +76,7 @@ struct AppdbNewsResource: APIResource {
     var queryItems: [URLQueryItem]?
 
     init() {
-        methodPath = "/v1.6/get_pages/"
+        methodPath = "/v1.7/get_pages/"
         queryItems = [
             URLQueryItem(name: "category", value: "news"),
             URLQueryItem(name: "length", value: "8")

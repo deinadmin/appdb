@@ -59,6 +59,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         navigationBar.theme_barStyle = [.default, .black, .black]
         navigationBar.theme_tintColor = Color.mainTint
         navigationBar.theme_titleTextAttributes = ThemeStringAttributesPicker.pickerWithAttributes(titleAttributes)
+        
+        // iOS 16+: Configure native transparent navigation bar appearance with dynamic colors
+        if #available(iOS 16.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithTransparentBackground()
+            
+            // Use dynamic color that responds to dark mode
+            let titleColor = UIColor { traitCollection in
+                if traitCollection.userInterfaceStyle == .dark {
+                    return UIColor(rgba: Color.navigationBarTextColor[1]) // Light text for dark mode
+                } else {
+                    return UIColor(rgba: Color.navigationBarTextColor[0]) // Dark text for light mode
+                }
+            }
+            appearance.titleTextAttributes = [
+                .foregroundColor: titleColor,
+                .font: UIFont.boldSystemFont(ofSize: 16.5)
+            ]
+            navigationBar.standardAppearance = appearance
+            navigationBar.compactAppearance = appearance
+            navigationBar.scrollEdgeAppearance = appearance
+        }
 
         // Theme Tab Bar
         let tabBar = UITabBar.appearance()
@@ -71,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         NetworkActivityIndicatorManager.shared.startDelay = 0.3
         NetworkActivityIndicatorManager.shared.isEnabled = true
 
-        application.shortcutItems = Global.ShortcutItem.createItems(for: [.search, .wishes, .updates, .news])
+        application.shortcutItems = Global.ShortcutItem.createItems(for: [.search, .wishes, .news])
 
         if #available(iOS 14.0, *) {
             WidgetCenter.shared.reloadAllTimelines()
@@ -154,8 +176,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
                 tab.selectedIndex = 2
             case "settings":
                 tab.selectedIndex = 3
-            case "updates":
-                tab.selectedIndex = 4
             case "news":
                 tab.selectedIndex = 3
                 guard let nav = tab.viewControllers?[3] as? UINavigationController else { break }

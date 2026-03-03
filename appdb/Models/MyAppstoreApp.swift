@@ -29,6 +29,9 @@ class MyAppStoreApp: Item {
     var version: String = ""
     var uploadedAt: String = ""
     var size: String = ""
+    var installationTicket: String = ""
+    var noInstallationTicketReason: String = ""
+    var iconUri: String = ""
 
     override func mapping(map: Map) {
         name <- map["name"]
@@ -37,6 +40,14 @@ class MyAppStoreApp: Item {
         version <- map["bundle_version"]
         uploadedAt <- map["uploaded_at"]
         size <- map["size"]
+        installationTicket <- map["installation_ticket"]
+        iconUri <- map["icon_uri"]
+
+        // Parse the failure reason if no ticket
+        if let errors = map.JSON["no_installation_ticket_failure_reason"] as? [String: Any],
+           let translated = errors["translated"] as? String {
+            noInstallationTicketReason = translated
+        }
 
         if let int64size = Int64(size) {
             size = Global.humanReadableSize(bytes: int64size)

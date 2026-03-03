@@ -71,7 +71,7 @@ class SeeAll: LoadingTableView {
         tableView.register(SeeAllCell.self, forCellReuseIdentifier: "seeallcell_book")
         tableView.register(SeeAllCellWithStars.self, forCellReuseIdentifier: "seeallcellwithstars")
         tableView.register(SeeAllCellWithStars.self, forCellReuseIdentifier: "seeallcellwithstars_book")
-        tableView.rowHeight = type == .books ? (130 ~~ 110) : (105 ~~ 85)
+        tableView.rowHeight = (105 ~~ 85)
 
         tableView.theme_separatorColor = Color.borderColor
         tableView.theme_backgroundColor = Color.tableViewBackgroundColor
@@ -107,7 +107,6 @@ class SeeAll: LoadingTableView {
         switch type {
         case .ios: searchController.searchBar.placeholder = "Search iOS Apps".localized()
         case .cydia: searchController.searchBar.placeholder = "Search Custom Apps".localized()
-        case .books: searchController.searchBar.placeholder = "Search Books".localized()
         default: break
         }
         searchController.searchBar.textField?.theme_textColor = Color.title
@@ -199,7 +198,6 @@ class SeeAll: LoadingTableView {
         switch self.type {
         case .ios: loadItems(type: App.self)
         case .cydia: loadItems(type: CydiaApp.self)
-        case .books: loadItems(type: Book.self)
         default: break
         }
     }
@@ -308,7 +306,6 @@ extension SeeAll: UISearchResultsUpdating {
             switch type {
             case .ios: quickSearch(type: App.self)
             case .cydia: quickSearch(type: CydiaApp.self)
-            case .books: quickSearch(type: Book.self)
             default: break
             }
         }

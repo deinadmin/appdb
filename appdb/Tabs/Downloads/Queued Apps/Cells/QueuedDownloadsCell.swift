@@ -17,10 +17,16 @@ class QueuedDownloadsCell: UICollectionViewCell {
     private var name: UILabel!
     private var icon: UIImageView!
     private var status: UILabel!
+    private var installButton: RoundedButton!
+
+    /// Called when the user taps the "Install" button (itms-services ready)
+    var onInstallTapped: (() -> Void)?
+
+    private var currentApp: RequestedApp?
 
     func configure(with app: RequestedApp) {
+        currentApp = app
         name.text = app.name
-        status.text = app.status
         if app.type != .myAppstore {
             if let url = URL(string: app.image) {
                 icon.af.setImage(withURL: url, placeholderImage: #imageLiteral(resourceName: "placeholderIcon"), filter: Global.roundedFilter(from: iconSize),
@@ -28,6 +34,18 @@ class QueuedDownloadsCell: UICollectionViewCell {
             }
         } else {
             icon.image = #imageLiteral(resourceName: "blank_icon")
+        }
+
+        if app.isReadyToInstall {
+            // Signing complete — show install button, hide status label
+            status.isHidden = true
+            installButton.isHidden = false
+            installButton.setTitle("INSTALL".localized(), for: .normal)
+        } else {
+            // Still signing or push flow — show status, hide button
+            status.isHidden = false
+            installButton.isHidden = true
+            status.text = app.status
         }
     }
 
@@ -75,11 +93,19 @@ class QueuedDownloadsCell: UICollectionViewCell {
         status.numberOfLines = 2
         status.makeDynamicFont()
 
+        // Install button (shown when itms-services manifest is ready)
+        installButton = RoundedButton()
+        installButton.titleLabel?.font = .boldSystemFont(ofSize: 13 ~~ 12)
+        installButton.setTitle("INSTALL".localized(), for: .normal)
+        installButton.isHidden = true
+        installButton.addTarget(self, action: #selector(installButtonTapped), for: .touchUpInside)
+
         contentView.addSubview(name)
         contentView.addSubview(icon)
         contentView.addSubview(status)
+        contentView.addSubview(installButton)
 
-        constrain(name, status, icon) { name, status, icon in
+        constrain(name, status, icon, installButton) { name, status, icon, installButton in
             icon.width ~== iconSize
             icon.height ~== icon.width
             icon.leading ~== icon.superview!.leading ~+ margin
@@ -92,6 +118,24 @@ class QueuedDownloadsCell: UICollectionViewCell {
             status.leading ~== name.leading
             status.top ~== name.bottom ~+ (4 ~~ 2)
             status.trailing ~<= status.superview!.trailing ~- margin
+
+            installButton.leading ~== name.leading
+            installButton.top ~== name.bottom ~+ (4 ~~ 2)
         }
+    }
+
+    @objc private func installButtonTapped() {
+        onInstallTapped?()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        icon.image = nil
+        name.text = nil
+        status.text = nil
+        status.isHidden = false
+        installButton.isHidden = true
+        onInstallTapped = nil
+        currentApp = nil
     }
 }

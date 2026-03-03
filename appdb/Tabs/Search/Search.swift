@@ -99,14 +99,14 @@ class Search: LoadingCollectionView, UISearchBarDelegate {
         searchController = UISearchController(searchResultsController: updateSuggestions)
         searchController.searchResultsUpdater = updateSuggestions
         searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "Search iOS Apps".localized()
+        searchController.searchBar.placeholder = "Search App Store".localized()
         searchController.searchBar.textField?.theme_textColor = Color.title
         searchController.searchBar.textField?.enablesReturnKeyAutomatically = false
         searchController.searchBar.textField?.theme_keyboardAppearance = [.light, .dark, .dark]
         definesPresentationContext = true
 
         if #available(iOS 11.0, *) {
-            searchController.searchBar.scopeButtonTitles = ["iOS".localized(), "Cydia".localized(), "Books".localized()]
+            searchController.searchBar.scopeButtonTitles = ["App Store".localized(), "Third Party".localized()]
             navigationItem.searchController = searchController
             navigationItem.hidesSearchBarWhenScrolling = false
         } else {
@@ -148,7 +148,6 @@ class Search: LoadingCollectionView, UISearchBarDelegate {
             switch updateSuggestions.type {
             case .ios: self.searchAndUpdate(App.self, query: text, page: self.currentPage)
             case .cydia: self.searchAndUpdate(CydiaApp.self, query: text, page: self.currentPage)
-            case .books: self.searchAndUpdate(Book.self, query: text, page: self.currentPage)
             default: break
             }
         }
@@ -171,8 +170,7 @@ class Search: LoadingCollectionView, UISearchBarDelegate {
         guard let updateSuggestions = self.searchController.searchResultsController as? SuggestionsWhileTyping else { return }
         switch updateSuggestions.type {
         case .ios: self.searchAndUpdate(App.self, query: text)
-        case .cydia: self.searchAndUpdate(CydiaApp.self, query: text)
-        case .books: self.searchAndUpdate(Book.self, query: text)
+        case .cydia: self.searchThirdPartyMerged(query: text)
         default: break
         }
     }
@@ -188,13 +186,10 @@ class Search: LoadingCollectionView, UISearchBarDelegate {
         switch selectedScope {
         case 0:
             updateSuggestions.type = .ios
-            searchController.searchBar.placeholder = "Search iOS Apps".localized()
+            searchController.searchBar.placeholder = "Search App Store".localized()
         case 1:
             updateSuggestions.type = .cydia
-            searchController.searchBar.placeholder = "Search Custom Apps".localized()
-        case 2:
-            updateSuggestions.type = .books
-            searchController.searchBar.placeholder = "Search Books".localized()
+            searchController.searchBar.placeholder = "Search Third Party Apps".localized()
         default: break
         }
         getTrending(type: updateSuggestions.type)
@@ -208,13 +203,13 @@ class Search: LoadingCollectionView, UISearchBarDelegate {
         switch updateSuggestions.type {
         case .ios:
             searchController.searchBar.selectedScopeButtonIndex = 0
-            searchController.searchBar.placeholder = "Search iOS Apps".localized()
+            searchController.searchBar.placeholder = "Search App Store".localized()
         case .cydia:
             searchController.searchBar.selectedScopeButtonIndex = 1
-            searchController.searchBar.placeholder = "Search Custom Apps".localized()
+            searchController.searchBar.placeholder = "Search Third Party Apps".localized()
         default:
-            searchController.searchBar.selectedScopeButtonIndex = 2
-            searchController.searchBar.placeholder = "Search Books".localized()
+            searchController.searchBar.selectedScopeButtonIndex = 0
+            searchController.searchBar.placeholder = "Search App Store".localized()
         }
         getTrending(type: updateSuggestions.type)
         actuallySearch(with: query)
@@ -252,9 +247,8 @@ class Search: LoadingCollectionView, UISearchBarDelegate {
     private func trendingTitle() -> String {
         guard let updateSuggestions = self.searchController.searchResultsController as? SuggestionsWhileTyping else { return "" }
         switch updateSuggestions.type {
-        case .ios: return "Trending iOS Apps".localized().uppercased().replacingOccurrences(of: "IOS", with: "iOS")
-        case .cydia: return "Trending Cydia Apps".localized().uppercased()
-        case .books: return "Trending Books".localized().uppercased()
+        case .ios: return "Trending App Store Apps".localized().uppercased()
+        case .cydia: return "Trending Third Party Apps".localized().uppercased()
         default: return ""
         }
     }

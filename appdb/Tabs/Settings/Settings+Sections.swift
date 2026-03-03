@@ -106,10 +106,6 @@ extension Settings {
 
     var deviceLinkedSections: [StaticSection] {
         var deviceConfigRows = [
-            StaticRow(text: "Jailbroken w/ Appsync".localized(), accessory: .switchToggle(value: Preferences.appsync) { newValue in
-                API.setConfiguration(params: [.appsync: newValue ? "yes" : "no"], success: {}, fail: { _ in })
-            }, cellClass: SimpleStaticCell.self),
-
             StaticRow(text: "Compatibility Checks".localized(), accessory: .switchToggle(value: !Preferences.ignoresCompatibility) { newValue in
                 API.setConfiguration(params: [.ignoreCompatibility: newValue ? "no" : "yes"], success: {}, fail: { _ in })
             }, cellClass: SimpleStaticCell.self),
@@ -118,12 +114,10 @@ extension Settings {
                 API.setConfiguration(params: [.askForOptions: newValue ? "yes" : "no"], success: {}, fail: { _ in })
             }, cellClass: SimpleStaticCell.self)
         ]
-        
-        if Preferences.isPlus {
-            deviceConfigRows.append( StaticRow(text: "IPA Cache".localized(), selection: { [unowned self] _ in
-                self.push(IPACache())
-            }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self))
-        }
+
+        deviceConfigRows.append(StaticRow(text: "Installation History".localized(), selection: { [unowned self] _ in
+            self.push(IPACache())
+        }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self))
         deviceConfigRows.append(StaticRow(text: "Advanced Options".localized(), selection: { [unowned self] _ in
             self.push(AdvancedOptions())
         }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self))
@@ -169,11 +163,6 @@ extension Settings {
                 StaticRow(text: "AltStore Repos".localized(), selection: { [unowned self] _ in
                     self.push(AltStoreRepos())
                 }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self)
-            ]),
-            StaticSection(rows: [
-                StaticRow(text: "Show badge for updates".localized(), cellClass: SwitchCell.self, context: ["valueChange": { new in
-                    Preferences.set(.showBadgeForUpdates, to: new)
-                }, "value": Preferences.showBadgeForUpdates])
             ])
         ] + commonSections + [
 

@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class MyDylibs: LoadingTableView {
 
-    var myDylibs: [String] = []
+    var myDylibs: [JSON] = []
 
     var isLoading = false
 
@@ -69,13 +70,13 @@ class MyDylibs: LoadingTableView {
     }
 
     func getDylibs(done: @escaping (_ error: String?) -> Void) {
-        API.getDylibs(success: { [weak self] dylibs in
+        API.getEnhancements(success: { [weak self] dylibs in
             guard let self = self else { return }
 
             self.myDylibs = dylibs
             done(nil)
         }, fail: { error in
-            done(error.prettified)
+            done(error)
         })
     }
 
@@ -94,7 +95,7 @@ class MyDylibs: LoadingTableView {
         let item = myDylibs[indexPath.row]
 
         cell.selectionStyle = .none
-        cell.textLabel!.text = item
+        cell.textLabel!.text = item["name"].stringValue
 
         return cell
     }
@@ -102,7 +103,7 @@ class MyDylibs: LoadingTableView {
     // MARK: - Section header view
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UpdatesSectionHeader(showsButton: true)
+        let view = SectionHeaderView(showsButton: true)
         view.configure(with: "My Dylibs, Frameworks and Debs".localized())
         view.helpButton.addTarget(self, action: #selector(self.showHelp), for: .touchUpInside)
         return view
@@ -121,7 +122,7 @@ class MyDylibs: LoadingTableView {
         [UITableViewRowAction(style: .destructive, title: "Delete".localized(), handler: { _, indexPath in
             let item = self.myDylibs[indexPath.row]
 
-            API.deleteDylib(name: item) {
+            API.deleteEnhancement(id: item["id"].stringValue) {
                 Messages.shared.showSuccess(message: "The dylib was deleted successfully".localized(), context: .viewController(self))
                 self.loadDylibs()
             } fail: { error in

@@ -1,0 +1,491 @@
+d57ee3564384bfac260b776806ea148783793dd3	not-for-merge	branch 'afonsograca-master' of https://github.com/tristanhimmelman/ObjectMapper
+6f2e5d07b23a0221b0bf12fa8335587460865e10	not-for-merge	branch 'clean-up' of https://github.com/tristanhimmelman/ObjectMapper
+9f933d07b187d758127c84ede1e678fcb1471f5f	not-for-merge	branch 'gh-pages' of https://github.com/tristanhimmelman/ObjectMapper
+9c4e6184479fb83cb8984bdae0e7dab0a9c7d762	not-for-merge	branch 'ignore-nil-option' of https://github.com/tristanhimmelman/ObjectMapper
+6021c6035e83a306047348666f6400dc61445d3b	not-for-merge	branch 'master' of https://github.com/tristanhimmelman/ObjectMapper
+3e3d3b47d1a5d5cb1f27b7949076bff80f6cbedc	not-for-merge	branch 'protocols-serializing' of https://github.com/tristanhimmelman/ObjectMapper
+d29eda0ebf4142068e640aa6a37b95ae627d1d7b	not-for-merge	branch 'sets-of-basic-type' of https://github.com/tristanhimmelman/ObjectMapper
+c8b1f862e3642150361e4773d10c0c1b44c4516e	not-for-merge	branch 'travis' of https://github.com/tristanhimmelman/ObjectMapper
+c90ca529c7f34bb7795dec451c7c9c5053475ac9	not-for-merge	branch 'travis-updates' of https://github.com/tristanhimmelman/ObjectMapper
+3b7101650f432a103c02ad81b7e1fb0ede24901b	not-for-merge	'refs/pull/1/head' of https://github.com/tristanhimmelman/ObjectMapper
+c630a500ae6ba4c36f739efc94f9610b82539f92	not-for-merge	'refs/pull/1/merge' of https://github.com/tristanhimmelman/ObjectMapper
+ee25d84a2126ffc7ba0f116f110f92f6519dc877	not-for-merge	'refs/pull/100/head' of https://github.com/tristanhimmelman/ObjectMapper
+f49b308c6783c7f817190e540d977961bb37a6d0	not-for-merge	'refs/pull/1003/head' of https://github.com/tristanhimmelman/ObjectMapper
+8f2b82c1d06659d4f3e788952a7e663d4f5fb478	not-for-merge	'refs/pull/101/head' of https://github.com/tristanhimmelman/ObjectMapper
+ec6015e41293580f1e20ce2aac595ae0271c5bbc	not-for-merge	'refs/pull/1012/head' of https://github.com/tristanhimmelman/ObjectMapper
+c1a0f5eac54e326a88ff02ac72fc98ba477b82b7	not-for-merge	'refs/pull/1015/head' of https://github.com/tristanhimmelman/ObjectMapper
+a39b69fb52beac4f95e0a1d84b21c5138f8e97e6	not-for-merge	'refs/pull/1016/head' of https://github.com/tristanhimmelman/ObjectMapper
+6b8206c145d0136e29802a4d007ff505a6f0d82a	not-for-merge	'refs/pull/1016/merge' of https://github.com/tristanhimmelman/ObjectMapper
+4b48e1466665d7c7f7d8c9da2fe97e51609a8449	not-for-merge	'refs/pull/1017/head' of https://github.com/tristanhimmelman/ObjectMapper
+b8c413a2b593bd56ad19fab295467ecb2aa94b38	not-for-merge	'refs/pull/1018/head' of https://github.com/tristanhimmelman/ObjectMapper
+d270234afcfd78f0379b526875c9af99f0e4c124	not-for-merge	'refs/pull/102/head' of https://github.com/tristanhimmelman/ObjectMapper
+55f1b0568c3ae4031254ef70dd93f741a17ed8ff	not-for-merge	'refs/pull/1022/head' of https://github.com/tristanhimmelman/ObjectMapper
+333d57063cd3a0b4507f839b095a6adc42d00521	not-for-merge	'refs/pull/1023/head' of https://github.com/tristanhimmelman/ObjectMapper
+c90ca529c7f34bb7795dec451c7c9c5053475ac9	not-for-merge	'refs/pull/1027/head' of https://github.com/tristanhimmelman/ObjectMapper
+acb5d54fd90062e1f7949abfa6ade7bba5ba919e	not-for-merge	'refs/pull/1028/head' of https://github.com/tristanhimmelman/ObjectMapper
+6f2e5d07b23a0221b0bf12fa8335587460865e10	not-for-merge	'refs/pull/1029/head' of https://github.com/tristanhimmelman/ObjectMapper
+1e8d2e9a05de361c592d511881c7604904d152d8	not-for-merge	'refs/pull/103/head' of https://github.com/tristanhimmelman/ObjectMapper
+a3703a1206f252ac2f330145808e1f66f6e1ab02	not-for-merge	'refs/pull/1035/head' of https://github.com/tristanhimmelman/ObjectMapper
+e7d2435f491b3aeeb701bfb3d3c1aaa30aab6fd3	not-for-merge	'refs/pull/1036/head' of https://github.com/tristanhimmelman/ObjectMapper
+bbce3ea74bb091903f992fa5d17bf046c5d490f6	not-for-merge	'refs/pull/1037/head' of https://github.com/tristanhimmelman/ObjectMapper
+864122c4575dec57bb2fecd8379e046f9e74cd3b	not-for-merge	'refs/pull/104/head' of https://github.com/tristanhimmelman/ObjectMapper
+34d96601389d46f70a0ce6baa04f0d02d2f70cb5	not-for-merge	'refs/pull/1040/head' of https://github.com/tristanhimmelman/ObjectMapper
+3ae37d31ef8f9d18475ad693a933c4a038bf7b3f	not-for-merge	'refs/pull/1044/head' of https://github.com/tristanhimmelman/ObjectMapper
+9b5db3831de060a2a9da19c1e8eca01950cfef31	not-for-merge	'refs/pull/1048/head' of https://github.com/tristanhimmelman/ObjectMapper
+e99c1cdfdf9b3fdecde00808f830e09cf54a8f8b	not-for-merge	'refs/pull/1052/head' of https://github.com/tristanhimmelman/ObjectMapper
+bcf759a66e5715e705522524d121a64ea211d1ae	not-for-merge	'refs/pull/1056/head' of https://github.com/tristanhimmelman/ObjectMapper
+897d4016d76f2bae001c3fcad9bd8db6dca76403	not-for-merge	'refs/pull/1057/head' of https://github.com/tristanhimmelman/ObjectMapper
+bc6377f1ab4e3cd7496fecab583a8fd00a310e75	not-for-merge	'refs/pull/1058/head' of https://github.com/tristanhimmelman/ObjectMapper
+9e318d069a85716779b840b4974883eedd2159b9	not-for-merge	'refs/pull/1059/head' of https://github.com/tristanhimmelman/ObjectMapper
+5ab8da2204312396136e4bd10792cdb58c345817	not-for-merge	'refs/pull/1060/head' of https://github.com/tristanhimmelman/ObjectMapper
+b1d19a6972951b3f5c37860c9b7b1ed30d5071a8	not-for-merge	'refs/pull/1061/head' of https://github.com/tristanhimmelman/ObjectMapper
+36985ab40382039b35365cbfecb72837a934c4fe	not-for-merge	'refs/pull/1061/merge' of https://github.com/tristanhimmelman/ObjectMapper
+3633d8be699b8c54aeb929babbf464f10c3b3ffe	not-for-merge	'refs/pull/1066/head' of https://github.com/tristanhimmelman/ObjectMapper
+f21382260087d3cbd54970a17822178cff30098a	not-for-merge	'refs/pull/1066/merge' of https://github.com/tristanhimmelman/ObjectMapper
+1f15e22a488f5b0b77649a3ae803a3d5b84330fb	not-for-merge	'refs/pull/1069/head' of https://github.com/tristanhimmelman/ObjectMapper
+3aef22800c4248fae1674703f0b512e85a49d90c	not-for-merge	'refs/pull/107/head' of https://github.com/tristanhimmelman/ObjectMapper
+ee2a57a0c91621f114c841b4c2ddeebf0a357c75	not-for-merge	'refs/pull/1070/head' of https://github.com/tristanhimmelman/ObjectMapper
+73cb592b921801e2cdab7b6dc77ae3dd34bcfd7e	not-for-merge	'refs/pull/1079/head' of https://github.com/tristanhimmelman/ObjectMapper
+076af3c0a4b2b78d2c0ee629f96df6088a8a527e	not-for-merge	'refs/pull/108/head' of https://github.com/tristanhimmelman/ObjectMapper
+10e5b2597352f86ddcac01c3802968d1fa5324eb	not-for-merge	'refs/pull/1080/head' of https://github.com/tristanhimmelman/ObjectMapper
+5ab8f3c840c37196e26685976ab9f798a814e396	not-for-merge	'refs/pull/1081/head' of https://github.com/tristanhimmelman/ObjectMapper
+fa9d9824f87b84ecfdbd0ed06186a4a51cb54806	not-for-merge	'refs/pull/1084/head' of https://github.com/tristanhimmelman/ObjectMapper
+c7df643522894240185ee77718b3ae1dd7e25ede	not-for-merge	'refs/pull/1084/merge' of https://github.com/tristanhimmelman/ObjectMapper
+880ea1f005acdb161beb533c6007255bfd95d059	not-for-merge	'refs/pull/1085/head' of https://github.com/tristanhimmelman/ObjectMapper
+e26443d5b57d5efa180972a1e934d52db7658b0c	not-for-merge	'refs/pull/1086/head' of https://github.com/tristanhimmelman/ObjectMapper
+c8b1f862e3642150361e4773d10c0c1b44c4516e	not-for-merge	'refs/pull/1087/head' of https://github.com/tristanhimmelman/ObjectMapper
+682588841923dd542f36cd5fc85aa51e99d1fb1e	not-for-merge	'refs/pull/1088/head' of https://github.com/tristanhimmelman/ObjectMapper
+bfc0e53b2c3358132348024200ca96d74e1a4cdf	not-for-merge	'refs/pull/109/head' of https://github.com/tristanhimmelman/ObjectMapper
+e2f521738641c982182a5edfaf4cb139b34960f5	not-for-merge	'refs/pull/1090/head' of https://github.com/tristanhimmelman/ObjectMapper
+7ac4d6932dd4120457218da70c0d16e3d8e10bd8	not-for-merge	'refs/pull/1097/head' of https://github.com/tristanhimmelman/ObjectMapper
+222ff48ae077de87d73a6a60a17c61df88cae37d	not-for-merge	'refs/pull/1103/head' of https://github.com/tristanhimmelman/ObjectMapper
+0ecd255c14162340116ce2cdab06c11c57d585eb	not-for-merge	'refs/pull/1103/merge' of https://github.com/tristanhimmelman/ObjectMapper
+77f10f123a2472484afac16bea453d45ab58aef6	not-for-merge	'refs/pull/1116/head' of https://github.com/tristanhimmelman/ObjectMapper
+877f1f2bc77ee5b3f677db424cf67542edd2a883	not-for-merge	'refs/pull/1116/merge' of https://github.com/tristanhimmelman/ObjectMapper
+836b020fa4a5f66c07c001d57fcbd15aa7d00677	not-for-merge	'refs/pull/112/head' of https://github.com/tristanhimmelman/ObjectMapper
+13329ccad1606691d55cae286ca5f5fb2515f9a8	not-for-merge	'refs/pull/1120/head' of https://github.com/tristanhimmelman/ObjectMapper
+5f147377c374974da95fe4ce527611cdfae87dc3	not-for-merge	'refs/pull/1120/merge' of https://github.com/tristanhimmelman/ObjectMapper
+9f0b42f17f2b28e87fe8b80045d724c6154bf505	not-for-merge	'refs/pull/1129/head' of https://github.com/tristanhimmelman/ObjectMapper
+0da7d277635d6ed5e7bc2de2b267ecbb71ab0aac	not-for-merge	'refs/pull/1129/merge' of https://github.com/tristanhimmelman/ObjectMapper
+444d8cb36964535871ddd4953e9e6a3e327786df	not-for-merge	'refs/pull/1131/head' of https://github.com/tristanhimmelman/ObjectMapper
+ec9d55db826201f71cf3b405eb3909021ecf8a5c	not-for-merge	'refs/pull/1131/merge' of https://github.com/tristanhimmelman/ObjectMapper
+e145a699e123e9453f0570a311766a529e19dc76	not-for-merge	'refs/pull/1133/head' of https://github.com/tristanhimmelman/ObjectMapper
+bd2fad1dd72a54bee2b2770c23f85d560b7faf4a	not-for-merge	'refs/pull/1136/head' of https://github.com/tristanhimmelman/ObjectMapper
+0698a3c534f3d5f9bd011831543dd6c658a40382	not-for-merge	'refs/pull/1136/merge' of https://github.com/tristanhimmelman/ObjectMapper
+a30532483a4a35d4adf27a8bd8e761c110f99edc	not-for-merge	'refs/pull/1139/head' of https://github.com/tristanhimmelman/ObjectMapper
+86e39b556c952633da7cf21e765d68b7e8b38fa9	not-for-merge	'refs/pull/1141/head' of https://github.com/tristanhimmelman/ObjectMapper
+a5a3b4ad5844172d90676f01efb5ccf17adb4ccf	not-for-merge	'refs/pull/1141/merge' of https://github.com/tristanhimmelman/ObjectMapper
+6c638e729e7ef95860fdad6d848bfb980ff3c3fc	not-for-merge	'refs/pull/1142/head' of https://github.com/tristanhimmelman/ObjectMapper
+6c0b8fb21d4a435b30fd1734e4fc8cef56a3cbcc	not-for-merge	'refs/pull/1143/head' of https://github.com/tristanhimmelman/ObjectMapper
+36db91f259b01c7587956e9d00a3a2b11a42c75d	not-for-merge	'refs/pull/1143/merge' of https://github.com/tristanhimmelman/ObjectMapper
+1cc49ba46ad3e26785671a3b9bcdf26bf3e3816f	not-for-merge	'refs/pull/1144/head' of https://github.com/tristanhimmelman/ObjectMapper
+c4e76b63f1abeda3840aaddecb17411b2c6008cb	not-for-merge	'refs/pull/1146/head' of https://github.com/tristanhimmelman/ObjectMapper
+9cdf8bf35b40a64aebbbb33b61211d9d1943c556	not-for-merge	'refs/pull/1148/head' of https://github.com/tristanhimmelman/ObjectMapper
+741908cfc48225d646425faf5b9d58a03c84bfc1	not-for-merge	'refs/pull/115/head' of https://github.com/tristanhimmelman/ObjectMapper
+4ed7e42e4739095c7ea5c0e3e73fe1bda33eac54	not-for-merge	'refs/pull/1153/head' of https://github.com/tristanhimmelman/ObjectMapper
+d78927ec730d9346befe4841f689273f5caf8915	not-for-merge	'refs/pull/1153/merge' of https://github.com/tristanhimmelman/ObjectMapper
+28bdf170ecbcf1340c1909a2eaaaa5284c572371	not-for-merge	'refs/pull/116/head' of https://github.com/tristanhimmelman/ObjectMapper
+22bb1ab05eee41997174bfd7cf6bab9b889634d3	not-for-merge	'refs/pull/117/head' of https://github.com/tristanhimmelman/ObjectMapper
+b3e045fb7d46e0ab8c1334e0557bdf0f20cbc8fa	not-for-merge	'refs/pull/124/head' of https://github.com/tristanhimmelman/ObjectMapper
+fe40da0139dea3758835ec48216ccce77cbe898c	not-for-merge	'refs/pull/125/head' of https://github.com/tristanhimmelman/ObjectMapper
+d1163fc7116935e04fba1a037566754374136501	not-for-merge	'refs/pull/127/head' of https://github.com/tristanhimmelman/ObjectMapper
+039e0042ecbab2c3801a0f0923feea3a975770d2	not-for-merge	'refs/pull/127/merge' of https://github.com/tristanhimmelman/ObjectMapper
+661b006c8aa3b8197ad227d655ed1efc4bb418bc	not-for-merge	'refs/pull/129/head' of https://github.com/tristanhimmelman/ObjectMapper
+eab156e5686b00ca29b5c3c5ae4a4ee0d2146452	not-for-merge	'refs/pull/13/head' of https://github.com/tristanhimmelman/ObjectMapper
+c0eb753f698dc236bb0670826dafd01819c3ea4a	not-for-merge	'refs/pull/133/head' of https://github.com/tristanhimmelman/ObjectMapper
+c77987cf3ba93726ece28f562f9a9e7bdb9dde1f	not-for-merge	'refs/pull/133/merge' of https://github.com/tristanhimmelman/ObjectMapper
+2c5afb4fe2cb85087a4784bbeacc020d283d5848	not-for-merge	'refs/pull/135/head' of https://github.com/tristanhimmelman/ObjectMapper
+ec8c4ead7ca4edb53326d85c29da5fe30233b00e	not-for-merge	'refs/pull/135/merge' of https://github.com/tristanhimmelman/ObjectMapper
+7c6bebedec0528351c93acff54a4885279b86fda	not-for-merge	'refs/pull/148/head' of https://github.com/tristanhimmelman/ObjectMapper
+dc18a3eaa56cfc4503e9638ee5a27f045958ab87	not-for-merge	'refs/pull/151/head' of https://github.com/tristanhimmelman/ObjectMapper
+e2cc284513f79a8de503abe7bbf0775f33e02d68	not-for-merge	'refs/pull/153/head' of https://github.com/tristanhimmelman/ObjectMapper
+79fcd81185c138d6ada9a5926bf4936b365914d0	not-for-merge	'refs/pull/155/head' of https://github.com/tristanhimmelman/ObjectMapper
+788944733d2a1afc8b88dd098fcde3bdb57d84ac	not-for-merge	'refs/pull/158/head' of https://github.com/tristanhimmelman/ObjectMapper
+7d0e884947102b7e104126978af4b4c6398c5efe	not-for-merge	'refs/pull/159/head' of https://github.com/tristanhimmelman/ObjectMapper
+10a41bba8b1c28b3bf24d3d007308164bb40782e	not-for-merge	'refs/pull/161/head' of https://github.com/tristanhimmelman/ObjectMapper
+c08a050d441445d76b0226934045fed2f512dfcc	not-for-merge	'refs/pull/166/head' of https://github.com/tristanhimmelman/ObjectMapper
+682d85c021c969c991dea7e01a1973077858009a	not-for-merge	'refs/pull/170/head' of https://github.com/tristanhimmelman/ObjectMapper
+e3d631a5b63a3e57a868ec3c130d8896b4859ff2	not-for-merge	'refs/pull/171/head' of https://github.com/tristanhimmelman/ObjectMapper
+a681a4db82048d6ee0df346320d5395899531a3a	not-for-merge	'refs/pull/171/merge' of https://github.com/tristanhimmelman/ObjectMapper
+9dda03eccb22dfe2604844ffde223e03711f6525	not-for-merge	'refs/pull/173/head' of https://github.com/tristanhimmelman/ObjectMapper
+9501a03f277e79b2f33ef49fc3518bd67b8f3641	not-for-merge	'refs/pull/180/head' of https://github.com/tristanhimmelman/ObjectMapper
+9a45f8f2ebf726179a2ea709577f438686114f72	not-for-merge	'refs/pull/180/merge' of https://github.com/tristanhimmelman/ObjectMapper
+642516118c627addde833bc04724bef1f778bbe5	not-for-merge	'refs/pull/181/head' of https://github.com/tristanhimmelman/ObjectMapper
+dab3dabc5e9074c1caae4a7420d9c14b9c4e9423	not-for-merge	'refs/pull/185/head' of https://github.com/tristanhimmelman/ObjectMapper
+dab3dabc5e9074c1caae4a7420d9c14b9c4e9423	not-for-merge	'refs/pull/186/head' of https://github.com/tristanhimmelman/ObjectMapper
+4463f023522e1046ba70d581fd1e774d7d9ef37d	not-for-merge	'refs/pull/196/head' of https://github.com/tristanhimmelman/ObjectMapper
+d57b959e1127d20d3b0c11468bdb23b3dd2cfe2c	not-for-merge	'refs/pull/198/head' of https://github.com/tristanhimmelman/ObjectMapper
+14381d1fc44d19b68063bd29599e5d76c5e44502	not-for-merge	'refs/pull/198/merge' of https://github.com/tristanhimmelman/ObjectMapper
+a9f9571feeb43bfae9ff8c8d0e09c703376ff6eb	not-for-merge	'refs/pull/199/head' of https://github.com/tristanhimmelman/ObjectMapper
+51c4d615dbf3335d95e23cdd1f55591c118060d5	not-for-merge	'refs/pull/2/head' of https://github.com/tristanhimmelman/ObjectMapper
+14505cf9cf46fc12f4a38200278d3ddc853fada2	not-for-merge	'refs/pull/201/head' of https://github.com/tristanhimmelman/ObjectMapper
+901501a0ceaf9197591a1c36e2a03eeb3b12a519	not-for-merge	'refs/pull/201/merge' of https://github.com/tristanhimmelman/ObjectMapper
+1bff9e2de52411d61bf81b160d7c6cfed1a3ce88	not-for-merge	'refs/pull/202/head' of https://github.com/tristanhimmelman/ObjectMapper
+99147a7a9eaf017e4139a3ff0b0d0e925c48c601	not-for-merge	'refs/pull/202/merge' of https://github.com/tristanhimmelman/ObjectMapper
+408ce0a474e2941ed72213a99731eadbb17e01f6	not-for-merge	'refs/pull/204/head' of https://github.com/tristanhimmelman/ObjectMapper
+c2aa92735401105f49b824cbf4963d9aea4cb0ae	not-for-merge	'refs/pull/206/head' of https://github.com/tristanhimmelman/ObjectMapper
+f2c2f916a25d237c843f214623eb3c53116d8962	not-for-merge	'refs/pull/207/head' of https://github.com/tristanhimmelman/ObjectMapper
+ab85da2524208cc5a131e641033e7a62943858bf	not-for-merge	'refs/pull/216/head' of https://github.com/tristanhimmelman/ObjectMapper
+7bbf916c80f80ffc23e2bc84207f5923719e2cae	not-for-merge	'refs/pull/217/head' of https://github.com/tristanhimmelman/ObjectMapper
+30774365714cc5a6dfe0a4738b2d2cedccc3f4ff	not-for-merge	'refs/pull/22/head' of https://github.com/tristanhimmelman/ObjectMapper
+a1a5f4fcb921ec6722c5026d36c9a2cdeb54c482	not-for-merge	'refs/pull/221/head' of https://github.com/tristanhimmelman/ObjectMapper
+711e185ff336d7a1cbb05d83210b2f768cbf023a	not-for-merge	'refs/pull/23/head' of https://github.com/tristanhimmelman/ObjectMapper
+091436169eea1f3c2d42b1a972a5342cdc480ee7	not-for-merge	'refs/pull/237/head' of https://github.com/tristanhimmelman/ObjectMapper
+5eae8ab8138adf6441f31b0ea39d02f4da5aac55	not-for-merge	'refs/pull/24/head' of https://github.com/tristanhimmelman/ObjectMapper
+e906c124f862cec21929528010059b9d30e5494a	not-for-merge	'refs/pull/243/head' of https://github.com/tristanhimmelman/ObjectMapper
+94c8f025130585542759abbde7cad9aa2804b27c	not-for-merge	'refs/pull/247/head' of https://github.com/tristanhimmelman/ObjectMapper
+87580bb0fa919a56fdf4b65ef5865a1c2cb08e7c	not-for-merge	'refs/pull/249/head' of https://github.com/tristanhimmelman/ObjectMapper
+4f588cc7431ece101619d3724002d2fb8d0d573f	not-for-merge	'refs/pull/259/head' of https://github.com/tristanhimmelman/ObjectMapper
+7fdcb6f7752c33fc345df9508037010369531cbe	not-for-merge	'refs/pull/259/merge' of https://github.com/tristanhimmelman/ObjectMapper
+fdfa7d1a5f75fa090eaccd36b5afad0f76ff9157	not-for-merge	'refs/pull/261/head' of https://github.com/tristanhimmelman/ObjectMapper
+1424c60aa3e80315149cee013c8f68169d1c0956	not-for-merge	'refs/pull/266/head' of https://github.com/tristanhimmelman/ObjectMapper
+16f7c5d1db35f60f072896bbe335d0eec3e48f22	not-for-merge	'refs/pull/267/head' of https://github.com/tristanhimmelman/ObjectMapper
+48f2d865fa253b644481d6fe939eebca53b86bd6	not-for-merge	'refs/pull/277/head' of https://github.com/tristanhimmelman/ObjectMapper
+8fa155cc5cd0773fe87e9bb78b80caa2fff5c4c0	not-for-merge	'refs/pull/28/head' of https://github.com/tristanhimmelman/ObjectMapper
+14852bff1e2b432c4fff9fbfaef7817e11a3e49b	not-for-merge	'refs/pull/293/head' of https://github.com/tristanhimmelman/ObjectMapper
+beec62f6228acab2aef754daeb57dbaf776897bf	not-for-merge	'refs/pull/307/head' of https://github.com/tristanhimmelman/ObjectMapper
+dd643b2dbd6a0f5c7b7c62dafe07a1026b4be45c	not-for-merge	'refs/pull/307/merge' of https://github.com/tristanhimmelman/ObjectMapper
+d1e995719e2cf9334226e3d091be5fda2e392f51	not-for-merge	'refs/pull/310/head' of https://github.com/tristanhimmelman/ObjectMapper
+7f03bca2d04c5b2ebcee727acf4127bc57300e7d	not-for-merge	'refs/pull/311/head' of https://github.com/tristanhimmelman/ObjectMapper
+fcbba7da72d889696ed2f3078f9b85ac829a588c	not-for-merge	'refs/pull/312/head' of https://github.com/tristanhimmelman/ObjectMapper
+ba21e894894a59193b377286642088810086e9ee	not-for-merge	'refs/pull/314/head' of https://github.com/tristanhimmelman/ObjectMapper
+341006313f40e4a74207b95fb902b8b4fd8d4ddb	not-for-merge	'refs/pull/316/head' of https://github.com/tristanhimmelman/ObjectMapper
+f348d29705fcce111f1a569e099aeb3cb7aaf91b	not-for-merge	'refs/pull/317/head' of https://github.com/tristanhimmelman/ObjectMapper
+08b02d05e1a3ff4eb4e3ef653ed38e7ccdabd303	not-for-merge	'refs/pull/318/head' of https://github.com/tristanhimmelman/ObjectMapper
+42803f52c3df34e26e995a112c6f7a13d67792ea	not-for-merge	'refs/pull/318/merge' of https://github.com/tristanhimmelman/ObjectMapper
+753480fa11562d1857095d3edd20ed22562cef00	not-for-merge	'refs/pull/319/head' of https://github.com/tristanhimmelman/ObjectMapper
+63811ef58b8cd229607066d368379761a927b425	not-for-merge	'refs/pull/32/head' of https://github.com/tristanhimmelman/ObjectMapper
+426ba13dd8c5b7a4f565b0017c5c1e896ece225a	not-for-merge	'refs/pull/325/head' of https://github.com/tristanhimmelman/ObjectMapper
+e53b87b43d596d3fd42c78f7fade932b6ea73ba9	not-for-merge	'refs/pull/325/merge' of https://github.com/tristanhimmelman/ObjectMapper
+7467d086bffb3c188a3de666d552e7c7399a3430	not-for-merge	'refs/pull/328/head' of https://github.com/tristanhimmelman/ObjectMapper
+575697bd5ac195af69635a89fb22e54f03d6abd1	not-for-merge	'refs/pull/33/head' of https://github.com/tristanhimmelman/ObjectMapper
+e752bc6636a98ce9576c64d044e06af8056f2828	not-for-merge	'refs/pull/331/head' of https://github.com/tristanhimmelman/ObjectMapper
+1b5046bd3e3aaa3ba984a97eea28cb6eab54193c	not-for-merge	'refs/pull/331/merge' of https://github.com/tristanhimmelman/ObjectMapper
+13e7f487f0b16c69b03c7b1444e56e040703f8d9	not-for-merge	'refs/pull/332/head' of https://github.com/tristanhimmelman/ObjectMapper
+dde31280abb51065279bd35f2f4843bfabd9f525	not-for-merge	'refs/pull/336/head' of https://github.com/tristanhimmelman/ObjectMapper
+dfbfde20234b51f9a9d965cb74929b90675965a7	not-for-merge	'refs/pull/34/head' of https://github.com/tristanhimmelman/ObjectMapper
+fd4b03b6cab298d3edfb7c9fb918db146fecc078	not-for-merge	'refs/pull/343/head' of https://github.com/tristanhimmelman/ObjectMapper
+e202665592e3bb30b53f2fce1a78d832ce78f141	not-for-merge	'refs/pull/344/head' of https://github.com/tristanhimmelman/ObjectMapper
+f4e25a7b7757c2f3e0d70280450967998a02bb83	not-for-merge	'refs/pull/345/head' of https://github.com/tristanhimmelman/ObjectMapper
+bc4a8195548bec6981fa269d430ef2ae8d1d8f5e	not-for-merge	'refs/pull/348/head' of https://github.com/tristanhimmelman/ObjectMapper
+d9d483cfc6612244ddaa935eddae1d9a798b2c8a	not-for-merge	'refs/pull/349/head' of https://github.com/tristanhimmelman/ObjectMapper
+14484366b5f37e59d3f97254d7899b454ce74630	not-for-merge	'refs/pull/35/head' of https://github.com/tristanhimmelman/ObjectMapper
+0a643ce2c4667c7c821e7c97933fdadfcf42e951	not-for-merge	'refs/pull/369/head' of https://github.com/tristanhimmelman/ObjectMapper
+a6b7028f967b07fa486caa2f52149ed4265cb536	not-for-merge	'refs/pull/369/merge' of https://github.com/tristanhimmelman/ObjectMapper
+a5ef8aebdda4caa3772d794ddb5f26c6d1679143	not-for-merge	'refs/pull/37/head' of https://github.com/tristanhimmelman/ObjectMapper
+68d69609b46ea1c370e223eb038799dff27cebb1	not-for-merge	'refs/pull/376/head' of https://github.com/tristanhimmelman/ObjectMapper
+5cb2d7ae215de120e4ca149e99f4dd240758e60d	not-for-merge	'refs/pull/376/merge' of https://github.com/tristanhimmelman/ObjectMapper
+6ecf986b2d00fc7cf5a9c3fe1410cc4032dcccdf	not-for-merge	'refs/pull/379/head' of https://github.com/tristanhimmelman/ObjectMapper
+9c7632b5f67c108dd31253612866b7f01dd0a191	not-for-merge	'refs/pull/38/head' of https://github.com/tristanhimmelman/ObjectMapper
+c9cd678cdb888eefc8dd79ddc1cc491d40814ea1	not-for-merge	'refs/pull/384/head' of https://github.com/tristanhimmelman/ObjectMapper
+0a4068366b3d789b90ed6ab0ee71cf20b71cf52c	not-for-merge	'refs/pull/384/merge' of https://github.com/tristanhimmelman/ObjectMapper
+3641299a4a408cb5cc709c22d9e8b239f5a4bc0e	not-for-merge	'refs/pull/391/head' of https://github.com/tristanhimmelman/ObjectMapper
+372fe4edb60689a143249322642ea3fccc47bce1	not-for-merge	'refs/pull/392/head' of https://github.com/tristanhimmelman/ObjectMapper
+6e02a6a090526ed7d1b59f479a5e0611368ba1bd	not-for-merge	'refs/pull/393/head' of https://github.com/tristanhimmelman/ObjectMapper
+c95edf5d997be86f25858d1e847030eb46ce373f	not-for-merge	'refs/pull/394/head' of https://github.com/tristanhimmelman/ObjectMapper
+d1fe16bbfb654bc63721b3ea4da71e64003b74d1	not-for-merge	'refs/pull/399/head' of https://github.com/tristanhimmelman/ObjectMapper
+8379aab9b9b05775bba06ffa6d4e186395d33b3a	not-for-merge	'refs/pull/4/head' of https://github.com/tristanhimmelman/ObjectMapper
+70720a771aeecf95cacd4e912a60a08246a960c5	not-for-merge	'refs/pull/403/head' of https://github.com/tristanhimmelman/ObjectMapper
+21f73a862c5bdae52c644828a074defc5e757160	not-for-merge	'refs/pull/41/head' of https://github.com/tristanhimmelman/ObjectMapper
+1bf64f055afaa11149ba46ba7c1fadb193d1b5ed	not-for-merge	'refs/pull/413/head' of https://github.com/tristanhimmelman/ObjectMapper
+de776e7c2ee7758457f556881f550fd6da799d9f	not-for-merge	'refs/pull/413/merge' of https://github.com/tristanhimmelman/ObjectMapper
+821f85e790f70f23237e6002dcba4929217f8a7a	not-for-merge	'refs/pull/416/head' of https://github.com/tristanhimmelman/ObjectMapper
+727d751b3934f1f5ae3a3837ad88e63fd771aaff	not-for-merge	'refs/pull/426/head' of https://github.com/tristanhimmelman/ObjectMapper
+fc3a7c8d7e5613959a5f3f5ade7a2cbc6dc0f020	not-for-merge	'refs/pull/426/merge' of https://github.com/tristanhimmelman/ObjectMapper
+21cb6d0e9034d31546bd85e65ae71480e4a9919d	not-for-merge	'refs/pull/429/head' of https://github.com/tristanhimmelman/ObjectMapper
+d893eca945532b3aef1f3c6c5e2590ba8d62b787	not-for-merge	'refs/pull/429/merge' of https://github.com/tristanhimmelman/ObjectMapper
+13e75cd30be6ea46dd55aeaa7657923ae8bf9132	not-for-merge	'refs/pull/43/head' of https://github.com/tristanhimmelman/ObjectMapper
+a9d40cd52c42c62f8e627ae9b1dcc9cbabef3661	not-for-merge	'refs/pull/44/head' of https://github.com/tristanhimmelman/ObjectMapper
+5f84dfacc0e2b013e06182a9d0bbc84f17d1fe1e	not-for-merge	'refs/pull/440/head' of https://github.com/tristanhimmelman/ObjectMapper
+672222cf87c318af6d0554cff9619143caa05336	not-for-merge	'refs/pull/45/head' of https://github.com/tristanhimmelman/ObjectMapper
+57f53109cba4227410d94ab9a2e9d24a5af281b1	not-for-merge	'refs/pull/456/head' of https://github.com/tristanhimmelman/ObjectMapper
+d83fe93ee6da1688cf3b8278808ae002a329f8b9	not-for-merge	'refs/pull/459/head' of https://github.com/tristanhimmelman/ObjectMapper
+0e2ff1bada9bcf56a7debd5b340c1cf9ce81dc56	not-for-merge	'refs/pull/461/head' of https://github.com/tristanhimmelman/ObjectMapper
+d51706da108a30e4e7a46621db31eb547190f0c4	not-for-merge	'refs/pull/474/head' of https://github.com/tristanhimmelman/ObjectMapper
+f5723df07329869df4f3060545d959c6edad8037	not-for-merge	'refs/pull/474/merge' of https://github.com/tristanhimmelman/ObjectMapper
+99a6451cc6d1173a2b0d5c75411cbae7008f3ece	not-for-merge	'refs/pull/480/head' of https://github.com/tristanhimmelman/ObjectMapper
+9c4e6184479fb83cb8984bdae0e7dab0a9c7d762	not-for-merge	'refs/pull/485/head' of https://github.com/tristanhimmelman/ObjectMapper
+46d406b20ce0bc29ed0cc875ea9fc15005b95ff0	not-for-merge	'refs/pull/49/head' of https://github.com/tristanhimmelman/ObjectMapper
+41b65a1b7531c3f3f60b96eb0c823dc9ea1d4700	not-for-merge	'refs/pull/491/head' of https://github.com/tristanhimmelman/ObjectMapper
+826e1d4af003706da9e9a994c3dce9820313f93e	not-for-merge	'refs/pull/491/merge' of https://github.com/tristanhimmelman/ObjectMapper
+2d8a29e6582266afd053d0c32e15f5ca3231e47b	not-for-merge	'refs/pull/5/head' of https://github.com/tristanhimmelman/ObjectMapper
+dc7030bff612c1cabdb250f11264f8a1882184ad	not-for-merge	'refs/pull/5/merge' of https://github.com/tristanhimmelman/ObjectMapper
+b8357960df3ebeb799d8454be7466a34a203c66e	not-for-merge	'refs/pull/50/head' of https://github.com/tristanhimmelman/ObjectMapper
+41b65a1b7531c3f3f60b96eb0c823dc9ea1d4700	not-for-merge	'refs/pull/505/head' of https://github.com/tristanhimmelman/ObjectMapper
+9b8163a46882351674925dc585291fd996c6edd9	not-for-merge	'refs/pull/510/head' of https://github.com/tristanhimmelman/ObjectMapper
+7655f734daab440973852d11d9fe5433e84a0906	not-for-merge	'refs/pull/510/merge' of https://github.com/tristanhimmelman/ObjectMapper
+63ee1c25d2dd3d4173b08fcfd567fe0a3decd277	not-for-merge	'refs/pull/511/head' of https://github.com/tristanhimmelman/ObjectMapper
+3e9871c3b72c44a2da846b0fb3bb7744024a4f23	not-for-merge	'refs/pull/517/head' of https://github.com/tristanhimmelman/ObjectMapper
+5ace825ac922d969a330f0d966f2412e765d51e5	not-for-merge	'refs/pull/519/head' of https://github.com/tristanhimmelman/ObjectMapper
+c1ce4faf196b29358ddcac5d7ddc036936553801	not-for-merge	'refs/pull/52/head' of https://github.com/tristanhimmelman/ObjectMapper
+76de2d73d1342c6ffd4b66a37c636833fa910994	not-for-merge	'refs/pull/522/head' of https://github.com/tristanhimmelman/ObjectMapper
+b98eb43a9cb2f878608210239e747c46222a8422	not-for-merge	'refs/pull/529/head' of https://github.com/tristanhimmelman/ObjectMapper
+d3c3bf522701b805ac8c66c3d919961dce61e103	not-for-merge	'refs/pull/529/merge' of https://github.com/tristanhimmelman/ObjectMapper
+9dc11b02d8e2e9f69d185f99e3838d99cb52de16	not-for-merge	'refs/pull/53/head' of https://github.com/tristanhimmelman/ObjectMapper
+92c7db6c0f52895f6292ce3bc74406d83795d828	not-for-merge	'refs/pull/530/head' of https://github.com/tristanhimmelman/ObjectMapper
+abf90a63a7fe7b699060b1bfde164cfea7c8d900	not-for-merge	'refs/pull/531/head' of https://github.com/tristanhimmelman/ObjectMapper
+c49f5c04e3a2e8fbe1746eaf99e60558e1740421	not-for-merge	'refs/pull/531/merge' of https://github.com/tristanhimmelman/ObjectMapper
+74195cf6864067483b28e104811f3318afcbae3d	not-for-merge	'refs/pull/532/head' of https://github.com/tristanhimmelman/ObjectMapper
+4e869d206e697ed844371dab0f5c6556aeee63d4	not-for-merge	'refs/pull/533/head' of https://github.com/tristanhimmelman/ObjectMapper
+684126d098b8fb44c24f875bd21d7cf0d3116bf3	not-for-merge	'refs/pull/539/head' of https://github.com/tristanhimmelman/ObjectMapper
+b4debd071f54cfc8c286383b2f14c8a568ad1388	not-for-merge	'refs/pull/54/head' of https://github.com/tristanhimmelman/ObjectMapper
+67f0df80f32b4b5f7c8f92ff8a98d66dbe72c435	not-for-merge	'refs/pull/541/head' of https://github.com/tristanhimmelman/ObjectMapper
+e2e4f2bc3222ed7f5061cc14cb832469b3c8f9fd	not-for-merge	'refs/pull/541/merge' of https://github.com/tristanhimmelman/ObjectMapper
+1aed1fde7f88cff65789fb6a40f5383fa19198fa	not-for-merge	'refs/pull/542/head' of https://github.com/tristanhimmelman/ObjectMapper
+3b412b0330689cdaf67db2b18fd74dda0e9c7608	not-for-merge	'refs/pull/542/merge' of https://github.com/tristanhimmelman/ObjectMapper
+b98eb43a9cb2f878608210239e747c46222a8422	not-for-merge	'refs/pull/547/head' of https://github.com/tristanhimmelman/ObjectMapper
+ed614a6d3d04fc6af9c623ad1887d2e8463ff39b	not-for-merge	'refs/pull/549/head' of https://github.com/tristanhimmelman/ObjectMapper
+49cc4db5d71cf1af0370a5d51f563458a7476121	not-for-merge	'refs/pull/55/head' of https://github.com/tristanhimmelman/ObjectMapper
+30a9a393219b2b1fa722294d4c8714b322a8a4aa	not-for-merge	'refs/pull/550/head' of https://github.com/tristanhimmelman/ObjectMapper
+e57a208eef37b43323c230437e4cd6e6f6b5fc02	not-for-merge	'refs/pull/550/merge' of https://github.com/tristanhimmelman/ObjectMapper
+8d1fa731d88b099cedb883a86b4bfd157799c3e1	not-for-merge	'refs/pull/551/head' of https://github.com/tristanhimmelman/ObjectMapper
+2ebfeadd609cc62f6f46def027cf4afc9ed58d6f	not-for-merge	'refs/pull/551/merge' of https://github.com/tristanhimmelman/ObjectMapper
+9063a253899af27c7f13f31137ea0b1ed28467cb	not-for-merge	'refs/pull/552/head' of https://github.com/tristanhimmelman/ObjectMapper
+fab4a04342d9b00f444a12cce53961472b3028e8	not-for-merge	'refs/pull/554/head' of https://github.com/tristanhimmelman/ObjectMapper
+f5734cce614d9a089a4d4d40c74a75a0b9e7bd99	not-for-merge	'refs/pull/557/head' of https://github.com/tristanhimmelman/ObjectMapper
+b8fdf2a1637cb68b8d67043b98d40b7851886627	not-for-merge	'refs/pull/56/head' of https://github.com/tristanhimmelman/ObjectMapper
+8164a1f4fa16d8447cfd19c3f7208f775da00250	not-for-merge	'refs/pull/560/head' of https://github.com/tristanhimmelman/ObjectMapper
+b2a10008a5ba6032800be6e04354c5f277e7c8f2	not-for-merge	'refs/pull/560/merge' of https://github.com/tristanhimmelman/ObjectMapper
+1c8e3eb35e6091e129770063e61b63c2125b83e4	not-for-merge	'refs/pull/561/head' of https://github.com/tristanhimmelman/ObjectMapper
+7b872db3efabbbfcf65046b737a54645ea7d1f14	not-for-merge	'refs/pull/565/head' of https://github.com/tristanhimmelman/ObjectMapper
+a9ba1cdfe92ecc094f2f999c4c86008afc6d2614	not-for-merge	'refs/pull/565/merge' of https://github.com/tristanhimmelman/ObjectMapper
+eef5607b6f7bb579f8cac34b72fdfde4355b4641	not-for-merge	'refs/pull/566/head' of https://github.com/tristanhimmelman/ObjectMapper
+f3d875f781f2ede42ab767fa19292a929a344278	not-for-merge	'refs/pull/566/merge' of https://github.com/tristanhimmelman/ObjectMapper
+ffe25d1d417a192c5dc7f859365f68276d6a0bec	not-for-merge	'refs/pull/567/head' of https://github.com/tristanhimmelman/ObjectMapper
+85c6a511caa1ba32e7d411fc23613cd23ffaed22	not-for-merge	'refs/pull/569/head' of https://github.com/tristanhimmelman/ObjectMapper
+a794192b73696800504a10233a8ed2f627a9c64a	not-for-merge	'refs/pull/57/head' of https://github.com/tristanhimmelman/ObjectMapper
+6ba230a37a4261bfad66ac573cc40b9d6c5c89f1	not-for-merge	'refs/pull/570/head' of https://github.com/tristanhimmelman/ObjectMapper
+110224ecb102973b9419be5eb01875653c5e2c21	not-for-merge	'refs/pull/578/head' of https://github.com/tristanhimmelman/ObjectMapper
+d251eeaeee9d4dc3210725f378ec6cd1fb141895	not-for-merge	'refs/pull/578/merge' of https://github.com/tristanhimmelman/ObjectMapper
+64a6cdd85d81762707834ddc1ad5f5e6d1cc9177	not-for-merge	'refs/pull/58/head' of https://github.com/tristanhimmelman/ObjectMapper
+44b698f05ab0c3fd35006eceb4576360abaf638b	not-for-merge	'refs/pull/585/head' of https://github.com/tristanhimmelman/ObjectMapper
+0509d97e5a482c365edabc0e55a79ee04e7a8692	not-for-merge	'refs/pull/587/head' of https://github.com/tristanhimmelman/ObjectMapper
+2f1042cdf91ba01c8e2c08dee9c0443895f898b5	not-for-merge	'refs/pull/589/head' of https://github.com/tristanhimmelman/ObjectMapper
+9266989cd5909aca62263bcca767db428a056477	not-for-merge	'refs/pull/589/merge' of https://github.com/tristanhimmelman/ObjectMapper
+5fcb73f3724ac286d9679c005daf4e4973fb632c	not-for-merge	'refs/pull/59/head' of https://github.com/tristanhimmelman/ObjectMapper
+a80e288c4877a34306cb2689ecdcd6837f53dddb	not-for-merge	'refs/pull/590/head' of https://github.com/tristanhimmelman/ObjectMapper
+2a6c00926a8441c153b1e07d9eb098dadf720a44	not-for-merge	'refs/pull/590/merge' of https://github.com/tristanhimmelman/ObjectMapper
+10debd93fa6f709d1a077500dbe077587a649ee2	not-for-merge	'refs/pull/592/head' of https://github.com/tristanhimmelman/ObjectMapper
+0b45a192f10fc3368770ca7e2514a310b70515a7	not-for-merge	'refs/pull/594/head' of https://github.com/tristanhimmelman/ObjectMapper
+e50496c447ed8ecf36a3df75f6e5af62d9301175	not-for-merge	'refs/pull/598/head' of https://github.com/tristanhimmelman/ObjectMapper
+26900177fc6c74205c757f57932bf648dcee5339	not-for-merge	'refs/pull/6/head' of https://github.com/tristanhimmelman/ObjectMapper
+ba07622b70de5684c1aed8adf5f8b5f910256c75	not-for-merge	'refs/pull/60/head' of https://github.com/tristanhimmelman/ObjectMapper
+3277abffb54c6edbc7a149be014315c9cd5e22b8	not-for-merge	'refs/pull/60/merge' of https://github.com/tristanhimmelman/ObjectMapper
+0ff9fd03e5d23b7699e6fef3ae45539c83165f2c	not-for-merge	'refs/pull/600/head' of https://github.com/tristanhimmelman/ObjectMapper
+e7408cab845c4204752ff20e2cce1d48cac962bc	not-for-merge	'refs/pull/601/head' of https://github.com/tristanhimmelman/ObjectMapper
+9d93faca4b28111fe4346e442fdcd00354d58eb5	not-for-merge	'refs/pull/602/head' of https://github.com/tristanhimmelman/ObjectMapper
+b3ac6d8757c479791fa6f5c0df2935397a26e425	not-for-merge	'refs/pull/604/head' of https://github.com/tristanhimmelman/ObjectMapper
+7a0e3341512ccc6c6dfb30bd65f19d00d1bf919a	not-for-merge	'refs/pull/604/merge' of https://github.com/tristanhimmelman/ObjectMapper
+b90ef460778c70772ae2a2e72893071d46b5742b	not-for-merge	'refs/pull/605/head' of https://github.com/tristanhimmelman/ObjectMapper
+2ddaf20cd3c399df6220fbb81e8f9f060a156726	not-for-merge	'refs/pull/608/head' of https://github.com/tristanhimmelman/ObjectMapper
+cf4c9eefc1c74e66c7c704edcb0b1094e80ece5c	not-for-merge	'refs/pull/612/head' of https://github.com/tristanhimmelman/ObjectMapper
+1dbd9620080559e187ec4f5e3b4f7374cef62e18	not-for-merge	'refs/pull/616/head' of https://github.com/tristanhimmelman/ObjectMapper
+42e5d22ea5d2f8650d5b238eb1f643453a4e152d	not-for-merge	'refs/pull/617/head' of https://github.com/tristanhimmelman/ObjectMapper
+0291919a7b0c5d2ae0f87c669fb062852e7dfdb4	not-for-merge	'refs/pull/618/head' of https://github.com/tristanhimmelman/ObjectMapper
+15696c8a2cdd206a56e3a2f6df86baef1d980e90	not-for-merge	'refs/pull/619/head' of https://github.com/tristanhimmelman/ObjectMapper
+246d67e67a3e8209651c61d39d05e4c5fa1f2b4f	not-for-merge	'refs/pull/621/head' of https://github.com/tristanhimmelman/ObjectMapper
+822cb5ae8d536ae5d949099a63b3f009168042d5	not-for-merge	'refs/pull/623/head' of https://github.com/tristanhimmelman/ObjectMapper
+ae9b0a0d5b97d24269076660e9fb69a0e3dcac24	not-for-merge	'refs/pull/628/head' of https://github.com/tristanhimmelman/ObjectMapper
+c21bf08e135070e0bc166b8f832e3a3820de884c	not-for-merge	'refs/pull/629/head' of https://github.com/tristanhimmelman/ObjectMapper
+f022cb2f68297b555ebcbd14a2ece90cfa42d80c	not-for-merge	'refs/pull/632/head' of https://github.com/tristanhimmelman/ObjectMapper
+018f37942ebebf7320fad14eaed0aeb6778adc23	not-for-merge	'refs/pull/634/head' of https://github.com/tristanhimmelman/ObjectMapper
+c59dd4e78bc01f3ec8973dc7749e0c7145af8987	not-for-merge	'refs/pull/639/head' of https://github.com/tristanhimmelman/ObjectMapper
+1680cee2b969bf20ed64d9e8b7d5bf7dc5d299b6	not-for-merge	'refs/pull/642/head' of https://github.com/tristanhimmelman/ObjectMapper
+370b2a2a36e477c965f84c015461433adb696591	not-for-merge	'refs/pull/644/head' of https://github.com/tristanhimmelman/ObjectMapper
+4bac58a9f38238903d90cf25792d82ae3ddec8b9	not-for-merge	'refs/pull/644/merge' of https://github.com/tristanhimmelman/ObjectMapper
+146a27c1311b26adf7968443064f1c55eb273c2f	not-for-merge	'refs/pull/648/head' of https://github.com/tristanhimmelman/ObjectMapper
+e38bbba568858b54d1db68b7e5c03fa3314b73d3	not-for-merge	'refs/pull/648/merge' of https://github.com/tristanhimmelman/ObjectMapper
+06ca777578402076a1019606c98cedbc8699a5f5	not-for-merge	'refs/pull/657/head' of https://github.com/tristanhimmelman/ObjectMapper
+92f2bdf724b2a5ee4abba0d5b2e40f08e2a508ea	not-for-merge	'refs/pull/658/head' of https://github.com/tristanhimmelman/ObjectMapper
+37939fe2d7abc147a98d02cbb679be305c37ce10	not-for-merge	'refs/pull/659/head' of https://github.com/tristanhimmelman/ObjectMapper
+fe872527b50d4e16d6a5d468ec6c12fe8a1eebe6	not-for-merge	'refs/pull/66/head' of https://github.com/tristanhimmelman/ObjectMapper
+d6720fdc2d330171e3f33ef5b5d523eb594c9f11	not-for-merge	'refs/pull/664/head' of https://github.com/tristanhimmelman/ObjectMapper
+2790175ed88e22151c82010e16b8bfabe4d8ee2c	not-for-merge	'refs/pull/666/head' of https://github.com/tristanhimmelman/ObjectMapper
+5dc86061c332e89c915d289cf4524a8e3fcec00c	not-for-merge	'refs/pull/666/merge' of https://github.com/tristanhimmelman/ObjectMapper
+f84c3f714e57762e27792b6ce6f5fb00c817214e	not-for-merge	'refs/pull/667/head' of https://github.com/tristanhimmelman/ObjectMapper
+1c0235a76126761fa067d78a08b2c873070748e5	not-for-merge	'refs/pull/670/head' of https://github.com/tristanhimmelman/ObjectMapper
+e6d13fb3f608dc1f87de3346fb1be0f396802cea	not-for-merge	'refs/pull/672/head' of https://github.com/tristanhimmelman/ObjectMapper
+161f1aa1ae05b61487ae31d850f63c38044a040c	not-for-merge	'refs/pull/672/merge' of https://github.com/tristanhimmelman/ObjectMapper
+9b561e2b832cacbb0f81da6c26bebb2b82d52c7b	not-for-merge	'refs/pull/680/head' of https://github.com/tristanhimmelman/ObjectMapper
+363bcc779ef0b8553caac18c9bf0585dc3d4a23e	not-for-merge	'refs/pull/69/head' of https://github.com/tristanhimmelman/ObjectMapper
+c93e462ec49d19c445adc5fc6cf14c31ead08e8c	not-for-merge	'refs/pull/691/head' of https://github.com/tristanhimmelman/ObjectMapper
+e54c921bf7cd8a0c65e3c01fe5336ae72dd9cd4f	not-for-merge	'refs/pull/691/merge' of https://github.com/tristanhimmelman/ObjectMapper
+77004729c964db9de35b987a327da5b502fa684a	not-for-merge	'refs/pull/695/head' of https://github.com/tristanhimmelman/ObjectMapper
+45b3b5197d08a0be26c2b820d38b6088b10d55bf	not-for-merge	'refs/pull/697/head' of https://github.com/tristanhimmelman/ObjectMapper
+83c09c9f6b96e39d5b06d65f4e1b40fa0b5a6368	not-for-merge	'refs/pull/7/head' of https://github.com/tristanhimmelman/ObjectMapper
+ee884c3d142882523806fdd3c2a79fa55c4b857b	not-for-merge	'refs/pull/70/head' of https://github.com/tristanhimmelman/ObjectMapper
+6669cd792899b79c008a8f0d337282bdc823ec3d	not-for-merge	'refs/pull/700/head' of https://github.com/tristanhimmelman/ObjectMapper
+1bb69fa809d632000e844b069ea4c29bce4028ee	not-for-merge	'refs/pull/71/head' of https://github.com/tristanhimmelman/ObjectMapper
+929047e41cb196d0eec662f703482f1af4189473	not-for-merge	'refs/pull/714/head' of https://github.com/tristanhimmelman/ObjectMapper
+ed3258925191e16341f0c64a4d17380a97163c2c	not-for-merge	'refs/pull/716/head' of https://github.com/tristanhimmelman/ObjectMapper
+5856657d09db07645c7c1af0a3ca411e5f482e17	not-for-merge	'refs/pull/717/head' of https://github.com/tristanhimmelman/ObjectMapper
+4dc159d66e11c112c23423035628a726680e36c8	not-for-merge	'refs/pull/72/head' of https://github.com/tristanhimmelman/ObjectMapper
+47f6b3b516d2f7f3fc985115e46ab1837423b654	not-for-merge	'refs/pull/736/head' of https://github.com/tristanhimmelman/ObjectMapper
+bd6cf23a91c231ced1304f8788bf6c85ad3327f2	not-for-merge	'refs/pull/737/head' of https://github.com/tristanhimmelman/ObjectMapper
+13a0f27d1aeacaeb60c8b89961584255c3563d71	not-for-merge	'refs/pull/748/head' of https://github.com/tristanhimmelman/ObjectMapper
+859d02af56a6638d0ea703307d7c4cec83c79493	not-for-merge	'refs/pull/75/head' of https://github.com/tristanhimmelman/ObjectMapper
+9ab5eb846d7b01c591c55f4ddc3df13261ae46fc	not-for-merge	'refs/pull/752/head' of https://github.com/tristanhimmelman/ObjectMapper
+35216fbda49d223930e9e14658f756e189dabec6	not-for-merge	'refs/pull/754/head' of https://github.com/tristanhimmelman/ObjectMapper
+5a01a7fdd218d2eee5e5eaa6b8d47bed8cc8f2fc	not-for-merge	'refs/pull/759/head' of https://github.com/tristanhimmelman/ObjectMapper
+beb82340fdd124312176d60b479a839befb893e7	not-for-merge	'refs/pull/759/merge' of https://github.com/tristanhimmelman/ObjectMapper
+9af2e9d4a2181dfe03f2e745c103bab5f8d94baf	not-for-merge	'refs/pull/76/head' of https://github.com/tristanhimmelman/ObjectMapper
+5af3c132e4140c94242dd6c71738d82cba324212	not-for-merge	'refs/pull/760/head' of https://github.com/tristanhimmelman/ObjectMapper
+b2ebc10b0ce730ed68d1e8ed637dbbd183ad0c58	not-for-merge	'refs/pull/761/head' of https://github.com/tristanhimmelman/ObjectMapper
+0833bdff5aa4153fe9fc9568312f2a3cf106dfc9	not-for-merge	'refs/pull/761/merge' of https://github.com/tristanhimmelman/ObjectMapper
+7976c6af466aadfcb19e2022e092bba2c795c06e	not-for-merge	'refs/pull/766/head' of https://github.com/tristanhimmelman/ObjectMapper
+e5ac919c581e52ce8482e2ab95590b0e7d1d3ad7	not-for-merge	'refs/pull/767/head' of https://github.com/tristanhimmelman/ObjectMapper
+88cc4df942dab8c1b61fb5edf43e5d23a05021b8	not-for-merge	'refs/pull/767/merge' of https://github.com/tristanhimmelman/ObjectMapper
+0113b0d37af20a9e6a70cf9f5553b20b852d8ddf	not-for-merge	'refs/pull/777/head' of https://github.com/tristanhimmelman/ObjectMapper
+1a147b32a74aac34b38fdbeadc7bd7793a5c3015	not-for-merge	'refs/pull/778/head' of https://github.com/tristanhimmelman/ObjectMapper
+64b4cc81f8dc22e2f85d0606d2aa3012630d7621	not-for-merge	'refs/pull/780/head' of https://github.com/tristanhimmelman/ObjectMapper
+b32a08ac974886e8926ae7a080c9e926f57c8066	not-for-merge	'refs/pull/781/head' of https://github.com/tristanhimmelman/ObjectMapper
+c00e37ae0d035c734389cb71b72ac2f86d36b861	not-for-merge	'refs/pull/785/head' of https://github.com/tristanhimmelman/ObjectMapper
+7be21b0689fb20743d4ccfce48491c4d830df6c9	not-for-merge	'refs/pull/785/merge' of https://github.com/tristanhimmelman/ObjectMapper
+6be71b1b7326e5387c549ee52816475d614a0dcf	not-for-merge	'refs/pull/791/head' of https://github.com/tristanhimmelman/ObjectMapper
+b465622c7909866eb7bab536198977169eae50f3	not-for-merge	'refs/pull/791/merge' of https://github.com/tristanhimmelman/ObjectMapper
+cb355f0b5174a14761964eb2a907a3356e57a0de	not-for-merge	'refs/pull/793/head' of https://github.com/tristanhimmelman/ObjectMapper
+cf68b04219195c03dd0add98d946cb2be66287db	not-for-merge	'refs/pull/8/head' of https://github.com/tristanhimmelman/ObjectMapper
+943228bc23b79c1d2536b51144473160d97bf252	not-for-merge	'refs/pull/80/head' of https://github.com/tristanhimmelman/ObjectMapper
+c9ab4f2b016ea2cd38ffc1151a0b87dcd73285eb	not-for-merge	'refs/pull/801/head' of https://github.com/tristanhimmelman/ObjectMapper
+ee1f890841610892c76cf44d8dc7e565496c5ce7	not-for-merge	'refs/pull/802/head' of https://github.com/tristanhimmelman/ObjectMapper
+5e4fde24c0a7709f296819c523e3d011566bd7b3	not-for-merge	'refs/pull/804/head' of https://github.com/tristanhimmelman/ObjectMapper
+b8d4ede700843b9632849c121d80bf48761c1b20	not-for-merge	'refs/pull/81/head' of https://github.com/tristanhimmelman/ObjectMapper
+5cdd13f08bf9e051b52277d4dbace024925cd011	not-for-merge	'refs/pull/810/head' of https://github.com/tristanhimmelman/ObjectMapper
+b9aed0155a1f6179d92b57c6bca9d3c538260fa5	not-for-merge	'refs/pull/810/merge' of https://github.com/tristanhimmelman/ObjectMapper
+cc238eafb20fca553feb998861e67ceccb889b21	not-for-merge	'refs/pull/816/head' of https://github.com/tristanhimmelman/ObjectMapper
+fff84fa75c02bb722590f1faafaf93174a9bf684	not-for-merge	'refs/pull/817/head' of https://github.com/tristanhimmelman/ObjectMapper
+ae57ee914ab9a41936d1fe53239f611ed9953667	not-for-merge	'refs/pull/817/merge' of https://github.com/tristanhimmelman/ObjectMapper
+0cf5895d5bfe8e42fa3656099a5aedca335f7c9e	not-for-merge	'refs/pull/82/head' of https://github.com/tristanhimmelman/ObjectMapper
+87daea6bf184ff1a386f23b54b2adc898c96c60b	not-for-merge	'refs/pull/825/head' of https://github.com/tristanhimmelman/ObjectMapper
+fd9c191fdb43ea0751ec59c9a560183a47ea42c2	not-for-merge	'refs/pull/83/head' of https://github.com/tristanhimmelman/ObjectMapper
+df8ad09af61d4043410d3e29786a948f4ba2873c	not-for-merge	'refs/pull/839/head' of https://github.com/tristanhimmelman/ObjectMapper
+36083b2ac5b6e3855284ca68c23af2b618ef9069	not-for-merge	'refs/pull/84/head' of https://github.com/tristanhimmelman/ObjectMapper
+49853a3fbc709ed7c622724eecb99c1761f27f9b	not-for-merge	'refs/pull/842/head' of https://github.com/tristanhimmelman/ObjectMapper
+6e853ff116a3d429487afbc021b5d9db12a2086a	not-for-merge	'refs/pull/846/head' of https://github.com/tristanhimmelman/ObjectMapper
+7f7b44748d1fb5dca593e6d08f62b7817c0bbaf7	not-for-merge	'refs/pull/85/head' of https://github.com/tristanhimmelman/ObjectMapper
+1b1517a4ffa6c9712e5272837b56e2aba718c13d	not-for-merge	'refs/pull/85/merge' of https://github.com/tristanhimmelman/ObjectMapper
+c33c1fe71f3a0a04c13c75134cdd213feeba5aca	not-for-merge	'refs/pull/857/head' of https://github.com/tristanhimmelman/ObjectMapper
+b5648073c0552add79bd66742fbd4826c0c6c520	not-for-merge	'refs/pull/857/merge' of https://github.com/tristanhimmelman/ObjectMapper
+01a2d25277181b135eb6201d960305b701ec69ff	not-for-merge	'refs/pull/863/head' of https://github.com/tristanhimmelman/ObjectMapper
+25869901e0d64e35c194928b5d7e3a6dd1cd1f37	not-for-merge	'refs/pull/867/head' of https://github.com/tristanhimmelman/ObjectMapper
+2a8369379b88bce522dd1532ca4c68415431a3ef	not-for-merge	'refs/pull/87/head' of https://github.com/tristanhimmelman/ObjectMapper
+262c258f09ba25948f4365553acdbe58f6d58e83	not-for-merge	'refs/pull/875/head' of https://github.com/tristanhimmelman/ObjectMapper
+49b3ae36c55d55b0317c0612cfab66c36c41804f	not-for-merge	'refs/pull/876/head' of https://github.com/tristanhimmelman/ObjectMapper
+b85d7d54241e7344d8386fca4a309bd3217e0d81	not-for-merge	'refs/pull/876/merge' of https://github.com/tristanhimmelman/ObjectMapper
+b340a7a39a7ed2279dc89f8e165b27bffb46c00d	not-for-merge	'refs/pull/877/head' of https://github.com/tristanhimmelman/ObjectMapper
+8fad074e98234a2d4d0443269f2c9500bfae37b3	not-for-merge	'refs/pull/877/merge' of https://github.com/tristanhimmelman/ObjectMapper
+b7025ae7865335f3e696fd9b2acd91eaab35f5cf	not-for-merge	'refs/pull/879/head' of https://github.com/tristanhimmelman/ObjectMapper
+5c82a3c0fb4f7a564eec0f2b761aa7a6de542dda	not-for-merge	'refs/pull/88/head' of https://github.com/tristanhimmelman/ObjectMapper
+562d4df94ce57745e59c6650273889508dd5e6e4	not-for-merge	'refs/pull/882/head' of https://github.com/tristanhimmelman/ObjectMapper
+e2f0fcf79f0904fdeac8e5b75e2d8ddbddc8d277	not-for-merge	'refs/pull/882/merge' of https://github.com/tristanhimmelman/ObjectMapper
+60304bee80032a2450132eac584acf96e8f524b0	not-for-merge	'refs/pull/885/head' of https://github.com/tristanhimmelman/ObjectMapper
+3154a98989164d2c8a0c1502e4168e5d72a6d384	not-for-merge	'refs/pull/888/head' of https://github.com/tristanhimmelman/ObjectMapper
+9e940cf4114cc7e8649b017729526d877f5a76ca	not-for-merge	'refs/pull/888/merge' of https://github.com/tristanhimmelman/ObjectMapper
+990bf7d353c73698108aef4d5d38abb048e2cf20	not-for-merge	'refs/pull/89/head' of https://github.com/tristanhimmelman/ObjectMapper
+18051553fc44e98ffb1b7e93fa94cd184283d993	not-for-merge	'refs/pull/892/head' of https://github.com/tristanhimmelman/ObjectMapper
+2f6a0cc4a8c9e0284363bb777b2fc9957d096877	not-for-merge	'refs/pull/893/head' of https://github.com/tristanhimmelman/ObjectMapper
+c1f4ac38512e83e29c8e1ad726081b901faf41fc	not-for-merge	'refs/pull/893/merge' of https://github.com/tristanhimmelman/ObjectMapper
+b89fd941bb1419c90649b37f19e556832d96f928	not-for-merge	'refs/pull/899/head' of https://github.com/tristanhimmelman/ObjectMapper
+07fb779b350303ec26029922bbebcaf51bb889be	not-for-merge	'refs/pull/900/head' of https://github.com/tristanhimmelman/ObjectMapper
+6336e7e817119e8f4ce8d9e0919ac65d10035b8f	not-for-merge	'refs/pull/903/head' of https://github.com/tristanhimmelman/ObjectMapper
+b98f2537c21170780835f0a04cf25b922544dc45	not-for-merge	'refs/pull/907/head' of https://github.com/tristanhimmelman/ObjectMapper
+fe5229449285a59996347fd1074badc54b81be5c	not-for-merge	'refs/pull/91/head' of https://github.com/tristanhimmelman/ObjectMapper
+f6e26310091b6bf25a3f926cf636fdf8be5c7f90	not-for-merge	'refs/pull/910/head' of https://github.com/tristanhimmelman/ObjectMapper
+5f39fe2e102eb9878538987ac0da92b9df94ca46	not-for-merge	'refs/pull/914/head' of https://github.com/tristanhimmelman/ObjectMapper
+356ea9d3adde8d9ae31f0c23e759e4263e915126	not-for-merge	'refs/pull/915/head' of https://github.com/tristanhimmelman/ObjectMapper
+5fe3a1d6c37d73eeecdc730f1071e8b650fdfc0f	not-for-merge	'refs/pull/921/head' of https://github.com/tristanhimmelman/ObjectMapper
+83f38c5db0d55e4f48e08542f4936d820ddd3a9e	not-for-merge	'refs/pull/921/merge' of https://github.com/tristanhimmelman/ObjectMapper
+f4c48e3898f2b96c6508c8970bcbc363b500eb42	not-for-merge	'refs/pull/929/head' of https://github.com/tristanhimmelman/ObjectMapper
+cbe1818b1d1d418c0e6f0a1b8da471c3e5e17891	not-for-merge	'refs/pull/929/merge' of https://github.com/tristanhimmelman/ObjectMapper
+73406a53f333fe93d8a907119ac564c4e1d24613	not-for-merge	'refs/pull/936/head' of https://github.com/tristanhimmelman/ObjectMapper
+39fd9436ac2a6b3ad281deab1a509c0ab71c76e5	not-for-merge	'refs/pull/937/head' of https://github.com/tristanhimmelman/ObjectMapper
+40c524ed7d89f1a8d02e9c6b2a2c9b494da361ce	not-for-merge	'refs/pull/937/merge' of https://github.com/tristanhimmelman/ObjectMapper
+41d5879b791691b9ca57793bb44d2a369ac25283	not-for-merge	'refs/pull/94/head' of https://github.com/tristanhimmelman/ObjectMapper
+7517dee10e02afe7e06938c5477ee7d8dfae4d85	not-for-merge	'refs/pull/940/head' of https://github.com/tristanhimmelman/ObjectMapper
+eca1f69652b399cebe620881706536080030ae1a	not-for-merge	'refs/pull/946/head' of https://github.com/tristanhimmelman/ObjectMapper
+506a1b103c4bde8251fcffae039c18a7de6863c3	not-for-merge	'refs/pull/959/head' of https://github.com/tristanhimmelman/ObjectMapper
+19fcf94548e935045603751de24ce3da60e892da	not-for-merge	'refs/pull/96/head' of https://github.com/tristanhimmelman/ObjectMapper
+61e412a00cd1cd0b5478464c36d4dc360c278b70	not-for-merge	'refs/pull/962/head' of https://github.com/tristanhimmelman/ObjectMapper
+2d040b99c010f7cd010103cfa32af65ce85af9fc	not-for-merge	'refs/pull/97/head' of https://github.com/tristanhimmelman/ObjectMapper
+382faa1dd15d9f787d63e19651abf78bf5dcc4bc	not-for-merge	'refs/pull/976/head' of https://github.com/tristanhimmelman/ObjectMapper
+193b14c4d4434fdb7e7b51d5b87e5d940f3da7e6	not-for-merge	'refs/pull/976/merge' of https://github.com/tristanhimmelman/ObjectMapper
+af7966b567860596fad270bb44b27f495cd8691d	not-for-merge	'refs/pull/978/head' of https://github.com/tristanhimmelman/ObjectMapper
+e3006b05824b5de5920c06734abc0b1beb65eb7e	not-for-merge	'refs/pull/978/merge' of https://github.com/tristanhimmelman/ObjectMapper
+58840880bfb0e97efeb500f24b0ad1dd9eec44b6	not-for-merge	'refs/pull/979/head' of https://github.com/tristanhimmelman/ObjectMapper
+f46c8ccc9dd262b35f868ec1d55548d8f8c4cd8a	not-for-merge	'refs/pull/98/head' of https://github.com/tristanhimmelman/ObjectMapper
+5985794dc23929ed2de4b4394bfadd29fff32bb4	not-for-merge	'refs/pull/980/head' of https://github.com/tristanhimmelman/ObjectMapper
+5a5471a3092cac6de6d98b96fdfd02b6156baa2a	not-for-merge	'refs/pull/982/head' of https://github.com/tristanhimmelman/ObjectMapper
+785d955c4896e97a3ee1b71843a67d0153d9141b	not-for-merge	'refs/pull/982/merge' of https://github.com/tristanhimmelman/ObjectMapper
+786543dec1292be9cbd4f597a8c1f415f855a809	not-for-merge	'refs/pull/984/head' of https://github.com/tristanhimmelman/ObjectMapper
+f9e71c7ff7cc566d655952e082d00b74686a97f3	not-for-merge	'refs/pull/987/head' of https://github.com/tristanhimmelman/ObjectMapper
+819dd2da90ca11a66987c33033bbcf4f39ea5bb0	not-for-merge	'refs/pull/989/head' of https://github.com/tristanhimmelman/ObjectMapper
+f4c2c7bc23c48ff2a757b8a78d4588fe1e793d80	not-for-merge	'refs/pull/99/head' of https://github.com/tristanhimmelman/ObjectMapper
+db971e853ced2757fe0c5190693a04a729a97f5a	not-for-merge	'refs/pull/993/head' of https://github.com/tristanhimmelman/ObjectMapper
+7cab225467d701a1fddc504ea0c1445a82ee52aa	not-for-merge	'refs/pull/993/merge' of https://github.com/tristanhimmelman/ObjectMapper
+f807de716163ad4fdb9d9e9fed463e8ed3d61402	not-for-merge	'refs/pull/999/head' of https://github.com/tristanhimmelman/ObjectMapper
+1dead278af2b586af8274a7ef196dcc1b72db302	not-for-merge	tag '0.0.1' of https://github.com/tristanhimmelman/ObjectMapper
+a772c85f0de3f5b96d072a0b798f02d9d0d418ab	not-for-merge	tag '0.0.2' of https://github.com/tristanhimmelman/ObjectMapper
+a30d148c9e9f33464a32331f7bd8af016d509138	not-for-merge	tag '0.0.3' of https://github.com/tristanhimmelman/ObjectMapper
+2808c4645910ddc5600a3c2f3d15d31f7e464407	not-for-merge	tag '0.1' of https://github.com/tristanhimmelman/ObjectMapper
+e271dc87b241176f958950158733c152d5e8417d	not-for-merge	tag '0.10' of https://github.com/tristanhimmelman/ObjectMapper
+6734361348ddcc7a842f3908c7f2e858f676789b	not-for-merge	tag '0.11' of https://github.com/tristanhimmelman/ObjectMapper
+3d802946303f3cb0d86ef79d26e8f8fd593e5e06	not-for-merge	tag '0.12' of https://github.com/tristanhimmelman/ObjectMapper
+2f093f6ea8a27a6019dfef6c0fccc8647aa37960	not-for-merge	tag '0.13' of https://github.com/tristanhimmelman/ObjectMapper
+effd3e121a27061c3c531d75252249d15f6c60d3	not-for-merge	tag '0.14' of https://github.com/tristanhimmelman/ObjectMapper
+e8929ed480b3cdcc4f002884ee769aa8d33b8cfc	not-for-merge	tag '0.15' of https://github.com/tristanhimmelman/ObjectMapper
+69e17b30a252cb5a307c344dbf4230a85a78388d	not-for-merge	tag '0.16' of https://github.com/tristanhimmelman/ObjectMapper
+527513182e0bbb4ed2aaa1738be9d6fe20c72070	not-for-merge	tag '0.17' of https://github.com/tristanhimmelman/ObjectMapper
+f8c32ea66e49a409ff05f834dc8cb81fb07d87c9	not-for-merge	tag '0.18' of https://github.com/tristanhimmelman/ObjectMapper
+a148170f56c6d613643462d5ef0d6621db6a0bc6	not-for-merge	tag '0.19' of https://github.com/tristanhimmelman/ObjectMapper
+9099cee86900fd5b04544f81dc4a2aab6d62b318	not-for-merge	tag '0.2' of https://github.com/tristanhimmelman/ObjectMapper
+f3b83b18c2d57dea914f17cb10a759b64c859c0c	not-for-merge	tag '0.3' of https://github.com/tristanhimmelman/ObjectMapper
+5fa298c7d6a79bd2d78b00dcf02bac72bf83c3ce	not-for-merge	tag '0.4' of https://github.com/tristanhimmelman/ObjectMapper
+61aa83e39622589a197e09c79b7d39d9d3e735a3	not-for-merge	tag '0.5' of https://github.com/tristanhimmelman/ObjectMapper
+ee17c6f14b392b7e988e1ac997fc371e1e366dd4	not-for-merge	tag '0.6' of https://github.com/tristanhimmelman/ObjectMapper
+4872214f7015df86ab67f9f692dde9b15fdadb2e	not-for-merge	tag '0.7' of https://github.com/tristanhimmelman/ObjectMapper
+b8b1a0190f360c1aa0d858799753757a167a5ae3	not-for-merge	tag '0.8' of https://github.com/tristanhimmelman/ObjectMapper
+d058e09c3175ecc64363d792f815e27946d389cc	not-for-merge	tag '0.9' of https://github.com/tristanhimmelman/ObjectMapper
+d73420f9afb3c0cc15729136d247accb695308ed	not-for-merge	tag '1.0.0' of https://github.com/tristanhimmelman/ObjectMapper
+3656dc404baa66cbf46908af8f2cc68040ada5d8	not-for-merge	tag '1.0.1' of https://github.com/tristanhimmelman/ObjectMapper
+c7be04aa120ba1cadc00fe830746a88a237c1e3f	not-for-merge	tag '1.1.0' of https://github.com/tristanhimmelman/ObjectMapper
+a9d94c9eb3d09cd7fab06db00a8674c870b8389f	not-for-merge	tag '1.1.1' of https://github.com/tristanhimmelman/ObjectMapper
+31a26172f2cec51da92c7e6d4bccce5057f72cea	not-for-merge	tag '1.1.2' of https://github.com/tristanhimmelman/ObjectMapper
+a5f9b06610f806c08863d95a7100cb4e3244a648	not-for-merge	tag '1.1.3' of https://github.com/tristanhimmelman/ObjectMapper
+04e65181a6529aee34e1ebc8188fdeb2c2d77877	not-for-merge	tag '1.1.4' of https://github.com/tristanhimmelman/ObjectMapper
+78cf49821d6ff3553f8d7275cb09ff4ec8857c16	not-for-merge	tag '1.1.5' of https://github.com/tristanhimmelman/ObjectMapper
+f72ad154d1f11b2833d4d3e35de68f41e7056d19	not-for-merge	tag '1.2.0' of https://github.com/tristanhimmelman/ObjectMapper
+cf7c4ba9e206531176104e06c24449c48823e136	not-for-merge	tag '1.3.0' of https://github.com/tristanhimmelman/ObjectMapper
+9443651c23193dd7cb31a35f328dc58242131285	not-for-merge	tag '1.4.0' of https://github.com/tristanhimmelman/ObjectMapper
+6b80f55cb4081c6f740adabbf99026d1d70b37a5	not-for-merge	tag '1.5.0' of https://github.com/tristanhimmelman/ObjectMapper
+680f5cdfe87b94aefce8f94adcbf73adf54c1f37	not-for-merge	tag '2.0.0' of https://github.com/tristanhimmelman/ObjectMapper
+5614c6bf94fd73821b6ead43180ef17a4d420376	not-for-merge	tag '2.1.0' of https://github.com/tristanhimmelman/ObjectMapper
+34997b626dc449bec4e1dff9d155d44b301c8ab9	not-for-merge	tag '2.2.0' of https://github.com/tristanhimmelman/ObjectMapper
+ed3258925191e16341f0c64a4d17380a97163c2c	not-for-merge	tag '2.2.1' of https://github.com/tristanhimmelman/ObjectMapper
+fc44253abc5b1d79e6d68c46c61940a45d642929	not-for-merge	tag '2.2.2' of https://github.com/tristanhimmelman/ObjectMapper
+4cde0b3690869533e4da101157cab5d0adb167b3	not-for-merge	tag '2.2.3' of https://github.com/tristanhimmelman/ObjectMapper
+eef27bfcfd201036a12992b6988e64a088fe7354	not-for-merge	tag '2.2.4' of https://github.com/tristanhimmelman/ObjectMapper
+94199e3573ba9b1d6051c07cf3628163a823a164	not-for-merge	tag '2.2.5' of https://github.com/tristanhimmelman/ObjectMapper
+b35a6c38c20ba1c6fd396fef535ad0f856d56714	not-for-merge	tag '2.2.6' of https://github.com/tristanhimmelman/ObjectMapper
+c7359f422f36d15a99f139ae58608f9086e656dc	not-for-merge	tag '2.2.7' of https://github.com/tristanhimmelman/ObjectMapper
+40916302f077985bbb017b7ed6ddff7256c67479	not-for-merge	tag '2.2.8' of https://github.com/tristanhimmelman/ObjectMapper
+fb16bcefc150854597dae9830d928a8fd924fe99	not-for-merge	tag '2.2.9' of https://github.com/tristanhimmelman/ObjectMapper
+950675da53170582b9ff3263cfc88f12b60c24b2	not-for-merge	tag '3.0.0' of https://github.com/tristanhimmelman/ObjectMapper
+04c624cbbc4f05659605ae72db0f3e9eaf2eeeef	not-for-merge	tag '3.1.0' of https://github.com/tristanhimmelman/ObjectMapper
+9c7d2b5bdd0eedc97deb95567933db41afe555fd	not-for-merge	tag '3.2.0' of https://github.com/tristanhimmelman/ObjectMapper
+7de160dbc8a9a03ad4c39167e63cc2b7361e4cc5	not-for-merge	tag '3.3.0' of https://github.com/tristanhimmelman/ObjectMapper
+e182607322cd01c25518566107cf381e1039a130	not-for-merge	tag '3.4.0' of https://github.com/tristanhimmelman/ObjectMapper
+feb763a93755b5b576e09a9db2cb8d380fd65ba2	not-for-merge	tag '3.4.1' of https://github.com/tristanhimmelman/ObjectMapper
+83848fe8baa6fab47c7c325514956d4c9b2b88e6	not-for-merge	tag '3.4.2' of https://github.com/tristanhimmelman/ObjectMapper
+30c1b42872a234bad51efbed4165d73dd796c1ea	not-for-merge	tag '3.5.0' of https://github.com/tristanhimmelman/ObjectMapper
+19d499c65b8240f1220d7cf155ccd309857f8018	not-for-merge	tag '3.5.1' of https://github.com/tristanhimmelman/ObjectMapper
+8b69860cc62987a778d5e0bd7db50268ba9596d3	not-for-merge	tag '3.5.2' of https://github.com/tristanhimmelman/ObjectMapper
+5804d5446eb68b56c61497656cbc7bb6652f069b	not-for-merge	tag '3.5.3' of https://github.com/tristanhimmelman/ObjectMapper
+88465f82cc9680399c0d97127f372abc4150e088	not-for-merge	tag '4.0.0' of https://github.com/tristanhimmelman/ObjectMapper
+c3696dca1370233227d640f7e7e52f2d374bb024	not-for-merge	tag '4.1.0' of https://github.com/tristanhimmelman/ObjectMapper
+0b96a734de3ea1c87374ae677064f86adb0716ec	not-for-merge	tag '4.2.0' of https://github.com/tristanhimmelman/ObjectMapper
+0c454a7b23f93693e4b7238467786505046b97c9	not-for-merge	tag '4.3.0' of https://github.com/tristanhimmelman/ObjectMapper
+acc15d68dbe18077575e13d18075c46f815915af	not-for-merge	tag '4.3.1' of https://github.com/tristanhimmelman/ObjectMapper
+d6a03f37cd7c56e1eef0a4384560c0c24fdbb0ff	not-for-merge	tag '4.4.0' of https://github.com/tristanhimmelman/ObjectMapper
+2fb55c47090979cbf5a1ceaa85a02ce1db635828	not-for-merge	tag '4.4.1' of https://github.com/tristanhimmelman/ObjectMapper
+f5a839fbfef2bd442bd379b45c04669cea6e7e68	not-for-merge	tag '4.4.2' of https://github.com/tristanhimmelman/ObjectMapper
+6021c6035e83a306047348666f6400dc61445d3b	not-for-merge	tag '4.4.3' of https://github.com/tristanhimmelman/ObjectMapper

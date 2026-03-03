@@ -13,11 +13,8 @@ class FeaturedCell: UITableViewCell {
     var height: CGFloat {
         guard let id = Featured.CellType(rawValue: reuseIdentifier ?? "") else { return 0 }
 
-        // iOS Height
+        // iOS / Custom Apps Height
         if Featured.iosTypes.contains(id) { return Global.Size.heightIos.value + (45 ~~ 40) }
-
-        // Books Height
-        if id == .books { return Global.Size.heightBooks.value + (45 ~~ 40) }
         return 0
     }
 }
@@ -30,7 +27,6 @@ extension Featured {
         case iosPopular = "ios_popular"
         case iosPaid = "ios_paid"
         case cydia = "cydia"
-        case books = "books"
         case dummy = "dummy"
         case copyright = "copyright"
     }
@@ -51,7 +47,6 @@ extension Featured {
     func setUp() {
         // Register cells
         for id in Featured.iosTypes { tableView.register(ItemCollection.self, forCellReuseIdentifier: id.rawValue) }
-        tableView.register(ItemCollection.self, forCellReuseIdentifier: CellType.books.rawValue)
         tableView.register(Dummy.self, forCellReuseIdentifier: CellType.dummy.rawValue)
         tableView.register(Copyright.self, forCellReuseIdentifier: CellType.copyright.rawValue)
 

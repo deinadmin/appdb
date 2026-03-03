@@ -20,7 +20,8 @@ extension API {
             return
         }
 
-        AF.request(endpoint + Actions.getLinkToken.rawValue, parameters: ["udid": deviceUdid, "client": "appdb unofficial client"], headers: headers)
+        // v1.7: get_link_session creates a link session; pass UDID as set_link_token context
+        AF.request(endpoint + Actions.getLinkSession.rawValue, parameters: ["lang": languageCode], headers: headers)
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -29,7 +30,12 @@ extension API {
                     if !json["success"].boolValue {
                         fail()
                     } else {
-                        let linkToken = json["data"].stringValue
+                        // v1.7 returns data as linkSession object(s) with uuid, expires_at, link_token
+                        let linkToken = json["data"]["link_token"].string ?? json["data"][0]["link_token"].string ?? ""
+                        guard !linkToken.isEmpty else {
+                            fail()
+                            return
+                        }
                         Preferences.set(.token, to: linkToken)
 
                         // Update link code
@@ -39,7 +45,7 @@ extension API {
                             fail()
                         })
                     }
-                case .failure(let error):
+                case .failure:
                     fail()
                 }
             }
@@ -91,23 +97,7 @@ extension API {
         }
     }
 
-    static func emailLinkCode(email: String, success: @escaping () -> Void, fail: @escaping (_ error: String) -> Void) {
-        AF.request(endpoint + Actions.emailLinkCode.rawValue, parameters: ["email": email,
-                                          "lang": languageCode], headers: headersWithCookie)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                if !json["success"].boolValue {
-                    fail(json["errors"][0]["translated"].stringValue)
-                } else {
-                    success()
-                }
-            case .failure(let error):
-                fail(error.localizedDescription)
-            }
-        }
-    }
+    // emailLinkCode removed in v1.7
 
     static func getAppdbAppsBundleIdsTicket(success: @escaping (_ ticket: String) -> Void, fail: @escaping (_ error: String) -> Void) {
         AF.request(endpoint + Actions.getAppdbAppsBundleIdsTicket.rawValue, parameters: ["lang": languageCode], headers: headersWithCookie)

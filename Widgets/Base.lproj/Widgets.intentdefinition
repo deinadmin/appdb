@@ -110,7 +110,7 @@
 				</dict>
 				<dict>
 					<key>INEnumValueDisplayName</key>
-					<string>iOS</string>
+					<string>App Store</string>
 					<key>INEnumValueDisplayNameID</key>
 					<string>WeJIpH</string>
 					<key>INEnumValueIndex</key>
@@ -120,7 +120,7 @@
 				</dict>
 				<dict>
 					<key>INEnumValueDisplayName</key>
-					<string>Cydia</string>
+					<string>Third Party</string>
 					<key>INEnumValueDisplayNameID</key>
 					<string>f4LE5Z</string>
 					<key>INEnumValueIndex</key>

@@ -156,6 +156,12 @@
 "Trending iOS Apps" = "Tren Aplikasi iOS";
 "Trending Cydia Apps" = "Tren Aplikasi Cydia";
 "Trending Books" = "Tren Buku";
+"App Store" = "App Store";
+"Third Party" = "Pihak Ketiga";
+"Search App Store" = "Nggoleki nang App Store";
+"Search Third Party Apps" = "Nggoleki Aplikasi Pihak Ketiga";
+"Trending App Store Apps" = "Tren Aplikasi App Store";
+"Trending Third Party Apps" = "Tren Aplikasi Pihak Ketiga";
 "No results found" = "Ora ditemokne";
 "No results were found for '%@'" = "Ora ditemokne nggo '%@'";
 "Please search at least two characters" = "Gunakke minimal 2 karakter";

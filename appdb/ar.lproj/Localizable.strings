@@ -156,6 +156,12 @@ Copyright © 2017 ned. All rights reserved.
 "Trending iOS Apps" = "تطبيقات iOS الرائجة";
 "Trending Cydia Apps" = "تطبيقات السيديا الرائجة";
 "Trending Books" = "الكتب الرائجة";
+"App Store" = "App Store";
+"Third Party" = "طرف ثالث";
+"Search App Store" = "البحث في App Store";
+"Search Third Party Apps" = "البحث في تطبيقات الطرف الثالث";
+"Trending App Store Apps" = "تطبيقات App Store الرائجة";
+"Trending Third Party Apps" = "تطبيقات الطرف الثالث الرائجة";
 "No results found" = "لم يتم العثور على نتائج";
 "No results were found for '%@'" = "لم يتم العثور على نتائج ل '%@'";
 "Please search at least two characters" = "يرجى البحث عن حرفين على الأقل";

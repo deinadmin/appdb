@@ -44,12 +44,21 @@ extension UpdateableApp: Mappable {
         alongsideId <- map["alongside_id"]
         trackid <- map["trackid"]
         image <- map["image"]
+        image <- map["icon_uri"]  // v1.7 fallback
         updateable <- map["updateable"]
         type <- map["type"]
         name <- map["name"]
         whatsnew <- map["whatsnew"]
         date <- map["added"]
 
-        itemType = type == "ios" ? .ios : .cydia
+        // Map type string to ItemType; v1.7 may return newContentType values
+        switch type {
+        case "ios", "official_app":
+            itemType = .ios
+        case "cydia", "repo_app":
+            itemType = .cydia
+        default:
+            itemType = .ios
+        }
     }
 }

@@ -29,8 +29,6 @@ class Featured: LoadingTableView, UIPopoverPresentationControllerDelegate {
         ItemCollection(id: .iosNew, title: "New and Noteworthy".localized()),
         ItemCollection(id: .iosPaid, title: "Top Paid".localized()),
         ItemCollection(id: .iosPopular, title: "Popular This Week".localized(), fullSeparator: true),
-        Dummy(),
-        ItemCollection(id: .books, title: "Top Books".localized(), fullSeparator: true),
         Copyright()
     ]
 

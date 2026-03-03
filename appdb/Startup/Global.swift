@@ -60,7 +60,7 @@ enum Global {
     // Homescreen shortcut items
     enum ShortcutItem: String {
 
-        case search, wishes, updates, news
+        case search, wishes, news
 
         static func createItems(for items: [ShortcutItem]) -> [UIApplicationShortcutItem] {
             items.map { createItem(for: $0) }
@@ -82,14 +82,6 @@ enum Global {
                 } else {
                     return UIApplicationShortcutIcon(type: .add)
                 }
-            case .updates:
-                if #available(iOS 13.0, *) {
-                    return UIApplicationShortcutIcon(systemImageName: "square.and.arrow.down")
-                } else  if #available(iOS 9.1, *) {
-                    return UIApplicationShortcutIcon(type: .update)
-                } else {
-                    return UIApplicationShortcutIcon(systemImageName: "updates")
-                }
             case .news:
                 if #available(iOS 13.0, *) {
                     return UIApplicationShortcutIcon(systemImageName: "bubble.left")
@@ -105,7 +97,6 @@ enum Global {
             switch self {
             case .search: return "Search".localized()
             case .wishes: return "Wishes".localized()
-            case .updates: return "Updates".localized()
             case .news: return "News".localized()
             }
         }
@@ -114,7 +105,6 @@ enum Global {
             switch self {
             case .search: return URL(string: "appdb-ios://?tab=search")!
             case .wishes: return URL(string: "appdb-ios://?tab=wishes")!
-            case .updates: return URL(string: "appdb-ios://?tab=updates")!
             case .news: return URL(string: "appdb-ios://?tab=news")!
             }
         }

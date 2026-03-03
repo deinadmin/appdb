@@ -156,6 +156,12 @@
 "Trending iOS Apps" = "App iOS in tendenza";
 "Trending Cydia Apps" = "App di Cydia in tendenza";
 "Trending Books" = "Libri in tendenza";
+"App Store" = "App Store";
+"Third Party" = "Terze parti";
+"Search App Store" = "Cerca nell'App Store";
+"Search Third Party Apps" = "Cerca app di terze parti";
+"Trending App Store Apps" = "App App Store in tendenza";
+"Trending Third Party Apps" = "App di terze parti in tendenza";
 "No results found" = "Nessun risultato trovato";
 "No results were found for '%@'" = "Nessun risultato trovato per '%@'";
 "Please search at least two characters" = "La ricerca deve contenere almeno due caratteri";

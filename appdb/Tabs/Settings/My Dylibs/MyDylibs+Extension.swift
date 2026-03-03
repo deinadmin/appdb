@@ -101,7 +101,7 @@ extension MyDylibs {
 
         let addAction = UIAlertAction(title: "Add .dylib/.deb/.framework.zip".localized(), style: .default, handler: { _ in
             guard let text = alertController.textFields?[0].text else { return }
-            API.addDylib(url: text) {
+            API.addEnhancement(url: text) {
                 Messages.shared.showSuccess(message: "Dylib was added successfully".localized(), context: .viewController(self))
                 self.loadDylibs()
             } fail: { error in
