@@ -284,8 +284,6 @@ extension Library {
         }
 
         if Preferences.deviceIsLinked {
-            setButtonTitle("Requesting...")
-
             func install(_ additionalOptions: [String: Any] = [:]) {
                 API.install(id: sender.linkId, type: .myAppstore, additionalOptions: additionalOptions) { [weak self] result in
                     guard let self = self else { return }
@@ -317,39 +315,14 @@ extension Library {
                 }
             }
 
-            if Preferences.askForInstallationOptions {
-                let vc = AdditionalInstallOptionsViewController()
-                let nav = AdditionalInstallOptionsNavController(rootViewController: vc)
-
-                vc.heightDelegate = nav
-
-                let segue = Messages.shared.generateModalSegue(vc: nav, source: self, trackKeyboard: true)
-
-                delay(0.3) {
-                    segue.perform()
-                }
-
-                // If vc.cancelled is true, modal was dismissed either through 'Cancel' button or background tap
-                segue.eventListeners.append { event in
-                    if case .didHide = event, vc.cancelled {
-                        setButtonTitle("Install")
-                    }
-                }
-
-                vc.onCompletion = { (patchIap: Bool, enableGameTrainer: Bool, removePlugins: Bool, enablePushNotifications: Bool, duplicateApp: Bool, newId: String, newName: String, selectedDylibs: [String]) in
-                    var additionalOptions: [String: Any] = [:]
-                    if patchIap { additionalOptions[InstallationFeatureParameter.key(for: "inapp")] = 1 }
-                    if enableGameTrainer { additionalOptions[InstallationFeatureParameter.key(for: "trainer")] = 1 }
-                    if removePlugins { additionalOptions[InstallationFeatureParameter.key(for: "remove_plugins")] = 1 }
-                    if enablePushNotifications { additionalOptions[InstallationFeatureParameter.key(for: "push")] = 1 }
-                    if duplicateApp && !newId.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "alongside")] = newId }
-                    if !newName.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "name")] = newName }
-                    if !selectedDylibs.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "inject_dylibs")] = selectedDylibs }
+            self.presentInstallationOptions(
+                onInstall: { additionalOptions in
                     install(additionalOptions)
+                },
+                onCancel: {
+                    setButtonTitle("Install")
                 }
-            } else {
-                install()
-            }
+            )
         } else {
             // Install requested but device is not linked
             setButtonTitle("Checking...")
@@ -496,7 +469,7 @@ extension Library: ETCollectionViewDelegateWaterfallLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, sizeAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: itemDimension, height: indexPath.section == Section.myappstore.rawValue ? (68 ~~ 63) : (60 ~~ 55))
+        CGSize(width: itemDimension, height: indexPath.section == Section.myappstore.rawValue ? (82 ~~ 76) : (60 ~~ 55))
     }
 }
 

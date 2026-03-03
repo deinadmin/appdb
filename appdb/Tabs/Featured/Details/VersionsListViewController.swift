@@ -184,25 +184,14 @@ class VersionsListViewController: LoadingTableView {
             }
 
             if Preferences.askForInstallationOptions {
-                let vc = AdditionalInstallOptionsViewController()
-                let nav = AdditionalInstallOptionsNavController(rootViewController: vc)
-                vc.heightDelegate = nav
-                let segue = Messages.shared.generateModalSegue(vc: nav, source: self, trackKeyboard: true)
-                delay(0.3) { segue.perform() }
-                segue.eventListeners.append { event in
-                    if case .didHide = event, vc.cancelled { setButtonTitle("Install") }
-                }
-                vc.onCompletion = { (patchIap, enableGameTrainer, removePlugins, enablePushNotifications, duplicateApp, newId, newName, selectedDylibs) in
-                    var opts: [String: Any] = [:]
-                    if patchIap { opts[InstallationFeatureParameter.key(for: "inapp")] = 1 }
-                    if enableGameTrainer { opts[InstallationFeatureParameter.key(for: "trainer")] = 1 }
-                    if removePlugins { opts[InstallationFeatureParameter.key(for: "remove_plugins")] = 1 }
-                    if enablePushNotifications { opts[InstallationFeatureParameter.key(for: "push")] = 1 }
-                    if duplicateApp && !newId.isEmpty { opts[InstallationFeatureParameter.key(for: "alongside")] = newId }
-                    if !newName.isEmpty { opts[InstallationFeatureParameter.key(for: "name")] = newName }
-                    if !selectedDylibs.isEmpty { opts[InstallationFeatureParameter.key(for: "inject_dylibs")] = selectedDylibs }
-                    install(opts)
-                }
+                self.presentInstallationOptions(
+                    onInstall: { additionalOptions in
+                        install(additionalOptions)
+                    },
+                    onCancel: {
+                        setButtonTitle("Install")
+                    }
+                )
             } else {
                 install()
             }

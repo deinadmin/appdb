@@ -160,8 +160,6 @@ class Details: UIHostingController<AnyView> {
 
     func actualInstall(linkId: String) {
         if Preferences.deviceIsLinked {
-            detailState.isInstalling = true
-
             func install(_ additionalOptions: [String: Any] = [:]) {
                 API.install(id: linkId, type: self.contentType, additionalOptions: additionalOptions) { [weak self] result in
                     guard let self = self else { return }
@@ -196,31 +194,26 @@ class Details: UIHostingController<AnyView> {
             }
 
             if Preferences.askForInstallationOptions {
-                let vc = AdditionalInstallOptionsViewController()
-                let nav = AdditionalInstallOptionsNavController(rootViewController: vc)
-                vc.heightDelegate = nav
-                let segue = Messages.shared.generateModalSegue(vc: nav, source: self, trackKeyboard: true)
+                // Load options before opening sheet so they appear instantly. Show spinner on Install button only if loading takes > 2s.
+                let showSpinnerWork = DispatchWorkItem { [weak self] in
+                    self?.detailState.isInstalling = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: showSpinnerWork)
 
-                delay(0.3) { segue.perform() }
-
-                segue.eventListeners.append { [weak self] event in
-                    if case .didHide = event, vc.cancelled {
+                self.loadInstallationOptionsAndPresentSheet(
+                    onInstall: { additionalOptions in
+                        install(additionalOptions)
+                    },
+                    onCancel: { [weak self] in
+                        showSpinnerWork.cancel()
                         self?.detailState.isInstalling = false
+                    },
+                    onWillPresent: {
+                        showSpinnerWork.cancel()
                     }
-                }
-
-                vc.onCompletion = { (patchIap, enableGameTrainer, removePlugins, enablePushNotifications, duplicateApp, newId, newName, selectedDylibs) in
-                    var additionalOptions: [String: Any] = [:]
-                    if patchIap { additionalOptions[InstallationFeatureParameter.key(for: "inapp")] = 1 }
-                    if enableGameTrainer { additionalOptions[InstallationFeatureParameter.key(for: "trainer")] = 1 }
-                    if removePlugins { additionalOptions[InstallationFeatureParameter.key(for: "remove_plugins")] = 1 }
-                    if enablePushNotifications { additionalOptions[InstallationFeatureParameter.key(for: "push")] = 1 }
-                    if duplicateApp && !newId.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "alongside")] = newId }
-                    if !newName.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "name")] = newName }
-                    if !selectedDylibs.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "inject_dylibs")] = selectedDylibs }
-                    install(additionalOptions)
-                }
+                )
             } else {
+                detailState.isInstalling = true
                 install()
             }
         } else {

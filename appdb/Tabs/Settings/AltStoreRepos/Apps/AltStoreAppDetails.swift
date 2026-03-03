@@ -72,8 +72,6 @@ class AltStoreAppDetails: UIHostingController<AnyView> {
 
     func installAction() {
         if Preferences.deviceIsLinked {
-            detailState.isInstalling = true
-
             func install(_ additionalOptions: [String: Any] = [:]) {
                 API.customInstall(ipaUrl: app.downloadURL, iconUrl: app.image, name: app.name, additionalOptions: additionalOptions) { [weak self] result in
                     guard let self = self else { return }
@@ -106,32 +104,25 @@ class AltStoreAppDetails: UIHostingController<AnyView> {
             }
 
             if Preferences.askForInstallationOptions {
-                let vc = AdditionalInstallOptionsViewController()
-                let nav = AdditionalInstallOptionsNavController(rootViewController: vc)
-                vc.heightDelegate = nav
-                let segue = Messages.shared.generateModalSegue(vc: nav, source: self, trackKeyboard: true)
+                let showSpinnerWork = DispatchWorkItem { [weak self] in
+                    self?.detailState.isInstalling = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: showSpinnerWork)
 
-                delay(0.3) { segue.perform() }
-
-                segue.eventListeners.append { [weak self] event in
-                    if case .didHide = event, vc.cancelled {
+                self.loadInstallationOptionsAndPresentSheet(
+                    onInstall: { additionalOptions in
+                        install(additionalOptions)
+                    },
+                    onCancel: { [weak self] in
+                        showSpinnerWork.cancel()
                         self?.detailState.isInstalling = false
+                    },
+                    onWillPresent: {
+                        showSpinnerWork.cancel()
                     }
-                }
-
-                vc.onCompletion = { [weak self] (patchIap, enableGameTrainer, removePlugins, enablePushNotifications, duplicateApp, newId, newName, selectedDylibs) in
-                    guard self != nil else { return }
-                    var additionalOptions: [String: Any] = [:]
-                    if patchIap { additionalOptions[InstallationFeatureParameter.key(for: "inapp")] = 1 }
-                    if enableGameTrainer { additionalOptions[InstallationFeatureParameter.key(for: "trainer")] = 1 }
-                    if removePlugins { additionalOptions[InstallationFeatureParameter.key(for: "remove_plugins")] = 1 }
-                    if enablePushNotifications { additionalOptions[InstallationFeatureParameter.key(for: "push")] = 1 }
-                    if duplicateApp && !newId.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "alongside")] = newId }
-                    if !newName.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "name")] = newName }
-                    if !selectedDylibs.isEmpty { additionalOptions[InstallationFeatureParameter.key(for: "inject_dylibs")] = selectedDylibs }
-                    install(additionalOptions)
-                }
+                )
             } else {
+                detailState.isInstalling = true
                 install()
             }
         } else {

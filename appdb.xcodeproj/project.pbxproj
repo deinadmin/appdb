@@ -24,6 +24,7 @@
 		81190B49216A302C00C81BEB /* MixedScreenshotsSearchCell_L->P+Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81190B48216A302C00C81BEB /* MixedScreenshotsSearchCell_L->P+Stars.swift */; };
 		81190B4B216A303C00C81BEB /* MixedScreenshotsSearchCell_P->L+Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81190B4A216A303C00C81BEB /* MixedScreenshotsSearchCell_P->L+Stars.swift */; };
 		811A824D2289D18C00969946 /* AdditionalInstallOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811A824C2289D18C00969946 /* AdditionalInstallOptionsViewController.swift */; };
+		E1B2C3D42A96A0010097B6CC /* InstallationOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2C3D32A96A0010097B6CC /* InstallationOptionsView.swift */; };
 		811B570B227DDBED000B2866 /* LocalIPAUploadUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811B570A227DDBED000B2866 /* LocalIPAUploadUtil.swift */; };
 		811BEE282151538600F1F56A /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811BEE1E2151538500F1F56A /* Items.swift */; };
 		811BEE292151538600F1F56A /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811BEE1F2151538600F1F56A /* Link.swift */; };
@@ -173,6 +174,9 @@
 		81485A79216777230004184F /* NoScreenshotsSearchCell~Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81485A78216777230004184F /* NoScreenshotsSearchCell~Book.swift */; };
 		8148D858226DD219006AD9E0 /* Downloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8148D857226DD219006AD9E0 /* Downloads.swift */; };
 		8148D85A226DD230006AD9E0 /* QueuedApps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8148D859226DD230006AD9E0 /* QueuedApps.swift */; };
+		C10A00012E670001000A0001 /* QueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000A0004 /* QueueViewModel.swift */; };
+		C10A00012E670001000A0002 /* QueueAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000A0005 /* QueueAccessoryView.swift */; };
+		C10A00012E670001000A0003 /* QueueSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000A0006 /* QueueSheetView.swift */; };
 		8148D85C226DE68E006AD9E0 /* Downloading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8148D85B226DE68E006AD9E0 /* Downloading.swift */; };
 		8148D85E226DE9A5006AD9E0 /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8148D85D226DE9A5006AD9E0 /* Library.swift */; };
 		814AEBF21E68312C00A207CC /* Details+Information.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814AEBF11E68312C00A207CC /* Details+Information.swift */; };
@@ -411,6 +415,7 @@
 		81190B48216A302C00C81BEB /* MixedScreenshotsSearchCell_L->P+Stars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MixedScreenshotsSearchCell_L->P+Stars.swift"; sourceTree = "<group>"; };
 		81190B4A216A303C00C81BEB /* MixedScreenshotsSearchCell_P->L+Stars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MixedScreenshotsSearchCell_P->L+Stars.swift"; sourceTree = "<group>"; };
 		811A824C2289D18C00969946 /* AdditionalInstallOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalInstallOptionsViewController.swift; sourceTree = "<group>"; };
+		E1B2C3D32A96A0010097B6CC /* InstallationOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationOptionsView.swift; sourceTree = "<group>"; };
 		811B570A227DDBED000B2866 /* LocalIPAUploadUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalIPAUploadUtil.swift; sourceTree = "<group>"; };
 		811BEE1E2151538500F1F56A /* Items.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Items.swift; sourceTree = "<group>"; };
 		811BEE1F2151538600F1F56A /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
@@ -544,6 +549,9 @@
 		81485A78216777230004184F /* NoScreenshotsSearchCell~Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoScreenshotsSearchCell~Book.swift"; sourceTree = "<group>"; };
 		8148D857226DD219006AD9E0 /* Downloads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloads.swift; sourceTree = "<group>"; };
 		8148D859226DD230006AD9E0 /* QueuedApps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueuedApps.swift; sourceTree = "<group>"; };
+		C10A00012E670001000A0004 /* QueueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueViewModel.swift; sourceTree = "<group>"; };
+		C10A00012E670001000A0005 /* QueueAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueAccessoryView.swift; sourceTree = "<group>"; };
+		C10A00012E670001000A0006 /* QueueSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueSheetView.swift; sourceTree = "<group>"; };
 		8148D85B226DE68E006AD9E0 /* Downloading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloading.swift; sourceTree = "<group>"; };
 		8148D85D226DE9A5006AD9E0 /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		814AEBF11E68312C00A207CC /* Details+Information.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Details+Information.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -824,6 +832,7 @@
 			children = (
 				811A824C2289D18C00969946 /* AdditionalInstallOptionsViewController.swift */,
 				813F01962A7C0375008DCA2E /* InstallOptionsDylibSelectViewController.swift */,
+				E1B2C3D32A96A0010097B6CC /* InstallationOptionsView.swift */,
 			);
 			path = "• AdditionalInstallOptionsView";
 			sourceTree = "<group>";
@@ -2032,6 +2041,9 @@
 			children = (
 				815A438D2275E0EF00868949 /* Cells */,
 				81ED9A60226CB86100F45B75 /* ObserveQueuedApps.swift */,
+				C10A00012E670001000A0004 /* QueueViewModel.swift */,
+				C10A00012E670001000A0005 /* QueueAccessoryView.swift */,
+				C10A00012E670001000A0006 /* QueueSheetView.swift */,
 				8148D859226DD230006AD9E0 /* QueuedApps.swift */,
 			);
 			path = "Queued Apps";
@@ -2475,6 +2487,9 @@
 				819AF4EA1E82CB8700B4D2EF /* Details+Related.swift in Sources */,
 				813F01222A7BFE9E008DCA2E /* ThemeColorPicker.swift in Sources */,
 				8148D85A226DD230006AD9E0 /* QueuedApps.swift in Sources */,
+				C10A00012E670001000A0001 /* QueueViewModel.swift in Sources */,
+				C10A00012E670001000A0002 /* QueueAccessoryView.swift in Sources */,
+				C10A00012E670001000A0003 /* QueueSheetView.swift in Sources */,
 				81EC00711DAD7979009EEFFA /* FeaturedApp.swift in Sources */,
 				819DFD582279EBBA00A811F9 /* LibrarySectionFooterView.swift in Sources */,
 				81ED9A61226CB86100F45B75 /* ObserveQueuedApps.swift in Sources */,
@@ -2544,6 +2559,7 @@
 				8189255A227CC9690096F661 /* AdaptiveUIAlertController.swift in Sources */,
 				81A1038E1F7FCA030011F4B3 /* DynamicFontSizeHelper.swift in Sources */,
 				811A824D2289D18C00969946 /* AdditionalInstallOptionsViewController.swift in Sources */,
+				E1B2C3D42A96A0010097B6CC /* InstallationOptionsView.swift in Sources */,
 				815234D52278C10A00B1AE65 /* BackgroundTaskUtil.swift in Sources */,
 				813F00F92A7BFE71008DCA2E /* Value1Cell.swift in Sources */,
 				813F01702A7C024C008DCA2E /* CachedIPAs+Extension.swift in Sources */,

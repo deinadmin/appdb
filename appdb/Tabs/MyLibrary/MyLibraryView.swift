@@ -28,6 +28,10 @@ struct MyLibraryView: SwiftUI.View {
 
     // MARK: - Content
 
+    @State private var installSheetItem: InstallSheetItem?
+    @State private var loadingOptionsForAppId: Int?
+    @State private var showSpinnerForAppId: Int?
+
     private var contentView: some SwiftUI.View {
         List {
             if viewModel.isUploading {
@@ -51,12 +55,23 @@ struct MyLibraryView: SwiftUI.View {
                 }
             }
         }
+        .sheet(item: $installSheetItem, onDismiss: { installSheetItem = nil }) { item in
+            InstallationOptionsSheetHost(
+                app: item.app,
+                preloadedOptions: item.preloadedOptions,
+                onInstall: { options in
+                    viewModel.installApp(item.app, additionalOptions: options)
+                    installSheetItem = nil
+                },
+                onCancel: { installSheetItem = nil }
+            )
+        }
     }
 
     // MARK: - App Row
 
     private func appRow(_ app: MyAppStoreApp) -> some SwiftUI.View {
-        HStack(spacing: 12) {
+        HStack(alignment: .top, spacing: 12) {
             AsyncImageWithPlaceholder(
                 url: URL(string: app.iconUri),
                 size: 50
@@ -77,17 +92,32 @@ struct MyLibraryView: SwiftUI.View {
 
             Spacer(minLength: 8)
 
-            Button {
-                viewModel.installApp(app)
-            } label: {
-                Text("Install".localized())
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
+            VStack(alignment: .trailing, spacing: 4) {
+                Button {
+                    startLoadingOptionsThenPresentSheet(for: app)
+                } label: {
+                    ZStack {
+                        Text("Install".localized())
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .opacity(showSpinnerForAppId == app.id ? 0 : 1)
+                        ProgressView()
+                            .controlSize(.small)
+                            .opacity(showSpinnerForAppId == app.id ? 1 : 0)
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.capsule)
+                .controlSize(.small)
+                .tint(.accentColor)
+                .disabled(app.installationTicket.isEmpty)
+
+                if !app.version.isEmpty {
+                    Text("v\(app.version)")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
             }
-            .buttonStyle(.borderedProminent)
-            .buttonBorderShape(.capsule)
-            .controlSize(.small)
-            .tint(.accentColor)
         }
         .padding(.vertical, 4)
         .contextMenu {
@@ -95,6 +125,33 @@ struct MyLibraryView: SwiftUI.View {
                 viewModel.deleteApp(app)
             } label: {
                 Label("Delete".localized(), systemImage: "trash")
+            }
+        }
+    }
+
+    private func startLoadingOptionsThenPresentSheet(for app: MyAppStoreApp) {
+        guard !app.installationTicket.isEmpty else { return }
+        guard loadingOptionsForAppId != app.id else { return }
+
+        loadingOptionsForAppId = app.id
+        let showSpinnerWork = DispatchWorkItem {
+            showSpinnerForAppId = app.id
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: showSpinnerWork)
+
+        API.getInstallationOptions { options in
+            showSpinnerWork.cancel()
+            DispatchQueue.main.async {
+                showSpinnerForAppId = nil
+                loadingOptionsForAppId = nil
+                installSheetItem = InstallSheetItem(app: app, preloadedOptions: options)
+            }
+        } fail: { error in
+            showSpinnerWork.cancel()
+            DispatchQueue.main.async {
+                showSpinnerForAppId = nil
+                loadingOptionsForAppId = nil
+                Messages.shared.showError(message: error.localizedDescription)
             }
         }
     }
@@ -176,5 +233,42 @@ struct MyLibraryView: SwiftUI.View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+// MARK: - Sheet item (Swift.Identifiable for .sheet(item:); holds app + preloaded options)
+
+private struct InstallSheetItem: Swift.Identifiable {
+    let app: MyAppStoreApp
+    let preloadedOptions: [InstallationOption]
+    var id: Int { app.id }
+}
+
+// MARK: - Installation options sheet (displays preloaded options, then installs on confirm)
+
+private struct InstallationOptionsSheetHost: SwiftUI.View {
+    let app: MyAppStoreApp
+    var preloadedOptions: [InstallationOption]
+    var onInstall: ([String: Any]) -> Void
+    var onCancel: () -> Void
+
+    @State private var state: InstallationOptionsState
+
+    init(app: MyAppStoreApp, preloadedOptions: [InstallationOption], onInstall: @escaping ([String: Any]) -> Void, onCancel: @escaping () -> Void) {
+        self.app = app
+        self.preloadedOptions = preloadedOptions
+        self.onInstall = onInstall
+        self.onCancel = onCancel
+        _state = State(initialValue: InstallationOptionsState(preloadedOptions: preloadedOptions))
+    }
+
+    var body: some SwiftUI.View {
+        InstallationOptionsView(
+            state: state,
+            onInstall: { options in
+                onInstall(options)
+            },
+            onCancel: onCancel
+        )
     }
 }

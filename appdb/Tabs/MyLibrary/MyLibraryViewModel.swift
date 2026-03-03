@@ -59,7 +59,7 @@ final class MyLibraryViewModel: ObservableObject {
         })
     }
 
-    func installApp(_ app: MyAppStoreApp) {
+    func installApp(_ app: MyAppStoreApp, additionalOptions: [String: Any] = [:]) {
         guard !app.installationTicket.isEmpty else {
             if !app.noInstallationTicketReason.isEmpty {
                 Messages.shared.showError(message: app.noInstallationTicketReason.prettified)
@@ -74,7 +74,7 @@ final class MyLibraryViewModel: ObservableObject {
             return
         }
 
-        API.install(id: app.installationTicket, type: .myAppstore) { result in
+        API.install(id: app.installationTicket, type: .myAppstore, additionalOptions: additionalOptions) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .failure(let error):

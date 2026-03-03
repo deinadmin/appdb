@@ -13,11 +13,13 @@ class MyAppStoreCell: UICollectionViewCell {
     var name: UILabel!
     var bundleId: UILabel!
     var installButton: RoundedButton!
+    var versionLabel: UILabel!
     var dummy: UIView!
 
     func configure(with app: MyAppStoreApp) {
-        name.text = app.name + " (\(app.version))"
+        name.text = app.name
         bundleId.text = app.bundleId
+        versionLabel.text = app.version.isEmpty ? "" : "v\(app.version)"
         // v1.7: use installation_ticket from /get_ipas/ for installing via type: "universal"
         installButton.linkId = app.installationTicket
         installButton.isEnabled = !app.installationTicket.isEmpty
@@ -72,19 +74,30 @@ class MyAppStoreCell: UICollectionViewCell {
             self.updateConstraintOnButtonSizeChange(width: self.installButton.bounds.size.width)
         }
 
+        // Version under install button
+        versionLabel = UILabel()
+        versionLabel.theme_textColor = Color.darkGray
+        versionLabel.font = .systemFont(ofSize: 12 ~~ 11)
+        versionLabel.numberOfLines = 1
+        versionLabel.makeDynamicFont()
+        versionLabel.textAlignment = .center
+
         dummy = UIView()
 
         contentView.addSubview(name)
         contentView.addSubview(bundleId)
         contentView.addSubview(installButton)
+        contentView.addSubview(versionLabel)
         contentView.addSubview(dummy)
 
-        constrain(name, bundleId, installButton, dummy) { name, bundleId, button, dummy in
+        constrain(name, bundleId, installButton, versionLabel, dummy) { name, bundleId, button, version, dummy in
             button.trailing ~== button.superview!.trailing ~- Global.Size.margin.value
-            button.centerY ~== button.superview!.centerY
-
             dummy.height ~== 1
             dummy.centerY ~== dummy.superview!.centerY
+
+            version.top ~== button.bottom ~+ 4
+            version.centerX ~== button.centerX
+            button.bottom ~== dummy.top ~- 2
 
             name.leading ~== name.superview!.leading ~+ Global.Size.margin.value
             name.bottom ~== dummy.top ~+ 2
