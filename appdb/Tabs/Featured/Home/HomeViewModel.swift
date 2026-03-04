@@ -75,17 +75,20 @@ final class HomeViewModel: ObservableObject {
 
     // MARK: - Data Loading
 
-    func loadData() {
-        isLoading = true
-        hasError = false
-        errorMessage = ""
+    /// - Parameter replacingContent: If true (default), shows full-screen loading and clears content (initial load).
+    ///   If false (pull-to-refresh), content stays visible and updates in place; no loading view.
+    /// - Parameter completion: Called when built-in section fetches have finished (for refreshable to end).
+    func loadData(replacingContent: Bool = true, completion: (() -> Void)? = nil) {
+        if replacingContent {
+            isLoading = true
+            hasError = false
+            errorMessage = ""
+            sections = [
+                HomeSection(id: "cydia", title: "Apps".localized(), itemType: .cydia, order: .added),
+                HomeSection(id: "ios_popular", title: "Popular This Week".localized(), itemType: .ios, price: .free, order: .week)
+            ]
+        }
         completedRequests = 0
-
-        // Reset sections with placeholders
-        sections = [
-            HomeSection(id: "cydia", title: "Apps".localized(), itemType: .cydia, order: .added),
-            HomeSection(id: "ios_popular", title: "Popular This Week".localized(), itemType: .ios, price: .free, order: .week)
-        ]
         repoSections = []
 
         // Load genres (enables Categories button in the future)
@@ -95,35 +98,36 @@ final class HomeViewModel: ObservableObject {
             }
         })
 
-        // Fetch each section
-        fetchCydiaApps()
-        fetchPopularThisWeek()
+        fetchCydiaApps(completion: completion)
+        fetchPopularThisWeek(completion: completion)
         fetchAltStoreRepos()
     }
 
     // MARK: - Fetch Built-in Sections
 
-    private func fetchCydiaApps() {
+    private func fetchCydiaApps(completion: (() -> Void)? = nil) {
         API.search(type: CydiaApp.self, order: .added, success: { [weak self] items in
             guard let self = self else { return }
             if let idx = self.sections.firstIndex(where: { $0.id == "cydia" }) {
                 self.sections[idx].items = items
             }
-            self.markRequestComplete()
+            self.markRequestComplete(completion: completion)
         }, fail: { [weak self] error in
             self?.handleError(error)
+            self?.markRequestComplete(completion: completion)
         })
     }
 
-    private func fetchPopularThisWeek() {
+    private func fetchPopularThisWeek(completion: (() -> Void)? = nil) {
         API.search(type: App.self, order: .week, price: .free, success: { [weak self] items in
             guard let self = self else { return }
             if let idx = self.sections.firstIndex(where: { $0.id == "ios_popular" }) {
                 self.sections[idx].items = items
             }
-            self.markRequestComplete()
+            self.markRequestComplete(completion: completion)
         }, fail: { [weak self] error in
             self?.handleError(error)
+            self?.markRequestComplete(completion: completion)
         })
     }
 
@@ -192,11 +196,12 @@ final class HomeViewModel: ObservableObject {
 
     // MARK: - Helpers
 
-    private func markRequestComplete() {
+    private func markRequestComplete(completion: (() -> Void)? = nil) {
         completedRequests += 1
         if completedRequests >= totalBuiltInRequests {
             DispatchQueue.main.async {
                 self.isLoading = false
+                completion?()
             }
         }
     }

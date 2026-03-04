@@ -164,7 +164,6 @@ class VersionsListViewController: LoadingTableView {
 
                         if installResult.installationType == .itmsServices {
                             setButtonTitle("Signing...")
-                            Messages.shared.showSuccess(message: "App is being signed, please wait...".localized(), context: .viewController(self))
                         } else {
                             setButtonTitle("Requested")
                             Messages.shared.showSuccess(message: "Installation has been queued to your device".localized(), context: .viewController(self))

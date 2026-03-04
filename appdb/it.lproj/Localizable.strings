@@ -105,6 +105,7 @@
 "Duplicate app" = "Duplica app";
 "New ID" = "Nuovo ID";
 "New display name" = "Nuovo nome";
+"Select Dylibs, Frameworks or Debs" = "Seleziona Dylibs, Frameworks o Debs";
 "Use Original" = "Usa l'originale";
 "Cracked by %@" = "Craccato da %@";
 "Uploaded by %@" = "Caricato da %@";
@@ -118,6 +119,13 @@
 "Any Price" = "Qualsiasi prezzo";
 "Paid" = "A pagamento";
 "Waiting %@ seconds..." = "Aspetto %@ secondi...";
+
+// Download stats
+"%@ today" = "%@ oggi";
+"%@ this week" = "%@ questa settimana";
+"%@ this month" = "%@ questo mese";
+"%@ this year" = "%@ quest'anno";
+"%@ total" = "%@ totale";
 
 //////////////////////////////////
 //     DEVICE LINK TUTORIAL     //
@@ -173,6 +181,7 @@
 
 "Queued" = "In coda";
 "Library" = "Libreria";
+"My Apps" = "Le mie app";
 "Downloading" = "In download";
 "No queued downloads"  = "Nessun download in coda";
 "File download has started" = "Il download del file è stato avviato";
@@ -223,12 +232,21 @@
 "Compatibility Checks" = "Controlli di compatibilità";
 "Ask for installation options" = "Chiedi opzioni di installazione";
 "Deauthorize" = "Scollega app";
+"Log out" = "Esci";
+"Sign in to AppDB" = "Accedi ad AppDB";
+"To use this feature, you need to login to AppDB!" = "Per usare questa funzione devi accedere ad AppDB!";
+"Login with AppDB" = "Accedi con AppDB";
+"Login to install" = "Accedi per installare";
+"Are you sure you want to log out?" = "Sei sicuro di voler uscire?";
 "User Interface" = "Interfaccia";
 "Choose Theme" = "Scegli tema";
+"Theme changed. The app needs to be restarted to apply the new appearance." = "Tema modificato. Riapri l'app per applicare il nuovo aspetto.";
+"Close App" = "Chiudi app";
 "Choose Language" = "Scegli lingua";
 "Language set, please restart the app to apply changes" = "Lingua impostata, chiudi e riapri l'app per applicare i cambiamenti";
 "Dark" = "Tema scuro";
 "Darker" = "Tema più scuro";
+"System" = "Sistema";
 "Light" = "Tema chiaro";
 "Support" = "Supporto";
 "Visit appdb forum" = "Visita il forum di appdb";
@@ -238,6 +256,10 @@
 "Device" = "Dispositivo";
 "Authorize App" = "Autorizza app";
 "Authorize app with link code from appdb website and enjoy unlimited app installs!" = "Autorizza l'app con il codice link di appdb e divertiti a scaricare app!";
+"PLUS Status" = "Stato PLUS";
+"Signing" = "Firma";
+"Choose Enterprise Certificate" = "Scegli certificato Enterprise";
+"%@ signs left until %@" = "%@ firme rimaste fino al %@";
 "PRO Status" = "Stato PRO";
 "Use this code if you want to link new devices to appdb. Press and hold the cell to copy it, or tap it to generate a new one." = "Usa questo codice per collegare nuovi dispositivi a appdb. Tieni premuto il codice per copiarlo, oppure toccalo per generarne uno nuovo.";
 "Device Status" = "Stato dispositivo";
@@ -292,6 +314,11 @@
 "Force Disable PRO" = "Disabilita PRO";
 "For Psychic Paper exploit" = "Per exploit Psychic Paper";
 "Clear Cache" = "Pulisci Cache";
+"Are you sure you want to clear the cache?" = "Sei sicuro di voler pulire la cache?";
+"Cached IPAs" = "IPA in cache";
+"IPA cache status for current device" = "Stato cache IPA per questo dispositivo";
+"The cached IPA was deleted successfully" = "L'IPA in cache è stato eliminato con successo";
+"appdb saves all installed IPA files for your device to cache, so you can easily restore all your apps after device reset or revocation. Cache is stored per device, and will be deleted if you will unlink your device. If you restored your device and missing appdb profile, you can visit device status page and tap \"Update profile\" button to install it, or link device via email by tapping \"Just link new device\" in message from appdb.\n\nNote: IPA files does not contain app data, if you want to keep your app data, backup device via Finder or iTunes, Remove revoked apps, Install apps from cache and then restore backup from Finder or iTunes." = "appdb salva in cache tutti gli IPA installati sul tuo dispositivo così puoi ripristinare le app dopo un reset o una revoca. La cache è per dispositivo e viene eliminata se scolleghi il dispositivo. Se hai ripristinato il dispositivo e manca il profilo appdb, vai in Stato dispositivo e tocca \"Aggiorna profilo\" o collega via email toccando \"Collega nuovo dispositivo\" nel messaggio di appdb.\n\nNota: i file IPA non contengono i dati delle app; per conservarli fai un backup con Finder o iTunes, rimuovi le app revocate, reinstalla dalla cache e ripristina il backup.";
 "Are you sure you want to clear app cache?\n\nNOTE: This will not deauthorize the app, and your device will still be linked to appdb." = "Sicuro di voler pulire la cache?\n\nNOTA: Questo non deautorizza l'app, e il tuo dispositivo resterà collegato con appdb.";
 "Cache cleared successfully!" = "Cache pulita con successo!";
 "Failed to clear cache: %@." = "Impossibile pulire la cache: %@.";
@@ -309,6 +336,39 @@
 "Reinstall everything" = "Reinstalla tutto";
 "Clear IPA cache" = "Pulisci IPA cache";
 "Re-validate IPA cache" = "Riconvalida IPA cache";
+
+/////////////////////
+//       PLUS      //
+/////////////////////
+"Most Reliable Signing Certificate + Service guarantee for 1 year + Instant Activation!" = "Certificato di firma più affidabile + garanzia 1 anno + attivazione istantanea!";
+"Guaranteed 1 year signing certificates" = "Certificati di firma garantiti 1 anno";
+"Public Free Enterprise Certificates (frequent revokes and device blacklists)" = "Certificati Enterprise gratuiti (revoche frequenti e blacklist dispositivi)";
+"Available PLUS subscriptions" = "Abbonamenti PLUS disponibili";
+"Purchase PLUS" = "Acquista PLUS";
+"Pay by" = "Paga con";
+"excl. VAT" = "IVA esclusa";
+"What is appdb PLUS?" = "Cos'è appdb PLUS?";
+"appdb PLUS allows you to use appdb on non-jailbroken device or Apple Silicon Mac with your own developer account and sign apps in the cloud without any limitations\n\nPLUS is activated per device, separately for each of your devices\n\nWe use this money to pay for servers, traffic, and support the community\n\nPLUS is not transferable between devices, you can cancel it at any time, or we will notify your about existing subscription for unlinked device, so you can cancel it if you sold your device\n\nPLUS is not compatible with corporate-owned devices with MDM. Please use appdb on your personal devices" = "appdb PLUS permette di usare appdb su dispositivo non jailbreakato o Mac Apple Silicon con il tuo account sviluppatore e firmare app nel cloud senza limiti.\n\nPLUS si attiva per dispositivo.\n\nUsiamo questi fondi per server, traffico e la community.\n\nPLUS non è trasferibile; puoi annullarlo quando vuoi; ti avvisiamo in caso di dispositivo scollegato.\n\nPLUS non è compatibile con dispositivi aziendali con MDM. Usa appdb su dispositivi personali.";
+
+/////////////////////
+//     ALTSTORE    //
+/////////////////////
+"AltStore Repos" = "Repo AltStore";
+"Please enter repository URL" = "Inserisci l'URL del repository";
+"Repository URL" = "URL repository";
+"Add repo" = "Aggiungi repo";
+"%@ Apps" = "%@ app";
+"Search Apps" = "Cerca app";
+"No repos found" = "Nessun repository trovato";
+"The repository was deleted successfully" = "Repository eliminato con successo";
+
+/////////////////////
+//      DYLIBS     //
+/////////////////////
+"My Dylibs, Frameworks and Debs" = "I miei Dylibs, Frameworks e Debs";
+"No dylibs found" = "Nessun dylib trovato";
+"The dylib was deleted successfully" = "Il dylib è stato eliminato con successo";
+"Here you can upload or import dynamic libraries, frameworks or debian packages or ZIP archives with tweaks to inject into apps that you are installing via appdb. Uploading or importing of any file will enable “Ask for Installation Options” feature for current device, so you can choose what tweaks you want to include in the app. You can disable this option later on device features configuration page.\n\nPlease note that not all packages, dylibs or frameworks that were built for jailbroken devices will work on your non-jailbroken devices." = "Qui puoi caricare o importare librerie dinamiche, framework o pacchetti deb o archivi ZIP con tweak da iniettare nelle app che installi via appdb. Caricando o importando qualsiasi file si attiverà \"Chiedi opzioni di installazione\" per questo dispositivo. Puoi disattivarlo in seguito nella configurazione dispositivo.\n\nNota: non tutti i pacchetti, dylib o framework pensati per dispositivi jailbreakati funzionano su dispositivi non jailbreakati.";
 
 /////////////////////
 //     UPDATES     //
@@ -376,6 +436,7 @@
 "Invalid voucher." = "Voucher non valido.";
 "Voucher already used." = "Questo voucher è già stato utilizzato.";
 "No devices with this email." = "Nessun dispositivo trovato con questa email.";
+"We've got reports reg. this link: \"%@\"" = "Abbiamo ricevuto segnalazioni per questo link: \"%@\"";
 
 ////////////////////////////
 //     LINK REPORTING     //
@@ -398,6 +459,9 @@
 "appdb team" = "Team di appdb";
 "Icon and banner designer" = "Designer di icona e banner";
 "View project on GitHub" = "Vedi progetto su GitHub";
+"Original Developer" = "Sviluppatore originale";
+"Current Maintainer" = "Mantenedore attuale";
+"Previous Maintainer" = "Mantenedore precedente";
 
 /////////////////////////////////////////
 //     WISHES / AUTOMATIC REQUESTS     //
@@ -435,4 +499,19 @@
 "%@h ago" = "%@h fa"; // hours, e.g. 6h ago
 "%@d ago" = "%@d fa"; // days, e.g. 3d ago
 "now" = "adesso";
+
+///////////////////
+//     ICONS     //
+///////////////////
+"Main (by aesign)" = "Principale (di aesign)";
+"Dark (by stayxnegative)" = "Scuro (di stayxnegative)";
+"Green" = "Verde";
+"Purple" = "Viola";
+"Yellow" = "Giallo";
+"Pink" = "Rosa";
+"Red" = "Rosso";
+"Aqua" = "Acqua";
+"Black" = "Nero";
+"Alternate icons seem to not work on this device" = "Le icone alternative sembrano non funzionare su questo dispositivo";
+"App icon was set to '%@'" = "L'icona dell'app è stata impostata su '%@'";
 

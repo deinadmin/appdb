@@ -182,6 +182,7 @@
 
 "Queued" = "Queued";
 "Library" = "Library";
+"My Apps" = "My Apps";
 "Downloading" = "Downloading";
 "No queued downloads"  = "No queued downloads";
 "File download has started" = "File download has started";
@@ -232,12 +233,20 @@
 "Compatibility Checks" = "Compatibility Checks";
 "Ask for installation options" = "Ask for installation options";
 "Deauthorize" = "Deauthorize";
+"Log out" = "Log out";
+"Sign in to AppDB" = "Sign in to AppDB";
+"To use this feature, you need to login to AppDB!" = "To use this feature, you need to login to AppDB!";
+"To use this feature, you need to login to AppDB!" = "To use this feature, you need to login to AppDB!";
+"Login with AppDB" = "Login with AppDB";
+"Login to install" = "Login to install";
+"Are you sure you want to log out?" = "Are you sure you want to log out?";
 "User Interface" = "User Interface";
 "Choose Theme" = "Choose Theme";
 "Choose Language" = "Choose Language";
 "Language set, please restart the app to apply changes" = "Language set, please restart the app to apply changes";
 "Dark" = "Dark";
 "Darker" = "Darker";
+"System" = "System";
 "Light" = "Light";
 "Support" = "Support";
 "Visit appdb forum" = "Visit appdb forums";
@@ -304,6 +313,7 @@
 "Force Disable PRO" = "Force Disable PRO";
 "For Psychic Paper exploit" = "For Psychic Paper exploit";
 "Clear Cache" = "Clear Cache";
+"Are you sure you want to clear the cache?" = "Are you sure you want to clear the cache?";
 "Cached IPAs" = "Cached IPAs";
 "IPA cache status for current device" = "IPA cache status for current device";
 "The cached IPA was deleted successfully" = "The cached IPA was deleted successfully";

@@ -36,8 +36,6 @@ class SystemStatus: LoadingTableView {
         tableView.estimatedRowHeight = 50
 
         tableView.theme_separatorColor = Color.borderColor
-        tableView.theme_backgroundColor = Color.tableViewBackgroundColor
-        view.theme_backgroundColor = Color.tableViewBackgroundColor
 
         animated = false
         showsErrorButton = false

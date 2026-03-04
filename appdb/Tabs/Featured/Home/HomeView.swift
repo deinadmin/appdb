@@ -45,15 +45,18 @@ struct HomeView: SwiftUI.View {
 
     // MARK: - Content
 
+    private let scrollAnchorId = "homeTop"
+
     private var contentView: some SwiftUI.View {
-        ScrollView(.vertical, showsIndicators: false) {
-            LazyVStack(spacing: 0) {
-                // Banner Slider
-                BannerSliderView(
-                    bannerImages: viewModel.bannerImages,
-                    onBannerTap: onBannerTap
-                )
-                .padding(.bottom, 8)
+        ScrollViewReader { proxy in
+            ScrollView(.vertical, showsIndicators: false) {
+                LazyVStack(spacing: 18) {
+                    // Banner Slider
+                    BannerSliderView(
+                        bannerImages: viewModel.bannerImages,
+                        onBannerTap: onBannerTap
+                    )
+                    .id(scrollAnchorId)
                 
                 // Genres Section
                 if !viewModel.genres.isEmpty {
@@ -61,7 +64,6 @@ struct HomeView: SwiftUI.View {
                         genres: viewModel.genres,
                         onCategoryTap: onCategoryTap
                     )
-                    .padding(.bottom, 8)
                 }
 
                 // Built-in sections
@@ -134,14 +136,14 @@ struct HomeView: SwiftUI.View {
                 // Bottom padding
                 Spacer()
                     .frame(height: 40)
+                }
             }
-        }
-        .refreshable {
-            await withCheckedContinuation { continuation in
-                viewModel.loadData()
-                // Give it time to reload
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    continuation.resume()
+            .refreshable {
+                await withCheckedContinuation { continuation in
+                    viewModel.loadData(replacingContent: false) {
+                        proxy.scrollTo(scrollAnchorId, anchor: .top)
+                        continuation.resume()
+                    }
                 }
             }
         }
@@ -226,8 +228,8 @@ struct GenreSectionView: SwiftUI.View {
             .scrollTargetBehavior(.viewAligned)
             .scrollBounceBehavior(.basedOnSize)
         }
-        .padding(.top, 12)
-        .padding(.bottom, 4)
+        .padding(.top, 8)
+        .padding(.bottom, 8)
     }
 }
 
@@ -235,8 +237,12 @@ struct GenreSectionView: SwiftUI.View {
 struct GenreCardView: SwiftUI.View {
     let genre: Genre
 
-    private func getStyle(for name: String) -> (icon: String, colors: [SColor]) {
-        let key = name.lowercased()
+    private func getStyle(for genre: Genre) -> (icon: String, colors: [SColor]) {
+        if genre.id == "0" {
+            return ("square.grid.2x2.fill", [SColor.accentColor, SColor.accentColor.opacity(0.7)])
+        }
+        
+        let key = genre.name.lowercased()
 
         switch key {
         case "games":
@@ -315,7 +321,7 @@ struct GenreCardView: SwiftUI.View {
     }
 
     var body: some SwiftUI.View {
-        let style = getStyle(for: genre.name)
+        let style = getStyle(for: genre)
         let gradient = LinearGradient(colors: style.colors, startPoint: .topLeading, endPoint: .bottomTrailing)
 
         VStack(spacing: 8) {

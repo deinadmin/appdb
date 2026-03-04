@@ -5,7 +5,6 @@
 
 import UIKit
 import SwiftUI
-import UniformTypeIdentifiers
 
 class MyLibraryHostingController: UIViewController {
 
@@ -15,14 +14,11 @@ class MyLibraryHostingController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Library".localized()
+        title = "My Apps".localized()
 
         let menu = UIMenu(children: [
-            UIAction(title: "Add from URL".localized(), image: UIImage(systemName: "link")) { [weak self] _ in
-                self?.presentURLPrompt()
-            },
-            UIAction(title: "Add from Files".localized(), image: UIImage(systemName: "folder")) { [weak self] _ in
-                self?.presentFilePicker()
+            UIAction(title: "Add via AppDB.to".localized(), image: UIImage(systemName: "arrow.up.forward")) { [weak self] _ in
+                self?.openAppDBMyApps()
             }
         ])
         let addButton = UIBarButtonItem(image: UIImage(systemName: "plus"), menu: menu)
@@ -43,7 +39,10 @@ class MyLibraryHostingController: UIViewController {
         let viewModel = MyLibraryViewModel()
         self.viewModel = viewModel
 
-        let libraryView = MyLibraryView().environmentObject(viewModel)
+        let libraryView = MyLibraryView(
+            onInstallApp: { [weak self] app in self?.handleMyAppStoreInstall(app: app) },
+            onPresentLogin: { [weak self] in self?.presentDeviceLinkBulletin() }
+        ).environmentObject(viewModel)
 
         let hosting = UIHostingController(rootView: AnyView(libraryView))
         hosting.view.backgroundColor = .systemGroupedBackground
@@ -61,34 +60,39 @@ class MyLibraryHostingController: UIViewController {
         self.hostingController = hosting
     }
 
-    private func presentURLPrompt() {
-        let alert = UIAlertController(title: "Add from URL".localized(), message: "Enter the URL of the IPA file".localized(), preferredStyle: .alert)
-        alert.addTextField { textField in
-            textField.placeholder = "https://"
-            textField.keyboardType = .URL
-            textField.autocapitalizationType = .none
-            textField.autocorrectionType = .no
+    private func openAppDBMyApps() {
+        guard let url = URL(string: "https://appdb.to/my/apps") else { return }
+        UIApplication.shared.open(url)
+    }
+
+    // MARK: - Install (same flow as home: askForInstallationOptions + UIKit sheet)
+
+    private func handleMyAppStoreInstall(app: MyAppStoreApp) {
+        guard !app.installationTicket.isEmpty else {
+            if !app.noInstallationTicketReason.isEmpty {
+                Messages.shared.showError(message: app.noInstallationTicketReason.prettified, context: .viewController(self))
+            } else {
+                Messages.shared.showError(message: "This app cannot be installed at this time".localized(), context: .viewController(self))
+            }
+            return
         }
-        alert.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
-        alert.addAction(UIAlertAction(title: "Add".localized(), style: .default) { [weak self] _ in
-            guard let urlString = alert.textFields?.first?.text, !urlString.isEmpty else { return }
-            self?.viewModel?.uploadIPAFromURL(urlString)
-        })
-        present(alert, animated: true)
-    }
 
-    private func presentFilePicker() {
-        let ipaType = UTType(filenameExtension: "ipa") ?? UTType.data
-        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [ipaType])
-        picker.delegate = self
-        picker.allowsMultipleSelection = false
-        present(picker, animated: true)
-    }
-}
+        guard Preferences.deviceIsLinked else {
+            Messages.shared.showError(message: "Please authorize app from Settings first".localized(), context: .viewController(self))
+            return
+        }
 
-extension MyLibraryHostingController: UIDocumentPickerDelegate {
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard let url = urls.first else { return }
-        viewModel?.uploadIPA(at: url)
+        guard let viewModel else { return }
+
+        if Preferences.askForInstallationOptions {
+            loadInstallationOptionsAndPresentSheet(
+                onInstall: { [weak self] options in
+                    self?.viewModel?.installApp(app, additionalOptions: options)
+                },
+                onCancel: nil
+            )
+        } else {
+            viewModel.installApp(app, additionalOptions: [:])
+        }
     }
 }

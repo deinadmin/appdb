@@ -15,7 +15,6 @@ protocol ChangedTheme: AnyObject {
 class ThemeChooser: UITableViewController {
 
     weak var changedThemeDelegate: ChangedTheme?
-    var followSystemAppearanceToggle: UISwitch?
 
     private var bgColorView: UIView = {
         let bgColorView = UIView()
@@ -30,9 +29,6 @@ class ThemeChooser: UITableViewController {
             self.init(style: .grouped)
         }
 
-        if #available(iOS 13.0, *) {
-            followSystemAppearanceToggle = UISwitch()
-        }
     }
 
     override func viewDidLoad() {
@@ -44,8 +40,6 @@ class ThemeChooser: UITableViewController {
         tableView.rowHeight = 50
 
         tableView.theme_separatorColor = Color.borderColor
-        tableView.theme_backgroundColor = Color.tableViewBackgroundColor
-        view.theme_backgroundColor = Color.tableViewBackgroundColor
 
         tableView.cellLayoutMarginsFollowReadableWidth = true
 
@@ -60,111 +54,40 @@ class ThemeChooser: UITableViewController {
             }
         }
 
-        disableUserInteractionIfNeeded()
     }
 
     @objc func dismissAnimated() { dismiss(animated: true) }
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        if #available(iOS 13.0, *) {
-            return 2
-        } else {
-            return 1
-        }
-    }
+    override func numberOfSections(in tableView: UITableView) -> Int { 1 }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if #available(iOS 13.0, *), section > 0 {
-            return 1
-        } else {
-            return Themes.allCases.count
-        }
+        Themes.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if #available(iOS 13.0, *), indexPath.section > 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.textLabel?.text = "Follow System Appearance".localized()
-            cell.textLabel?.makeDynamicFont()
-            cell.textLabel?.theme_textColor = Color.title
-            cell.setBackgroundColor(Color.veryVeryLightGray)
-            cell.accessoryView = followSystemAppearanceToggle
-            followSystemAppearanceToggle?.setOn(Preferences.followSystemAppearance, animated: false)
-            followSystemAppearanceToggle?.addTarget(self, action: #selector(appearanceToggleValueChanged), for: .valueChanged)
-            cell.accessoryType = .none
-            cell.theme_backgroundColor = Color.veryVeryLightGray
-            cell.selectedBackgroundView = bgColorView
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.textLabel?.text = Themes(rawValue: indexPath.row)?.toString
-            cell.textLabel?.makeDynamicFont()
-            cell.textLabel?.theme_textColor = Color.title
-            cell.accessoryView = nil
-            cell.accessoryType = Themes.current == Themes(rawValue: indexPath.row) ? .checkmark : .none
-            cell.setBackgroundColor(Color.veryVeryLightGray)
-            cell.theme_backgroundColor = Color.veryVeryLightGray
-            cell.selectedBackgroundView = bgColorView
-            return cell
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = Themes(rawValue: indexPath.row)?.toString
+        cell.textLabel?.makeDynamicFont()
+        cell.textLabel?.theme_textColor = Color.title
+        cell.accessoryView = nil
+        cell.accessoryType = Themes.current == Themes(rawValue: indexPath.row) ? .checkmark : .none
+        cell.setBackgroundColor(Color.veryVeryLightGray)
+        cell.theme_backgroundColor = Color.veryVeryLightGray
+        cell.selectedBackgroundView = bgColorView
+        return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let theme = Themes(rawValue: indexPath.row) else { return }
-        if theme == .dark {
-            Preferences.set(.shouldSwitchToDarkerTheme, to: false)
-        } else if theme == .darker {
-            Preferences.set(.shouldSwitchToDarkerTheme, to: true)
-        }
         reloadTheme(theme: theme)
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if #available(iOS 13.0, *), section > 0 {
-            return ""
-        } else {
-            return "Available Themes".localized()
-        }
+        "Available Themes".localized()
     }
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if #available(iOS 13.0, *), section > 0 {
-            return "Automatically switch between light and dark theme based on System Appearance. To switch to the Darker theme instead, just manually select it once.\n\nNOTE: If you're experiencing issues (theme not switching automatically or mixed themes) just close the app from multitasking and reopen it.".localized()
-        }
-        return nil
-    }
-
-    @objc func appearanceToggleValueChanged(sender: UISwitch) {
-        Preferences.set(.followSystemAppearance, to: sender.isOn)
-
-        disableUserInteractionIfNeeded()
-
-        if Preferences.followSystemAppearance {
-            switch Themes.current {
-            case .dark, .darker:
-                if !Global.isDarkSystemAppearance {
-                    reloadTheme(theme: .light)
-                }
-            default:
-                if Global.isDarkSystemAppearance {
-                    reloadTheme(theme: Preferences.shouldSwitchToDarkerTheme ? .darker : .dark)
-                }
-            }
-        }
-
-        Global.refreshAppearanceForCurrentTheme()
-    }
-
-    func disableUserInteractionIfNeeded() {
-        DispatchQueue.main.async {
-            if #available(iOS 13.0, *) {
-                (0..<self.tableView.numberOfRows(inSection: 0)).indices.forEach { rowIndex in
-                    if let cell = self.tableView.cellForRow(at: IndexPath(row: rowIndex, section: 0)) {
-                        cell.setEnabled(on: !Preferences.followSystemAppearance)
-                    }
-                }
-            }
-        }
+        "System matches your device appearance (light or dark).".localized()
     }
 
     func reloadTheme(theme: Themes) {

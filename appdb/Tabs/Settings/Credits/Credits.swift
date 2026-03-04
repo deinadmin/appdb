@@ -65,8 +65,6 @@ class Credits: TableViewController {
         title = "Credits".localized()
 
         tableView.theme_separatorColor = Color.borderColor
-        tableView.theme_backgroundColor = Color.tableViewBackgroundColor
-        view.theme_backgroundColor = Color.tableViewBackgroundColor
         tableView.cellLayoutMarginsFollowReadableWidth = true
 
         // Hide last separator

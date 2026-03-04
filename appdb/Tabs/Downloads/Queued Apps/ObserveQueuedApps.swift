@@ -55,9 +55,6 @@ class ObserveQueuedApps {
             timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateAppsStatus), userInfo: nil, repeats: true)
         }
 
-        // Increase Downloads badge
-        UIApplication.shared.keyWindow?.rootViewController?.badgeAddOne(for: .downloads)
-
         // Notify updates
         numberOfQueuedApps += 1
         let numberOfQueuedAppsDict: [String: Int] = ["number": numberOfQueuedApps, "tab": 0]
@@ -67,9 +64,6 @@ class ObserveQueuedApps {
     func removeApp(linkId: String) {
         if let index = requestedApps.lastIndex(where: { $0.linkId == linkId }) {
             requestedApps.remove(at: index)
-
-            // Decrease Downloads badge
-            UIApplication.shared.keyWindow?.rootViewController?.badgeSubtractOne(for: .downloads)
 
             numberOfQueuedApps -= 1
             let numberOfQueuedAppsDict: [String: Int] = ["number": numberOfQueuedApps, "tab": 0]
@@ -81,8 +75,6 @@ class ObserveQueuedApps {
         if let index = requestedApps.lastIndex(where: { $0.commandUUID == commandUUID }) {
             requestedApps.remove(at: index)
 
-            UIApplication.shared.keyWindow?.rootViewController?.badgeSubtractOne(for: .downloads)
-
             numberOfQueuedApps -= 1
             let numberOfQueuedAppsDict: [String: Int] = ["number": numberOfQueuedApps, "tab": 0]
             NotificationCenter.default.post(name: .UpdateQueuedSegmentTitle, object: self, userInfo: numberOfQueuedAppsDict)
@@ -91,9 +83,6 @@ class ObserveQueuedApps {
 
     func removeAllApps() {
         self.requestedApps = []
-
-        // Reset badge
-        UIApplication.shared.keyWindow?.rootViewController?.updateBadge(with: nil, for: .downloads)
 
         numberOfQueuedApps = 0
         let numberOfQueuedAppsDict: [String: Int] = ["number": numberOfQueuedApps, "tab": 0]

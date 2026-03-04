@@ -82,9 +82,7 @@ final class MyLibraryViewModel: ObservableObject {
                 case .success(let installResult):
                     UINotificationFeedbackGenerator().notificationOccurred(.success)
 
-                    if installResult.installationType == .itmsServices {
-                        Messages.shared.showSuccess(message: "App is being signed, please wait...".localized())
-                    } else {
+                    if installResult.installationType != .itmsServices {
                         Messages.shared.showSuccess(message: "Installation has been queued to your device".localized())
                     }
 

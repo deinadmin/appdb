@@ -37,8 +37,6 @@ class ListAppsManagedByAppdb: LoadingTableView {
         tableView.estimatedRowHeight = 50
 
         tableView.theme_separatorColor = Color.borderColor
-        tableView.theme_backgroundColor = Color.tableViewBackgroundColor
-        view.theme_backgroundColor = Color.tableViewBackgroundColor
 
         tableView.cellLayoutMarginsFollowReadableWidth = true
 

@@ -105,6 +105,7 @@
 "Duplicate app" = "Duplikat Aplikasi";
 "New ID" = "ID Baru";
 "New display name" = "Nama Tampilan";
+"Select Dylibs, Frameworks or Debs" = "Pilih Dylibs, Frameworks, atau Debs";
 "Use Original" = "Gunakan Aslinya";
 "Cracked by %@" = "di Crack oleh %@";
 "Uploaded by %@" = "di Unggah oleh %@";
@@ -118,6 +119,13 @@
 "Any Price" = "Harga Berapapun";
 "Paid" = "Berbayar";
 "Waiting %@ seconds..." = "Menunggu %@ detik...";
+
+// Download stats
+"%@ today" = "%@ hari ini";
+"%@ this week" = "%@ minggu ini";
+"%@ this month" = "%@ bulan ini";
+"%@ this year" = "%@ tahun ini";
+"%@ total" = "%@ total";
 
 //////////////////////////////////
 //     DEVICE LINK TUTORIAL     //
@@ -173,6 +181,7 @@
 
 "Queued" = "Antri";
 "Library" = "Perpustakaan";
+"My Apps" = "Aplikasi Saya";
 "Downloading" = "Mengunduh";
 "No queued downloads"  = "Tidak ada unduhan yang antri";
 "File download has started" = "Pengunduhan file telah dimulai";
@@ -223,12 +232,21 @@
 "Compatibility Checks" = "Cek Kompabilitas";
 "Ask for installation options" = "Tanya opsi instalasi";
 "Deauthorize" = "Membatalkan otorisasi";
+"Log out" = "Keluar";
+"Sign in to AppDB" = "Masuk ke AppDB";
+"To use this feature, you need to login to AppDB!" = "Untuk menggunakan fitur ini, Anda harus masuk ke AppDB!";
+"Login with AppDB" = "Masuk dengan AppDB";
+"Login to install" = "Masuk untuk menginstal";
+"Are you sure you want to log out?" = "Anda yakin ingin keluar?";
 "User Interface" = "Antarmuka pengguna";
 "Choose Theme" = "Pilih Tema";
+"Theme changed. The app needs to be restarted to apply the new appearance." = "Tema diubah. Mulai ulang aplikasi untuk menerapkan tampilan baru.";
+"Close App" = "Tutup Aplikasi";
 "Choose Language" = "Pilih Bahasa";
 "Language set, please restart the app to apply changes" = "Set bahasa, silakan restart aplikasi untuk menerapkan perubahan";
 "Dark" = "Hitam";
 "Darker" = "Hitam Pekat";
+"System" = "Sistem";
 "Light" = "Cerah";
 "Support" = "Dukungan";
 "Visit appdb forum" = "Kunjungi forum appdb";
@@ -238,6 +256,10 @@
 "Device" = "Perangkat";
 "Authorize App" = "Otorisasi Aplikasi";
 "Authorize app with link code from appdb website and enjoy unlimited app installs!" = "Otorisasi aplikasi dengan kode tautan dari situs web appdb dan nikmati pemasangan aplikasi tanpa batas! ";
+"PLUS Status" = "Status PLUS";
+"Signing" = "Penandatanganan";
+"Choose Enterprise Certificate" = "Pilih Sertifikat Enterprise";
+"%@ signs left until %@" = "%@ tanda tangan tersisa hingga %@";
 "PRO Status" = "PRO Status";
 "Use this code if you want to link new devices to appdb. Press and hold the cell to copy it, or tap it to generate a new one." = "Gunakan kode ini jika Anda ingin menautkan perangkat baru ke appdb. Tekan dan tahan sel untuk menyalinnya, atau ketuk untuk membuat yang baru. ";
 "Device Status" = "Status Perangkat";
@@ -292,6 +314,11 @@
 "Force Disable PRO" = "Paksa Nonaktifkan PRO";
 "For Psychic Paper exploit" = "Untuk mengeksploitasi Psychic Paper";
 "Clear Cache" = "Bersihkan Cache";
+"Are you sure you want to clear the cache?" = "Anda yakin ingin membersihkan cache?";
+"Cached IPAs" = "IPA dalam cache";
+"IPA cache status for current device" = "Status cache IPA untuk perangkat saat ini";
+"The cached IPA was deleted successfully" = "IPA dalam cache berhasil dihapus";
+"appdb saves all installed IPA files for your device to cache, so you can easily restore all your apps after device reset or revocation. Cache is stored per device, and will be deleted if you will unlink your device. If you restored your device and missing appdb profile, you can visit device status page and tap \"Update profile\" button to install it, or link device via email by tapping \"Just link new device\" in message from appdb.\n\nNote: IPA files does not contain app data, if you want to keep your app data, backup device via Finder or iTunes, Remove revoked apps, Install apps from cache and then restore backup from Finder or iTunes." = "appdb menyimpan semua file IPA yang diinstal ke cache perangkat Anda agar Anda dapat memulihkan aplikasi setelah reset atau pencabutan. Cache disimpan per perangkat dan akan dihapus jika Anda memutuskan tautan. Jika Anda mengembalikan perangkat dan profil appdb hilang, buka Status Perangkat dan ketuk \"Perbarui profil\" atau tautkan lewat email dengan mengetuk \"Tautkan perangkat baru\" di pesan dari appdb.\n\nCatatan: File IPA tidak berisi data aplikasi; untuk menyimpan data, cadangkan perangkat lewat Finder atau iTunes, hapus aplikasi yang dicabut, instal dari cache lalu pulihkan cadangan.";
 "Are you sure you want to clear app cache?\n\nNOTE: This will not deauthorize the app, and your device will still be linked to appdb." = "Anda yakin ingin menghapus cache aplikasi?\n\nCatatan: Ini tidak akan membatalkan otorisasi aplikasi, dan perangkat Anda akan tetap ditautkan ke appdb.";
 "Cache cleared successfully!" = "Cache berhasil dihapus!";
 "Failed to clear cache: %@." = "Gagal menghapus cache: %@.";
@@ -309,6 +336,39 @@
 "Reinstall everything" = "Instal ulang semuanya";
 "Clear IPA cache" = "Hapus IPA cache";
 "Re-validate IPA cache" = "Validasi ulang IPA cache";
+
+/////////////////////
+//       PLUS      //
+/////////////////////
+"Most Reliable Signing Certificate + Service guarantee for 1 year + Instant Activation!" = "Sertifikat penandatanganan paling andal + jaminan layanan 1 tahun + aktivasi instan!";
+"Guaranteed 1 year signing certificates" = "Sertifikat penandatanganan terjamin 1 tahun";
+"Public Free Enterprise Certificates (frequent revokes and device blacklists)" = "Sertifikat Enterprise gratis (pencabutan sering dan daftar hitam perangkat)";
+"Available PLUS subscriptions" = "Langganan PLUS tersedia";
+"Purchase PLUS" = "Beli PLUS";
+"Pay by" = "Bayar dengan";
+"excl. VAT" = "tidak termasuk PPN";
+"What is appdb PLUS?" = "Apa itu appdb PLUS?";
+"appdb PLUS allows you to use appdb on non-jailbroken device or Apple Silicon Mac with your own developer account and sign apps in the cloud without any limitations\n\nPLUS is activated per device, separately for each of your devices\n\nWe use this money to pay for servers, traffic, and support the community\n\nPLUS is not transferable between devices, you can cancel it at any time, or we will notify your about existing subscription for unlinked device, so you can cancel it if you sold your device\n\nPLUS is not compatible with corporate-owned devices with MDM. Please use appdb on your personal devices" = "appdb PLUS memungkinkan Anda menggunakan appdb di perangkat non-jailbreak atau Mac Apple Silicon dengan akun pengembang sendiri dan menandatangani aplikasi di cloud tanpa batasan.\n\nPLUS diaktifkan per perangkat.\n\nKami menggunakan dana ini untuk server, lalu lintas, dan komunitas.\n\nPLUS tidak dapat dialihkan; Anda dapat membatalkan kapan saja; kami akan memberi tahu jika perangkat diputuskan.\n\nPLUS tidak kompatibel dengan perangkat perusahaan dengan MDM. Gunakan appdb di perangkat pribadi.";
+
+/////////////////////
+//     ALTSTORE    //
+/////////////////////
+"AltStore Repos" = "Repo AltStore";
+"Please enter repository URL" = "Masukkan URL repositori";
+"Repository URL" = "URL repositori";
+"Add repo" = "Tambah repo";
+"%@ Apps" = "%@ Aplikasi";
+"Search Apps" = "Cari Aplikasi";
+"No repos found" = "Tidak ada repo ditemukan";
+"The repository was deleted successfully" = "Repositori berhasil dihapus";
+
+/////////////////////
+//      DYLIBS     //
+/////////////////////
+"My Dylibs, Frameworks and Debs" = "Dylibs, Frameworks, dan Debs Saya";
+"No dylibs found" = "Tidak ada dylib ditemukan";
+"The dylib was deleted successfully" = "Dylib berhasil dihapus";
+"Here you can upload or import dynamic libraries, frameworks or debian packages or ZIP archives with tweaks to inject into apps that you are installing via appdb. Uploading or importing of any file will enable “Ask for Installation Options” feature for current device, so you can choose what tweaks you want to include in the app. You can disable this option later on device features configuration page.\n\nPlease note that not all packages, dylibs or frameworks that were built for jailbroken devices will work on your non-jailbroken devices." = "Di sini Anda dapat mengunggah atau mengimpor pustaka dinamis, framework, atau paket debian atau arsip ZIP dengan tweak untuk disuntikkan ke aplikasi yang Anda instal melalui appdb. Mengunggah atau mengimpor file akan mengaktifkan \"Tanya opsi instalasi\" untuk perangkat saat ini. Anda dapat menonaktifkannya nanti di halaman konfigurasi perangkat.\n\nPerhatikan bahwa tidak semua paket, dylib, atau framework yang dibuat untuk perangkat jailbreak akan berfungsi di perangkat non-jailbreak.";
 
 /////////////////////
 //     UPDATES     //
@@ -376,6 +436,7 @@
 "Invalid voucher." = "Voucher tidak valid.";
 "Voucher already used." = "Voucher sudah digunakan.";
 "No devices with this email." = "Tidak ada perangkat dengan email ini.";
+"We've got reports reg. this link: \"%@\"" = "Kami menerima laporan tentang tautan ini: \"%@\"";
 
 ////////////////////////////
 //     LINK REPORTING     //
@@ -398,6 +459,9 @@
 "appdb team" = "tim appdb";
 "Icon and banner designer" = "Desainer ikon dan spanduk";
 "View project on GitHub" = "Lihat proyek di GitHub";
+"Original Developer" = "Pengembang Asli";
+"Current Maintainer" = "Pengelola Saat Ini";
+"Previous Maintainer" = "Pengelola Sebelumnya";
 
 /////////////////////////////////////////
 //     WISHES / AUTOMATIC REQUESTS     //
@@ -435,3 +499,18 @@
 "%@h ago" = "%@h lalu"; // hours, e.g. 6h ago
 "%@d ago" = "%@d lalu"; // days, e.g. 3d ago
 "now" = "sekarang";
+
+///////////////////
+//     ICONS     //
+///////////////////
+"Main (by aesign)" = "Utama (oleh aesign)";
+"Dark (by stayxnegative)" = "Gelap (oleh stayxnegative)";
+"Green" = "Hijau";
+"Purple" = "Ungu";
+"Yellow" = "Kuning";
+"Pink" = "Merah Muda";
+"Red" = "Merah";
+"Aqua" = "Aqua";
+"Black" = "Hitam";
+"Alternate icons seem to not work on this device" = "Ikon alternatif tampaknya tidak berfungsi di perangkat ini";
+"App icon was set to '%@'" = "Ikon aplikasi diatur ke '%@'";

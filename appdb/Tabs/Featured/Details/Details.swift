@@ -77,6 +77,8 @@ class Details: UIHostingController<AnyView> {
         view.backgroundColor = UIColor.systemBackground
         setupDetailView()
 
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshLoginState), name: .RefreshSettings, object: nil)
+
         if !loadDynamically {
             onContentLoaded()
         } else {
@@ -85,10 +87,16 @@ class Details: UIHostingController<AnyView> {
         }
     }
 
+    @objc private func refreshLoginState() {
+        setupDetailView()
+    }
+
     // MARK: - SwiftUI View Setup
 
     private func setupDetailView() {
         var detailView = AppDetailView(state: detailState)
+        detailView.isLoggedIn = Preferences.deviceIsLinked
+        detailView.onPresentLogin = { [weak self] in self?.presentDeviceLinkBulletin() }
 
         detailView.onInstall = { [weak self] in self?.installLatestVersion() }
         detailView.onShare = { [weak self] in self?.shareAction() }
@@ -238,9 +246,7 @@ class Details: UIHostingController<AnyView> {
                     case .success(let installResult):
                         if #available(iOS 10.0, *) { UINotificationFeedbackGenerator().notificationOccurred(.success) }
 
-                        if installResult.installationType == .itmsServices {
-                            Messages.shared.showSuccess(message: "App is being signed, please wait...".localized(), context: .viewController(self))
-                        } else {
+                        if installResult.installationType != .itmsServices {
                             Messages.shared.showSuccess(message: "Installation has been queued to your device".localized(), context: .viewController(self))
                         }
 

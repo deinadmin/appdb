@@ -196,15 +196,14 @@ class HomeHostingController: UIViewController {
         API.getRepos(isPublic: false, success: { [weak self] repos in
             DispatchQueue.main.async {
                 self?.homeViewModel?.isLoadingRepos = false
-                let sheet = UIHostingController(rootView: EditRepositoriesView(initialRepos: repos))
+                let sheet = UIHostingController(rootView: EditRepositoriesView(initialRepos: repos, onPresentLogin: { [weak self] in self?.presentedViewController?.presentDeviceLinkBulletin() }))
                 sheet.modalPresentationStyle = .formSheet
                 self?.present(sheet, animated: true)
             }
         }, fail: { [weak self] _ in
             DispatchQueue.main.async {
                 self?.homeViewModel?.isLoadingRepos = false
-                // Fall back to empty sheet so the user isn't stuck — it will load inside
-                let sheet = UIHostingController(rootView: EditRepositoriesView())
+                let sheet = UIHostingController(rootView: EditRepositoriesView(onPresentLogin: { [weak self] in self?.presentedViewController?.presentDeviceLinkBulletin() }))
                 sheet.modalPresentationStyle = .formSheet
                 self?.present(sheet, animated: true)
             }
@@ -299,9 +298,7 @@ class HomeHostingController: UIViewController {
                     Messages.shared.showError(message: error.prettified, context: .viewController(self))
                 case .success(let installResult):
                     if #available(iOS 10.0, *) { UINotificationFeedbackGenerator().notificationOccurred(.success) }
-                    if installResult.installationType == .itmsServices {
-                        Messages.shared.showSuccess(message: "App is being signed, please wait...".localized(), context: .viewController(self))
-                    } else {
+                    if installResult.installationType != .itmsServices {
                         Messages.shared.showSuccess(message: "Installation has been queued to your device".localized(), context: .viewController(self))
                     }
                     if type != .books {
@@ -335,9 +332,7 @@ class HomeHostingController: UIViewController {
                     Messages.shared.showError(message: error.prettified, context: .viewController(self))
                 case .success(let installResult):
                     if #available(iOS 10.0, *) { UINotificationFeedbackGenerator().notificationOccurred(.success) }
-                    if installResult.installationType == .itmsServices {
-                        Messages.shared.showSuccess(message: "App is being signed, please wait...".localized(), context: .viewController(self))
-                    } else {
+                    if installResult.installationType != .itmsServices {
                         Messages.shared.showSuccess(message: "Installation has been queued to your device".localized(), context: .viewController(self))
                     }
                     ObserveQueuedApps.shared.addApp(

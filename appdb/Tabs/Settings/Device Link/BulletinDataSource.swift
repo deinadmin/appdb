@@ -213,3 +213,18 @@ class DummyBulletinPage: BLTNPageItem {
         return []
     }
 }
+
+// MARK: - Present from any view controller (Edit Repos, My Apps, app detail)
+
+extension UIViewController {
+    /// Presents the device-link / authorize bulletin so the user can link their device to AppDB.
+    func presentDeviceLinkBulletin() {
+        let rootItem: BLTNItem = DeviceLinkIntroBulletins.makeSelectorPage()
+        let manager = BLTNItemManager(rootItem: rootItem)
+        manager.theme_backgroundColor = Color.easyBulletinBackground
+        if #available(iOS 10, *) {
+            manager.backgroundViewStyle = .blurredDark
+        }
+        manager.showBulletin(above: tabBarController ?? self)
+    }
+}

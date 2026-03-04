@@ -76,8 +76,8 @@ struct AppSectionView: SwiftUI.View {
             .scrollTargetBehavior(.viewAligned)
             .scrollBounceBehavior(.basedOnSize)
         }
-        .padding(.top, 12)
-        .padding(.bottom, 4)
+        .padding(.top, 8)
+        .padding(.bottom, 8)
     }
 
     /// Chunk items into pages of 3 for the vertical stacks
@@ -116,7 +116,7 @@ struct AppListRow: SwiftUI.View {
                     .foregroundStyle(.primary)
                     .lineLimit(1)
 
-                Text(item.itemCategoryName.isEmpty ? item.itemSeller : item.itemCategoryName)
+                Text(item.itemSeller.isEmpty ? item.itemBundleId : item.itemSeller)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
@@ -124,19 +124,24 @@ struct AppListRow: SwiftUI.View {
 
             Spacer()
 
-            // Install button pill (Accent color with white/black text)
-            Button {
-                onInstall?()
-            } label: {
-                Text("Get".localized())
-                    .font(.system(size: 15, weight: .bold))
-                    .foregroundStyle(.white) // Standard for most accent colors
-                    .padding(.horizontal, 22)
-                    .padding(.vertical, 6)
-                    .background(SColor.accentColor)
-                    .clipShape(Capsule())
+            VStack {
+                // Install button pill (Accent color with white/black text)
+                Button {
+                    onInstall?()
+                } label: {
+                    Text("Get".localized())
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(.white) // Standard for most accent colors
+                        .padding(.horizontal, 22)
+                        .padding(.vertical, 6)
+                        .background(SColor.accentColor)
+                        .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                Text(item.itemVersion.isEmpty ? "Latest" : "v\(item.itemVersion)")
+                    .opacity(0.6)
+                    .font(.caption2)
             }
-            .buttonStyle(.plain)
         }
         .contentShape(Rectangle()) // Ensure the whole row is tappable
     }

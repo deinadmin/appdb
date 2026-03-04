@@ -4,15 +4,17 @@
 //
 
 import SwiftUI
+import Localize_Swift
 
 private typealias SColor = SwiftUI.Color
 
 struct EditRepositoriesView: SwiftUI.View {
     @Environment(\.dismiss) private var dismiss
 
-    init(initialRepos: [AltStoreRepo] = []) {
+    init(initialRepos: [AltStoreRepo] = [], onPresentLogin: (() -> Void)? = nil) {
         _repos = State(initialValue: initialRepos)
         _isLoading = State(initialValue: initialRepos.isEmpty)
+        self.onPresentLogin = onPresentLogin
     }
 
     @State private var repos: [AltStoreRepo]
@@ -20,10 +22,16 @@ struct EditRepositoriesView: SwiftUI.View {
     @State private var errorMessage: String?
     @State private var showingAddAlert = false
     @State private var newRepoURL = ""
+    @State private var isLoggedIn = Preferences.deviceIsLinked
+    var onPresentLogin: (() -> Void)?
 
     var body: some SwiftUI.View {
         NavigationStack {
             content
+                .onAppear { isLoggedIn = Preferences.deviceIsLinked }
+                .onReceive(NotificationCenter.default.publisher(for: .RefreshSettings)) { _ in
+                    isLoggedIn = Preferences.deviceIsLinked
+                }
                 .navigationTitle("Manage Repositories".localized())
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -56,7 +64,9 @@ struct EditRepositoriesView: SwiftUI.View {
 
     @ViewBuilder
     private var content: some SwiftUI.View {
-        if isLoading {
+        if !isLoggedIn {
+            SignInToAppDBView(onLogin: { onPresentLogin?() })
+        } else if isLoading {
             VStack {
                 Spacer()
                 ProgressView()
@@ -163,5 +173,37 @@ struct EditRepositoriesView: SwiftUI.View {
             })
         }
         repos.remove(atOffsets: offsets)
+    }
+}
+
+// MARK: - Sign-in prompt (used by Edit Repos and My Apps when not logged in)
+
+struct SignInToAppDBView: SwiftUI.View {
+    var onLogin: () -> Void = {}
+
+    var body: some SwiftUI.View {
+        VStack(spacing: 24) {
+            Spacer()
+            Text("Sign in to AppDB".localized())
+                .font(.title2)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+            Text("To use this feature, you need to login to AppDB!".localized())
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+            Button("Login with AppDB".localized()) {
+                onLogin()
+            }
+            .font(.headline)
+            .foregroundStyle(.white)
+            .padding(.horizontal, 32)
+            .padding(.vertical, 14)
+            .background(SColor.accentColor, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .padding(.top, 8)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

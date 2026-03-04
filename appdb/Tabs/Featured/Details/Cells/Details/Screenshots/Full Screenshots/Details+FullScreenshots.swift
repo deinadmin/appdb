@@ -86,63 +86,46 @@ class DetailsFullScreenshots: UIViewController {
     // Layout insets
     var height, width, left, top, bottom: CGFloat!
 
+    // MARK: - Aspect Ratio Helper
+    private func getAspectRatio() -> CGFloat {
+        if screenshots.isEmpty { return 0.462 }
+        let types = Set(screenshots.map { $0.type })
+        let isIpad = types == Set(["ipad"])
+        if allLandscape { return isIpad ? 1.333 : 1.78 }
+        return isIpad ? 0.75 : 0.462
+    }
+
     // Returns item size at given index
     func itemSize(for index: Int) -> CGSize {
-        if isPortrait { // device is portratit
-            if screenshots[index].class_ == "landscape" && !mixedClasses {
-                let w = round(view.bounds.width - (Global.Size.margin.value - (-100 ~~ 0)) * 2)
-                return CGSize(width: w, height: w / magic)
-            } else {
-                let off: CGFloat = (Global.isIpad && magic == 1.775) ? (180 ~~ 20) : (100 ~~ 20)
-                let w = round(view.bounds.width - (Global.Size.margin.value + off) * 2)
-                return CGSize(width: w, height: w * magic)
-            }
-        } else { // device is landscape
-            if screenshots[index].class_ == "landscape" && !mixedClasses {
-                let h = round(view.bounds.height - (Global.Size.margin.value + (100 ~~ 25)) * 2)
-                return CGSize(width: h * magic, height: h)
-            } else {
-                let h = round(view.bounds.height - (Global.Size.margin.value + (100 ~~ 25)) * 2)
-                return CGSize(width: h / magic, height: h)
-            }
-        }
+        return CGSize(width: width, height: height)
     }
 
     // Calculates width, height and insets for the correct layout
     func calculateAllSizes() {
-        if isPortrait {
-            if allLandscape {
-                width = round(view.bounds.width - (Global.Size.margin.value - (-100 ~~ 0)) * 2)
-                height = round(width / magic)
-                left = round((view.bounds.width - width) / 2)
-
-                let w = (view.bounds.width - Global.Size.margin.value / 2) / magic
-                let topFull = round((view.bounds.height - w) / 2)
-                top = topFull
-                bottom = topFull - (50 ~~ 0)
-            } else {
-                let off: CGFloat = round((Global.isIpad && magic == 1.775) ? (180 ~~ 20) : (100 ~~ 20))
-                width = round(view.bounds.width - (Global.Size.margin.value + off) * 2)
-                height = round(width * magic)
-                left = round((view.bounds.width - width) / 2)
-                top = round((view.bounds.height - (view.bounds.width - (Global.Size.margin.value + 20) * 2) * magic) / 2 + 23)
-                bottom = round((view.bounds.height - (view.bounds.width - (Global.Size.margin.value + 20) * 2) * magic) / 2 - 23)
-            }
-        } else {
-            if allLandscape {
-                height = round(view.bounds.height - (Global.Size.margin.value + (100 ~~ 25)) * 2)
-                width = round(height * magic)
-                left = round((view.bounds.width - width) / 2)
-                top = round(Global.Size.margin.value + 20 + (30 ~~ 12))
-                bottom = round(Global.Size.margin.value + 20 - (-30 ~~ 12) - (50 ~~ 0))
-            } else {
-                height = round(view.bounds.height - (Global.Size.margin.value + (100 ~~ 25)) * 2)
-                width = round(height / magic)
-                left = round((view.bounds.width - width) / 2)
-                top = round(Global.Size.margin.value + 20 + (30 ~~ 15))
-                bottom = round(Global.Size.margin.value + 20 - (-30 ~~ 15) - (50 ~~ 0))
-            }
+        let ratio = getAspectRatio()
+        
+        let navFrame = navigationController?.navigationBar.frame ?? .zero
+        let navBarHeight: CGFloat = navFrame.maxY > 0 ? navFrame.maxY : 90.0
+        
+        // Ensure there's a safe space beneath the toolbar for the Done button and at the bottom for dots
+        let topMargin = navBarHeight > 0 ? navBarHeight + 60 : 120
+        let bottomMargin: CGFloat = 80 // Clear margin from the bottom pagination dots
+        
+        let maxH = view.bounds.height - topMargin - bottomMargin
+        let maxW = view.bounds.width - 60 // minimum 30px padding left/right
+        
+        var h = maxH
+        var w = h * ratio
+        if w > maxW {
+            w = maxW
+            h = w / ratio
         }
+        
+        width = round(w)
+        height = round(h)
+        left = round((view.bounds.width - width) / 2)
+        top = topMargin + round((maxH - height) / 2)
+        bottom = view.bounds.height - top - height
     }
 
     // Initializer

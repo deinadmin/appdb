@@ -84,9 +84,7 @@ class AltStoreAppDetails: UIHostingController<AnyView> {
                     case .success(let installResult):
                         if #available(iOS 10.0, *) { UINotificationFeedbackGenerator().notificationOccurred(.success) }
 
-                        if installResult.installationType == .itmsServices {
-                            Messages.shared.showSuccess(message: "App is being signed, please wait...".localized(), context: .viewController(self))
-                        } else {
+                        if installResult.installationType != .itmsServices {
                             Messages.shared.showSuccess(message: "Installation has been queued to your device".localized(), context: .viewController(self))
                         }
 

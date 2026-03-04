@@ -299,19 +299,7 @@ extension UITableViewCell {
 extension UIViewController {
     @available(iOS 13.0, *)
     func updateAppearance(style: UIUserInterfaceStyle) {
-        if Preferences.followSystemAppearance {
-            switch style {
-            case .light:
-                if Themes.isNight {
-                    Themes.switchTo(theme: .light)
-                }
-            default:
-                if !Themes.isNight {
-                    Themes.switchTo(theme: Preferences.shouldSwitchToDarkerTheme ? .darker : .dark)
-                }
-            }
-        }
-        Global.refreshAppearanceForCurrentTheme()
+        Themes.refreshForSystemAppearance()
     }
 }
 

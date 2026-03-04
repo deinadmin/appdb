@@ -272,6 +272,8 @@
 		8189794922859EED00EC87B2 /* IPAWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8189794822859EED00EC87B2 /* IPAWebViewController.swift */; };
 		8189794B228714B500EC87B2 /* AdBlocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8189794A228714B500EC87B2 /* AdBlocker.swift */; };
 		818A559F20583D4600162E51 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818A559E20583D4600162E51 /* Settings.swift */; };
+		81F100032A7C02C2008DCA2E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F100012A7C02C2008DCA2E /* SettingsView.swift */; };
+		81F100042A7C02C2008DCA2E /* SettingsHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F100022A7C02C2008DCA2E /* SettingsHostingController.swift */; };
 		818A55A920584D9100162E51 /* LNZSnapToCenterCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818A55A720584D9100162E51 /* LNZSnapToCenterCollectionViewLayout.swift */; };
 		818A55AA20584D9100162E51 /* LNZInfiniteCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818A55A820584D9100162E51 /* LNZInfiniteCollectionViewLayout.swift */; };
 		818A55AC20584F2B00162E51 /* BannerImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818A55AB20584F2B00162E51 /* BannerImage.swift */; };
@@ -659,6 +661,8 @@
 		8189794822859EED00EC87B2 /* IPAWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPAWebViewController.swift; sourceTree = "<group>"; };
 		8189794A228714B500EC87B2 /* AdBlocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlocker.swift; sourceTree = "<group>"; };
 		818A559E20583D4600162E51 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		81F100012A7C02C2008DCA2E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		81F100022A7C02C2008DCA2E /* SettingsHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHostingController.swift; sourceTree = "<group>"; };
 		818A55A42058439B00162E51 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		818A55A720584D9100162E51 /* LNZSnapToCenterCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LNZSnapToCenterCollectionViewLayout.swift; sourceTree = "<group>"; };
 		818A55A820584D9100162E51 /* LNZInfiniteCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LNZInfiniteCollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -1480,6 +1484,8 @@
 			isa = PBXGroup;
 			children = (
 				818A559E20583D4600162E51 /* Settings.swift */,
+				81F100012A7C02C2008DCA2E /* SettingsView.swift */,
+				81F100022A7C02C2008DCA2E /* SettingsHostingController.swift */,
 				8115465920826AA50031C9DA /* Settings+Sections.swift */,
 				81324067205BD86000945CE9 /* Settings+StaticCells.swift */,
 				819EC27420A7249F007138CF /* Acknowledgements */,
@@ -2342,6 +2348,8 @@
 				8188CE9D1F347F1E001D1DB8 /* ElasticLabel.swift in Sources */,
 				813F01252A7BFE9E008DCA2E /* ThemeScrollViewIndicatorStylePicker.swift in Sources */,
 				818A559F20583D4600162E51 /* Settings.swift in Sources */,
+				81F100032A7C02C2008DCA2E /* SettingsView.swift in Sources */,
+				81F100042A7C02C2008DCA2E /* SettingsHostingController.swift in Sources */,
 				813F00E52A7BFE52008DCA2E /* LayoutItem.swift in Sources */,
 				81F20A5F27EBD9C900CD20C1 /* IconChooser.swift in Sources */,
 				81C82B7B22C3DBC1008BB076 /* AskBundleBeforeUploadViewController.swift in Sources */,

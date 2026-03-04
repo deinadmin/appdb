@@ -105,6 +105,7 @@
 "Duplicate app" = "Dupliquer l'application";
 "New ID" = "Nouvelle ID";
 "New display name" = "Nouveau nom d'affichage";
+"Select Dylibs, Frameworks or Debs" = "Sélectionner Dylibs, Frameworks ou Debs";
 "Use Original" = "Utiliser l'original";
 "Cracked by %@" = "Cracker par %@";
 "Uploaded by %@" = "telechargé par %@";
@@ -118,6 +119,13 @@
 "Any Price" = "N'importe quel prix";
 "Paid" = "Payé";
 "Waiting %@ seconds..." = "En attente de %@ secondes...";
+
+// Download stats
+"%@ today" = "%@ aujourd'hui";
+"%@ this week" = "%@ cette semaine";
+"%@ this month" = "%@ ce mois-ci";
+"%@ this year" = "%@ cette année";
+"%@ total" = "%@ total";
 
 //////////////////////////////////
 //     DEVICE LINK TUTORIAL     //
@@ -173,6 +181,7 @@
 
 "Queued" = "En file d'attente";
 "Library" = "Bibliothèque";
+"My Apps" = "Mes applications";
 "Downloading" = "Téléchargement";
 "No queued downloads"  = "Aucun téléchargement en file d'attente";
 "File download has started" = "Le téléchargement du fichier a commencé";
@@ -223,12 +232,21 @@
 "Compatibility Checks" = "Vérifications de compatibilité";
 "Ask for installation options" = "Demander les options d'installation";
 "Deauthorize" = "Annuler l'autorisation";
+"Log out" = "Déconnexion";
+"Sign in to AppDB" = "Se connecter à AppDB";
+"To use this feature, you need to login to AppDB!" = "Pour utiliser cette fonctionnalité, connectez-vous à AppDB !";
+"Login with AppDB" = "Se connecter avec AppDB";
+"Login to install" = "Se connecter pour installer";
+"Are you sure you want to log out?" = "Voulez-vous vraiment vous déconnecter ?";
 "User Interface" = "Interface utilisateur";
 "Choose Theme" = "Choisissez un thème";
+"Theme changed. The app needs to be restarted to apply the new appearance." = "Thème modifié. Redémarrez l'application pour appliquer le nouvel aspect.";
+"Close App" = "Fermer l'application";
 "Choose Language" = "Choisissez la langue";
 "Language set, please restart the app to apply changes" = "Langue définie, veuillez redémarrer l'application pour appliquer les modifications";
 "Dark" = "Sombre";
 "Darker" = "Plus sombre";
+"System" = "Système";
 "Light" = "Blanc";
 "Support" = "Soutien";
 "Visit appdb forum" = "Visiter les forums appdb";
@@ -238,6 +256,10 @@
 "Device" = "Dispositif";
 "Authorize App" = "Autoriser l'App";
 "Authorize app with link code from appdb website and enjoy unlimited app installs!" = "Autorisez l'application avec le code de lien du site Web appdb et profitez d'installations d'application illimitées!";
+"PLUS Status" = "Statut PLUS";
+"Signing" = "Signature";
+"Choose Enterprise Certificate" = "Choisir le certificat Enterprise";
+"%@ signs left until %@" = "%@ signatures restantes jusqu'au %@";
 "PRO Status" = "Statut PRO";
 "Use this code if you want to link new devices to appdb. Press and hold the cell to copy it, or tap it to generate a new one." = "Utilisez ce code si vous souhaitez lier de nouveaux périphériques à appdb. Maintenez la cellule enfoncée pour la copier ou appuyez dessus pour en générer une nouvelle.";
 "Device Status" = "Statut du périphérique";
@@ -292,6 +314,11 @@
 "Force Disable PRO" = "Forcer la désactivation de PRO";
 "For Psychic Paper exploit" = "Pour l'exploit Psychic Paper";
 "Clear Cache" = "Vider le cache";
+"Are you sure you want to clear the cache?" = "Voulez-vous vraiment vider le cache ?";
+"Cached IPAs" = "IPAs en cache";
+"IPA cache status for current device" = "État du cache IPA pour cet appareil";
+"The cached IPA was deleted successfully" = "L'IPA en cache a été supprimé avec succès";
+"appdb saves all installed IPA files for your device to cache, so you can easily restore all your apps after device reset or revocation. Cache is stored per device, and will be deleted if you will unlink your device. If you restored your device and missing appdb profile, you can visit device status page and tap \"Update profile\" button to install it, or link device via email by tapping \"Just link new device\" in message from appdb.\n\nNote: IPA files does not contain app data, if you want to keep your app data, backup device via Finder or iTunes, Remove revoked apps, Install apps from cache and then restore backup from Finder or iTunes." = "appdb enregistre tous les IPA installés en cache pour votre appareil afin que vous puissiez restaurer vos applications après une réinitialisation ou une révocation. Le cache est stocké par appareil et sera supprimé si vous dissociez votre appareil. Si vous avez réinitialisé votre appareil et que le profil appdb manque, allez dans État du périphérique et appuyez sur \"Mettre à jour le profil\" ou associez par e-mail en appuyant sur \"Associer un nouvel appareil\" dans le message appdb.\n\nNote : les IPA ne contiennent pas les données des applications ; pour les conserver, faites une sauvegarde via Finder ou iTunes, supprimez les applications révoquées, installez depuis le cache puis restaurez la sauvegarde.";
 "Are you sure you want to clear app cache?\n\nNOTE: This will not deauthorize the app, and your device will still be linked to appdb." = "Voulez-vous vraiment vider le cache de l'application?\n\nNOTE: Cela ne désautorisera pas l'application et votre appareil sera toujours lié à appdb.";
 "Cache cleared successfully!" = "Cache effacé avec succès!";
 "Failed to clear cache: %@." = "Échec de la suppression du cache: %@.";
@@ -309,6 +336,39 @@
 "Reinstall everything" = "Tout réinstaller";
 "Clear IPA cache" = "Effacer le cache IPA";
 "Re-validate IPA cache" = "Re-valider le cache IPA";
+
+/////////////////////
+//       PLUS      //
+/////////////////////
+"Most Reliable Signing Certificate + Service guarantee for 1 year + Instant Activation!" = "Certificat de signature le plus fiable + garantie 1 an + activation instantanée !";
+"Guaranteed 1 year signing certificates" = "Certificats de signature garantis 1 an";
+"Public Free Enterprise Certificates (frequent revokes and device blacklists)" = "Certificats Enterprise gratuits (révocations fréquentes et listes noires)";
+"Available PLUS subscriptions" = "Abonnements PLUS disponibles";
+"Purchase PLUS" = "Acheter PLUS";
+"Pay by" = "Payer par";
+"excl. VAT" = "HT";
+"What is appdb PLUS?" = "Qu'est-ce qu'appdb PLUS ?";
+"appdb PLUS allows you to use appdb on non-jailbroken device or Apple Silicon Mac with your own developer account and sign apps in the cloud without any limitations\n\nPLUS is activated per device, separately for each of your devices\n\nWe use this money to pay for servers, traffic, and support the community\n\nPLUS is not transferable between devices, you can cancel it at any time, or we will notify your about existing subscription for unlinked device, so you can cancel it if you sold your device\n\nPLUS is not compatible with corporate-owned devices with MDM. Please use appdb on your personal devices" = "appdb PLUS permet d'utiliser appdb sur appareil non jailbreaké ou Mac Apple Silicon avec votre compte développeur et de signer des apps dans le cloud sans limite.\n\nPLUS est activé par appareil.\n\nNous utilisons ces revenus pour les serveurs, le trafic et la communauté.\n\nPLUS n'est pas transférable ; vous pouvez l'annuler à tout moment ; nous vous notifierons en cas d'appareil dissocié pour annuler si vous avez vendu l'appareil.\n\nPLUS n'est pas compatible avec les appareils d'entreprise sous MDM. Utilisez appdb sur vos appareils personnels.";
+
+/////////////////////
+//     ALTSTORE    //
+/////////////////////
+"AltStore Repos" = "Dépôts AltStore";
+"Please enter repository URL" = "Veuillez entrer l'URL du dépôt";
+"Repository URL" = "URL du dépôt";
+"Add repo" = "Ajouter un dépôt";
+"%@ Apps" = "%@ applications";
+"Search Apps" = "Rechercher des applications";
+"No repos found" = "Aucun dépôt trouvé";
+"The repository was deleted successfully" = "Le dépôt a été supprimé avec succès";
+
+/////////////////////
+//      DYLIBS     //
+/////////////////////
+"My Dylibs, Frameworks and Debs" = "Mes Dylibs, Frameworks et Debs";
+"No dylibs found" = "Aucun dylib trouvé";
+"The dylib was deleted successfully" = "Le dylib a été supprimé avec succès";
+"Here you can upload or import dynamic libraries, frameworks or debian packages or ZIP archives with tweaks to inject into apps that you are installing via appdb. Uploading or importing of any file will enable “Ask for Installation Options” feature for current device, so you can choose what tweaks you want to include in the app. You can disable this option later on device features configuration page.\n\nPlease note that not all packages, dylibs or frameworks that were built for jailbroken devices will work on your non-jailbroken devices." = "Ici vous pouvez envoyer ou importer des bibliothèques dynamiques, frameworks ou paquets deb ou archives ZIP avec des tweaks à injecter dans les apps installées via appdb. L'envoi ou l'import de tout fichier activera « Demander les options d'installation » pour cet appareil. Vous pourrez désactiver cette option dans la configuration de l'appareil.\n\nNote : tous les paquets, dylibs ou frameworks conçus pour appareils jailbreakés ne fonctionnent pas sur les appareils non jailbreakés.";
 
 /////////////////////
 //     UPDATES     //
@@ -376,6 +436,7 @@
 "Invalid voucher." = "Coupon invalide.";
 "Voucher already used." = "Bon déjà utilisé.";
 "No devices with this email." = "Aucun appareil avec cet email.";
+"We've got reports reg. this link: \"%@\"" = "Nous avons des signalements pour ce lien : \"%@\"";
 
 ////////////////////////////
 //     LINK REPORTING     //
@@ -398,6 +459,9 @@
 "appdb team" = "équipe appdb";
 "Icon and banner designer" = "Concepteur d'icônes et de bannières";
 "View project on GitHub" = "Voir le projet sur GitHub";
+"Original Developer" = "Développeur original";
+"Current Maintainer" = "Mainteneur actuel";
+"Previous Maintainer" = "Ancien mainteneur";
 
 /////////////////////////////////////////
 //     WISHES / AUTOMATIC REQUESTS     //
@@ -435,3 +499,18 @@
 "%@h ago" = "%@h depuis"; // hours, e.g. 6h ago
 "%@d ago" = "%@d depuis"; // days, e.g. 3d ago
 "now" = "maintenant";
+
+///////////////////
+//     ICONS     //
+///////////////////
+"Main (by aesign)" = "Principal (par aesign)";
+"Dark (by stayxnegative)" = "Sombre (par stayxnegative)";
+"Green" = "Vert";
+"Purple" = "Violet";
+"Yellow" = "Jaune";
+"Pink" = "Rose";
+"Red" = "Rouge";
+"Aqua" = "Bleu aqua";
+"Black" = "Noir";
+"Alternate icons seem to not work on this device" = "Les icônes alternatives ne semblent pas fonctionner sur cet appareil";
+"App icon was set to '%@'" = "L'icône de l'app a été définie sur '%@'";

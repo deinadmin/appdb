@@ -35,12 +35,16 @@ class TabBarController: UITabBarController {
             UINavigationController(rootViewController: Search())
         })
 
-        let libraryTab = UITab(title: "Library".localized(), image: UIImage(systemName: "books.vertical.fill"), identifier: "library") { _ in
+        let libraryTab = UITab(title: "My Apps".localized(), image: UIImage(systemName: "square.grid.2x2.fill"), identifier: "library") { _ in
             UINavigationController(rootViewController: MyLibraryHostingController())
         }
 
         let settingsTab = UITab(title: "Settings".localized(), image: UIImage(named: "settings"), identifier: "settings") { _ in
-            UINavigationController(rootViewController: Settings())
+            if #available(iOS 15.0, *) {
+                UINavigationController(rootViewController: SettingsHostingController())
+            } else {
+                UINavigationController(rootViewController: Settings())
+            }
         }
 
         tabs = [homeTab, searchTab, libraryTab, settingsTab]

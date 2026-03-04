@@ -36,8 +36,6 @@ class IPACache: LoadingTableView {
         tableView.rowHeight = UITableView.automaticDimension
 
         tableView.theme_separatorColor = Color.borderColor
-        tableView.theme_backgroundColor = Color.tableViewBackgroundColor
-        view.theme_backgroundColor = Color.tableViewBackgroundColor
 
         animated = false
         showsErrorButton = false

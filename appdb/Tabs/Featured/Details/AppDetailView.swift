@@ -29,6 +29,8 @@ struct AppDetailView: SwiftUI.View {
     var state: AppDetailState
 
     var onInstall: () -> Void = {}
+    var isLoggedIn: Bool = true
+    var onPresentLogin: () -> Void = {}
     var onShare: () -> Void = {}
     var onDismiss: () -> Void = {}
     var onRelatedTap: (String) -> Void = { _ in }
@@ -42,6 +44,8 @@ struct AppDetailView: SwiftUI.View {
 
     @State private var descExpanded = false
     @State private var changelogExpanded = false
+    @State private var descCanExpand = false
+    @State private var changelogCanExpand = false
     @State private var showNavTitle = false
 
     var body: some SwiftUI.View {
@@ -54,57 +58,80 @@ struct AppDetailView: SwiftUI.View {
                 detailScrollView(content)
             }
         }
+        .navigationTitle(state.content?.itemName ?? "")
+        .navigationSubtitle("") // Keep it empty to minimize vertical space but maintain leading alignment
         .toolbar { toolbarContent }
+        .toolbarBackground(.hidden, for: .navigationBar)
     }
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         if let content = state.content {
             ToolbarItem(placement: .principal) {
-                VStack(spacing: 1) {
-                    Text(content.itemName)
-                        .font(.headline)
-                        .lineLimit(1)
-                    Text(content.itemSeller)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                HStack(spacing: 8) {
+                    AsyncImage(url: URL(string: content.itemIconUrl)) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image.resizable().aspectRatio(contentMode: .fill)
+                        default:
+                            SColor(.systemGray5)
+                        }
+                    }
+                    .frame(width: 28, height: 28)
+                    .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(content.itemName)
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                        Text(content.itemSeller.isEmpty ? "Unknown Developer" : content.itemSeller)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                    }
+                    Spacer()
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 0)
+                .offset(y: 1) // Tiny pull down to visually center in the taller nav bar
                 .opacity(showNavTitle ? 1 : 0)
                 .animation(.easeInOut(duration: 0.25), value: showNavTitle)
             }
+        }
 
-            if Global.isIpad {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Dismiss".localized()) { onDismiss() }
-                }
+        if Global.isIpad {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Dismiss".localized()) { onDismiss() }
             }
+        }
 
-            ToolbarItem(placement: .confirmationAction) {
-                Button {
-                    if !state.isInstalling { onInstall() }
-                } label: {
-                    ZStack {
-                        Text("Install".localized())
-                            .opacity(state.isInstalling ? 0 : 1)
-                        ProgressView()
-                            .controlSize(.small)
-                            .opacity(state.isInstalling ? 1 : 0)
+        ToolbarItem(placement: .confirmationAction) {
+            Group {
+                if isLoggedIn {
+                    Button {
+                        if !state.isInstalling { onInstall() }
+                    } label: {
+                        ZStack {
+                            Text("Get".localized())
+                                .opacity(state.isInstalling ? 0 : 1)
+                            ProgressView()
+                                .controlSize(.small)
+                                .opacity(state.isInstalling ? 1 : 0)
+                        }
+                        .animation(.easeInOut(duration: 0.3), value: state.isInstalling)
                     }
-                    .animation(.easeInOut(duration: 0.3), value: state.isInstalling)
+                    .buttonStyle(.glassProminent)
+                } else {
+                    Button("Login to install".localized()) {
+                        onPresentLogin()
+                    }
+                    .buttonStyle(.glassProminent)
+                    .tint(SColor.accentColor)
                 }
-                .buttonStyle(.glassProminent)
             }
-
-            if state.contentType != .altstore {
-                ToolbarSpacer(.flexible)
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Share", systemImage: "square.and.arrow.up") { onShare() }
-                }
-                
-            }
-
-            
         }
     }
 
@@ -192,11 +219,6 @@ struct AppDetailView: SwiftUI.View {
                     informationSection(infoRows)
                 }
 
-                if hasDownloadStats(content) {
-                    sectionDivider
-                    downloadStatsSection(content)
-                }
-
                 if state.versionsAvailable {
                     sectionDivider
                     previousVersionsRow
@@ -250,7 +272,7 @@ struct AppDetailView: SwiftUI.View {
                         } label: {
                             Text(app.seller)
                                 .font(.subheadline)
-                                .foregroundStyle(.blue)
+                                .foregroundStyle(SColor.accentColor)
                         }
                         .buttonStyle(.plain)
                     } else if let cydiaApp = content as? CydiaApp, !cydiaApp.developer.isEmpty {
@@ -259,7 +281,7 @@ struct AppDetailView: SwiftUI.View {
                         } label: {
                             Text(cydiaApp.developer)
                                 .font(.subheadline)
-                                .foregroundStyle(.blue)
+                                .foregroundStyle(SColor.accentColor)
                         }
                         .buttonStyle(.plain)
                     } else {
@@ -267,6 +289,10 @@ struct AppDetailView: SwiftUI.View {
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
+                } else {
+                    Text("Unknown Developer".localized())
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
                 }
 
                 if let altApp = content as? AltStoreApp, !altApp.subtitle.isEmpty {
@@ -294,12 +320,6 @@ struct AppDetailView: SwiftUI.View {
             if let app = content as? App,
                app.screenshotsIphone.isEmpty, !app.screenshotsIpad.isEmpty {
                 badgeLabel("iPad only".localized())
-            }
-            if let cydia = content as? CydiaApp {
-                let cat = !cydia.categoryName.isEmpty ? cydia.categoryName : API.categoryFromId(id: cydia.categoryId.description, type: .cydia)
-                if !cat.isEmpty {
-                    badgeLabel(cat)
-                }
             }
         }
         .padding(.top, 2)
@@ -370,11 +390,15 @@ struct AppDetailView: SwiftUI.View {
                 .foregroundStyle(.secondary)
                 .textCase(.uppercase)
 
-            if let icon = pill.icon {
+            if !pill.icons.isEmpty {
                 VStack(spacing: 2) {
-                    Image(systemName: icon)
-                        .font(.title3)
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 4) {
+                        ForEach(pill.icons, id: \.self) { icon in
+                            Image(systemName: icon)
+                                .font(.title3)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                     if !pill.value.isEmpty {
                         Text(pill.value)
                             .font(.system(size: 11, weight: .medium))
@@ -390,8 +414,9 @@ struct AppDetailView: SwiftUI.View {
 
             if let footer = pill.footer {
                 Text(footer)
-                    .font(.system(size: 10))
-                    .foregroundStyle(.tertiary)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
         }
         .padding(.horizontal, 8)
@@ -458,6 +483,7 @@ struct AppDetailView: SwiftUI.View {
                     }
                 }
                 .padding(.horizontal, 20)
+                .scrollTargetLayout()
             }
             .scrollTargetBehavior(.viewAligned)
         }
@@ -490,13 +516,34 @@ struct AppDetailView: SwiftUI.View {
                 .font(.subheadline)
                 .foregroundStyle(.primary)
                 .lineLimit(changelogExpanded ? nil : 3)
+                .background(
+                    GeometryReader { proxy in
+                        SColor.clear.onAppear {
+                            // Measure in the background
+                        }
+                        .overlay(
+                            Text(content.itemChangelog.decoded)
+                                .font(.subheadline)
+                                .lineLimit(nil)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(width: proxy.size.width, alignment: .leading)
+                                .background(GeometryReader { full in
+                                    SColor.clear.onAppear {
+                                        changelogCanExpand = full.size.height > proxy.size.height + 2
+                                    }
+                                })
+                        )
+                    }
+                    .opacity(0)
+                )
 
-            if !changelogExpanded {
+            if !changelogExpanded && changelogCanExpand {
                 Button("more".localized()) {
                     withAnimation(.easeInOut(duration: 0.25)) { changelogExpanded = true }
                 }
                 .font(.subheadline)
                 .fontWeight(.medium)
+                .foregroundStyle(SColor.accentColor)
             }
         }
         .padding(.horizontal, 20)
@@ -515,13 +562,34 @@ struct AppDetailView: SwiftUI.View {
                 .font(.subheadline)
                 .foregroundStyle(.primary)
                 .lineLimit(descExpanded ? nil : 3)
+                .background(
+                    GeometryReader { proxy in
+                        SColor.clear.onAppear {
+                            // Measure in the background
+                        }
+                        .overlay(
+                            Text(content.itemDescription.decoded)
+                                .font(.subheadline)
+                                .lineLimit(nil)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(width: proxy.size.width, alignment: .leading)
+                                .background(GeometryReader { full in
+                                    SColor.clear.onAppear {
+                                        descCanExpand = full.size.height > proxy.size.height + 2
+                                    }
+                                })
+                        )
+                    }
+                    .opacity(0)
+                )
 
-            if !descExpanded {
+            if !descExpanded && descCanExpand {
                 Button("more".localized()) {
                     withAnimation(.easeInOut(duration: 0.25)) { descExpanded = true }
                 }
                 .font(.subheadline)
                 .fontWeight(.medium)
+                .foregroundStyle(SColor.accentColor)
             }
         }
         .padding(.horizontal, 20)
@@ -610,30 +678,7 @@ struct AppDetailView: SwiftUI.View {
         .padding(.vertical, 14)
     }
 
-    // MARK: - Download Stats
-
-    private func downloadStatsSection(_ content: Item) -> some SwiftUI.View {
-        let line1: String = content.downloadsDay + " " + "today".localized()
-            + " · " + content.downloadsWeek + " " + "this week".localized()
-            + " · " + content.downloadsMonth + " " + "this month".localized()
-        let line2: String = content.downloadsYear + " " + "this year".localized()
-            + " · " + content.downloadsAll + " " + "total".localized()
-
-        return VStack(alignment: .leading, spacing: 6) {
-            Text("Downloads".localized())
-                .font(.title3)
-                .fontWeight(.bold)
-
-            Text(line1)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            Text(line2)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-        }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 14)
-    }
+    // MARK: - Previous Versions
 
     // MARK: - Previous Versions
 
@@ -758,7 +803,7 @@ struct AppDetailView: SwiftUI.View {
             HStack {
                 Text(title)
                     .font(.subheadline)
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(SColor.accentColor)
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.caption)
@@ -776,18 +821,19 @@ struct AppDetailView: SwiftUI.View {
     private func publisherSection(_ content: Item) -> some SwiftUI.View {
         let publisher: String = {
             if let app = content as? App, !app.publisher.isEmpty { return app.publisher }
-            if let cydia = content as? CydiaApp { return "© " + cydia.developer }
+            if let cydia = content as? CydiaApp { return cydia.developer.isEmpty ? "" : "© " + cydia.developer }
             if let book = content as? Book {
-                return !book.publisher.isEmpty ? book.publisher : "© " + book.author
+                if !book.publisher.isEmpty { return book.publisher }
+                return book.author.isEmpty ? "" : "© " + book.author
             }
-            if let alt = content as? AltStoreApp { return "© " + alt.developer }
+            if let alt = content as? AltStoreApp { return alt.developer.isEmpty ? "" : "© " + alt.developer }
             return ""
         }()
 
         if !publisher.isEmpty {
             Text(publisher)
                 .font(.caption)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(SColor.accentColor)
                 .padding(.horizontal, 20)
                 .padding(.top, 12)
                 .padding(.bottom, 4)
@@ -820,9 +866,6 @@ struct AppDetailView: SwiftUI.View {
         return "star"
     }
 
-    private func hasDownloadStats(_ content: Item) -> Bool {
-        content is App || content is CydiaApp || content is Book
-    }
 
     // MARK: - Info Pills Builder
 
@@ -833,38 +876,81 @@ struct AppDetailView: SwiftUI.View {
             pills.append(InfoPillData(
                 header: content.itemRating + " " + "Ratings".localized(),
                 value: String(format: "%.1f", content.itemNumberOfStars),
-                icon: nil,
+                icons: [],
                 footer: nil,
                 isCategory: false
             ))
         }
 
         if !content.itemRated.isEmpty {
-            pills.append(InfoPillData(header: "Age".localized(), value: content.itemRated, icon: nil, footer: nil, isCategory: false))
+            pills.append(InfoPillData(header: "Age".localized(), value: content.itemRated, icons: [], footer: nil, isCategory: false))
         }
 
-        if !content.itemCategoryName.isEmpty {
+        if let altApp = content as? AltStoreApp {
+            pills.append(InfoPillData(
+                header: "Category".localized(),
+                value: "Repositories".localized(),
+                icons: ["list.bullet.below.rectangle"],
+                footer: nil,
+                isCategory: false
+            ))
+        } else if !content.itemCategoryName.isEmpty {
             let icon = categoryIconName(for: content.itemCategoryName)
-            pills.append(InfoPillData(header: "Category".localized(), value: content.itemCategoryName, icon: icon, footer: nil, isCategory: true))
+            pills.append(InfoPillData(header: "Category".localized(), value: content.itemCategoryName, icons: icon != nil ? [icon!] : [], footer: nil, isCategory: true))
         }
 
-        if !content.itemSize.isEmpty {
-            pills.append(InfoPillData(header: "Size".localized(), value: content.itemSize, icon: nil, footer: nil, isCategory: false))
+        let size = validateSize(content.itemSize)
+        if !size.isEmpty {
+            let storage = Global.deviceTotalStorage
+            let footer = !storage.isEmpty ? "of ".localized() + storage : nil
+            pills.append(InfoPillData(header: "Size".localized(), value: size, icons: [], footer: footer, isCategory: false))
         }
 
-        if !content.itemCompatibility.isEmpty {
-            pills.append(InfoPillData(header: "Compatibility".localized(), value: "", icon: "iphone", footer: content.itemCompatibility, isCategory: false))
+        let rawCompatibility = content.itemCompatibility
+        var compatIcons: [String] = []
+        var filteredCompatibility = ""
+
+        if rawCompatibility.isEmpty {
+            compatIcons = ["ipad.and.iphone"]
+            filteredCompatibility = "iPhone, iPad"
+        } else {
+            let compat = rawCompatibility.lowercased()
+            let hasIphone = compat.contains("iphone") || compat.contains("ios")
+            let hasIpad = compat.contains("ipad")
+
+            if hasIphone && hasIpad {
+                compatIcons.append("ipad.and.iphone")
+            } else if hasIphone {
+                compatIcons.append("iphone")
+            } else if hasIpad {
+                compatIcons.append("ipad")
+            }
+
+            if !compatIcons.isEmpty {
+                filteredCompatibility = rawCompatibility.components(separatedBy: ", ").filter { part in
+                    let p = part.lowercased()
+                    return p.contains("iphone") || p.contains("ios") || p.contains("ipad")
+                }.joined(separator: ", ")
+                
+                if filteredCompatibility.isEmpty {
+                    filteredCompatibility = "iPhone, iPad"
+                }
+            }
+        }
+
+        if !compatIcons.isEmpty {
+            pills.append(InfoPillData(header: "Compatibility".localized(), value: "", icons: compatIcons, footer: filteredCompatibility, isCategory: false))
         }
 
         if !content.itemPrice.isEmpty {
-            pills.append(InfoPillData(header: "Price".localized(), value: content.itemPrice, icon: nil, footer: nil, isCategory: false))
+            pills.append(InfoPillData(header: "Price".localized(), value: content.itemPrice, icons: [], footer: nil, isCategory: false))
         }
 
         if !content.itemLanguages.isEmpty {
             let firstLang = content.itemLanguages.components(separatedBy: ", ").first ?? content.itemLanguages
             let count = content.itemLanguages.components(separatedBy: ", ").count
             let footer = count > 1 ? "+ \(count - 1) " + "More".localized() : nil
-            pills.append(InfoPillData(header: "Language".localized(), value: firstLang, icon: nil, footer: footer, isCategory: false))
+            pills.append(InfoPillData(header: "Language".localized(), value: firstLang, icons: [], footer: footer, isCategory: false))
         }
 
         return pills
@@ -884,7 +970,7 @@ struct AppDetailView: SwiftUI.View {
                 rows.append(("Price", app.price))
                 rows.append(("Updated", app.published))
                 rows.append(("Version", app.version))
-                rows.append(("Size", app.size))
+                rows.append(("Size", validateSize(app.size)))
                 rows.append(("Rating", app.rated))
                 rows.append(("Compatibility", app.compatibility))
                 rows.append(("Languages", app.languages))
@@ -897,7 +983,7 @@ struct AppDetailView: SwiftUI.View {
                 rows.append(("Price", app.price))
                 rows.append(("Updated", content.itemUpdatedDate))
                 rows.append(("Version", app.version))
-                rows.append(("Size", app.size))
+                rows.append(("Size", validateSize(app.size)))
                 rows.append(("Compatibility", app.compatibility))
             }
         case .books:
@@ -912,8 +998,9 @@ struct AppDetailView: SwiftUI.View {
         case .altstore:
             if let app = content as? AltStoreApp {
                 rows.append(("Developer", app.developer))
+                rows.append(("Category", "Repositories".localized()))
                 rows.append(("Bundle ID", app.bundleId))
-                rows.append(("Size", app.formattedSize))
+                rows.append(("Size", validateSize(app.formattedSize)))
                 rows.append(("Updated", app.updated))
                 rows.append(("Version", app.version))
             }
@@ -984,6 +1071,21 @@ struct AppDetailView: SwiftUI.View {
             return "square.grid.2x2"
         }
     }
+
+    private func validateSize(_ size: String) -> String {
+        let trimmed = size.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty { return "Unknown".localized() }
+
+        // Check for "0" variants like "0 KB", "0.0 MB", "0 bytes"
+        if trimmed.hasPrefix("0") {
+            let components = trimmed.components(separatedBy: .whitespaces)
+            if let first = components.first, let value = Double(first), value == 0 {
+                return "Unknown".localized()
+            }
+        }
+
+        return trimmed
+    }
 }
 
 // MARK: - Info Pill Data
@@ -991,7 +1093,7 @@ struct AppDetailView: SwiftUI.View {
 private struct InfoPillData {
     let header: String
     let value: String
-    let icon: String?
+    let icons: [String]
     let footer: String?
     let isCategory: Bool
 }

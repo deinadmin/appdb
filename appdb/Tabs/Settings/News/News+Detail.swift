@@ -48,7 +48,6 @@ class NewsDetail: LoadingTableView {
         tableView.tableFooterView = UIView()
 
         // UI
-        tableView.theme_backgroundColor = Color.veryVeryLightGray
 
         tableView.separatorStyle = .none
 

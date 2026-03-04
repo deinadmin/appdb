@@ -37,7 +37,7 @@ struct QueueAccessoryView: SwiftUI.View {
 
     @ViewBuilder
     private func accessoryContent(for app: RequestedApp) -> some SwiftUI.View {
-        HStack(spacing: 12) {
+        HStack {
             // App icon
             AsyncImage(url: URL(string: app.image)) { phase in
                 switch phase {
@@ -80,7 +80,8 @@ struct QueueAccessoryView: SwiftUI.View {
 
             Spacer(minLength: 0)
 
-            // Trailing: progress spinner or install button
+            // Trailing: progress spinner or install button (small control height)
+            let trailingControlHeight: CGFloat = 28
             if app.isReadyToInstall {
                 Button {
                     viewModel.install(app)
@@ -93,20 +94,25 @@ struct QueueAccessoryView: SwiftUI.View {
                 .buttonBorderShape(.capsule)
                 .controlSize(.small)
                 .tint(.accentColor)
+                .frame(height: trailingControlHeight)
+                .padding(.trailing, viewModel.apps.count > 1 ? 0 : 2)
             } else {
                 ProgressView()
                     .controlSize(.small)
-                    .padding(.trailing, 4)
+                    .frame(height: trailingControlHeight)
+                    .padding(.trailing, viewModel.apps.count > 1 ? 0 : 6)
             }
 
-            // Chevron indicating the sheet can be opened
-            Image(systemName: "chevron.up.circle.fill")
-                .symbolRenderingMode(.hierarchical)
-                .foregroundStyle(.secondary)
-                .font(.body)
+            if viewModel.apps.count > 1 {
+                // Chevron: same height/size as install button, no right padding
+                Image(systemName: "chevron.up.circle.fill")
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundStyle(.secondary)
+                    .font(.system(size: 26))
+                    .frame(width: trailingControlHeight, height: trailingControlHeight)
+            }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
+        .padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 8))
     }
 
     private var iconPlaceholder: some SwiftUI.View {

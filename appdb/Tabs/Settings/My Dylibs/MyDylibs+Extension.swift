@@ -22,7 +22,6 @@ extension MyDylibs {
     func setUp() {
 
         tableView.tableFooterView = UIView()
-        tableView.theme_backgroundColor = Color.tableViewBackgroundColor
         tableView.theme_separatorColor = Color.borderColor
 
         tableView.cellLayoutMarginsFollowReadableWidth = true

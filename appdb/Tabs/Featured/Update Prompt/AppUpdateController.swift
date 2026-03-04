@@ -177,7 +177,6 @@ class AppUpdateController: UITableViewController {
 
                 if installResult.installationType == .itmsServices {
                     setButtonTitle("Signing...")
-                    Messages.shared.showSuccess(message: "App is being signed, please wait...".localized())
                 } else {
                     setButtonTitle("Requested")
                     Messages.shared.showSuccess(message: "Installation has been queued to your device".localized())

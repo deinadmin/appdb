@@ -105,6 +105,7 @@ Copyright © 2017 ned. All rights reserved.
 "Duplicate app" = "تطبيق مكرر";
 "New ID" = "معرف جديد";
 "New display name" = "آسم جديد";
+"Select Dylibs, Frameworks or Debs" = "اختر Dylibs أو Frameworks أو Debs";
 "Use Original" = "آستخدم الآصلي";
 "Cracked by %@" = "مكرك بواسطة %@";
 "Uploaded by %@" = "رفع بواسطة %@";
@@ -118,6 +119,13 @@ Copyright © 2017 ned. All rights reserved.
 "Any Price" = "اي سعر";
 "Paid" = "دفع";
 "Waiting %@ seconds..." = "في انتظار %@ ثانية ...";
+
+// Download stats
+"%@ today" = "%@ اليوم";
+"%@ this week" = "%@ هذا الأسبوع";
+"%@ this month" = "%@ هذا الشهر";
+"%@ this year" = "%@ هذا العام";
+"%@ total" = "%@ الإجمالي";
 
 //////////////////////////////////
 // DEVICE LINK TUTORIAL //
@@ -173,6 +181,7 @@ Copyright © 2017 ned. All rights reserved.
 
 "Queued" = "في قائمة الانتظار";
 "Library" = "مكتبة";
+"My Apps" = "تطبيقاتي";
 "Downloading" = "جارى التحميل";
 "No queued downloads" = "لا توجد تنزيلات في قائمة الانتظار";
 "File download has started" = "تم بدأ تنزيل الملف";
@@ -223,12 +232,21 @@ Copyright © 2017 ned. All rights reserved.
 "Compatibility Checks" = "التحقق من التوافق";
 "Ask for installation options" = "طلب خيارات التثبيت";
 "Deauthorize" = "إلغاء المصادقة";
+"Log out" = "تسجيل الخروج";
+"Sign in to AppDB" = "تسجيل الدخول إلى AppDB";
+"To use this feature, you need to login to AppDB!" = "لاستخدام هذه الميزة، تحتاج لتسجيل الدخول إلى AppDB!";
+"Login with AppDB" = "تسجيل الدخول مع AppDB";
+"Login to install" = "تسجيل الدخول للتثبيت";
+"Are you sure you want to log out?" = "هل أنت متأكد أنك تريد تسجيل الخروج؟";
 "User Interface" = "واجهة المستخدم";
 "Choose Theme" = "اختيار المظهر";
+"Theme changed. The app needs to be restarted to apply the new appearance." = "تم تغيير المظهر. يجب إعادة تشغيل التطبيق لتطبيق المظهر الجديد.";
+"Close App" = "إغلاق التطبيق";
 "Choose Language" = "اختيار اللغة";
 "Language set, please restart the app to apply changes" = "تم تعيين اللغة ، يرجى إعادة تشغيل التطبيق لتطبيق التغييرات";
 "Dark" = "داكن";
 "Darker" = "أغمق";
+"System" = "النظام";
 "Light" = "مضيء";
 "Support" = "الدعم";
 "Visit appdb forum" = "زيارة منتدى appdb";
@@ -238,6 +256,10 @@ Copyright © 2017 ned. All rights reserved.
 "Device" = "الجهاز";
 "Authorize App" = "تفويض ربط الجهاز";
 "Authorize app with link code from appdb website and enjoy unlimited app installs!" = "قم بتفويض التطبيق برمز الارتباط من موقع appdb والتمتع بتثبيت غير محدود للتطبيق!";
+"PLUS Status" = "حالة PLUS";
+"Signing" = "التوقيع";
+"Choose Enterprise Certificate" = "اختر شهادة Enterprise";
+"%@ signs left until %@" = "%@ توقيعات متبقية حتى %@";
 "PRO Status" = "حالة الاشتراك";
 "Use this code if you want to link new devices to appdb. Press and hold the cell to copy it, or tap it to generate a new one." = "استخدم هذا الرمز إذا كنت تريد ربط أجهزة جديدة ب appdb. اضغط مع الاستمرار على الحزمة لنسخها ، أو انقر عليها لإنشاء حزمة جديدة.";
 "Device Status" = "حالة الجهاز";
@@ -292,8 +314,12 @@ Copyright © 2017 ned. All rights reserved.
 "Force Disable PRO" = "قوة تعطيل PRO";
 "For Psychic Paper exploit" = "لاستغلال الورق النفسي";
 "Clear Cache" = "مسح ذاكرة التخزين المؤقت";
-"Are you sure you want to clear app cache?\n\nNOTE: This will not deauthorize the app, and your device will still be linked to appdb." = "هل أنت متأكد أنك تريد مسح ذاكرة التخزين المؤقت للتطبيق؟
-\n\nملاحظة: لن يؤدي هذا إلى إلغاء ترخيص التطبيق ، وسيظل جهازك مرتبطًا بـ appdb.";
+"Are you sure you want to clear the cache?" = "هل أنت متأكد أنك تريد مسح ذاكرة التخزين المؤقت؟";
+"Cached IPAs" = "ملفات IPA في الذاكرة المؤقتة";
+"IPA cache status for current device" = "حالة ذاكرة التخزين المؤقت لملفات IPA لهذا الجهاز";
+"The cached IPA was deleted successfully" = "تم حذف ملف IPA من الذاكرة المؤقتة بنجاح";
+"appdb saves all installed IPA files for your device to cache, so you can easily restore all your apps after device reset or revocation. Cache is stored per device, and will be deleted if you will unlink your device. If you restored your device and missing appdb profile, you can visit device status page and tap \"Update profile\" button to install it, or link device via email by tapping \"Just link new device\" in message from appdb.\n\nNote: IPA files does not contain app data, if you want to keep your app data, backup device via Finder or iTunes, Remove revoked apps, Install apps from cache and then restore backup from Finder or iTunes." = "يحفظ appdb جميع ملفات IPA المثبتة لجهازك في الذاكرة المؤقتة، حتى تتمكن من استعادة تطبيقاتك بسهولة بعد إعادة تعيين الجهاز أو إبطال الشهادة. يتم تخزين الذاكرة المؤقتة لكل جهاز، وسيتم حذفها إذا ألغيت ربط جهازك. إذا أعدت ضبط جهازك وكان ملف تعريف appdb مفقوداً، يمكنك زيارة صفحة حالة الجهاز والضغط على \"تحديث الملف الشخصي\" أو ربط الجهاز عبر البريد بالضغط على \"ربط جهاز جديد فقط\" في رسالة من appdb.\n\nملاحظة: ملفات IPA لا تحتوي على بيانات التطبيق؛ لحفظ بياناتك قم بعمل نسخة احتياطية عبر Finder أو iTunes، ثم احذف التطبيقات الملغاة، ثبّت التطبيقات من الذاكرة المؤقتة ثم استعد النسخة الاحتياطية.";
+"Are you sure you want to clear app cache?\n\nNOTE: This will not deauthorize the app, and your device will still be linked to appdb." = "هل أنت متأكد أنك تريد مسح ذاكرة التخزين المؤقت للتطبيق؟\n\nملاحظة: لن يؤدي هذا إلى إلغاء ترخيص التطبيق ، وسيظل جهازك مرتبطًا بـ appdb.";
 "Cache cleared successfully!" = "تم مسح ذاكرة التخزين المؤقت بنجاح!";
 "Failed to clear cache: %@." = "فشل مسح ذاكرة التخزين المؤقت: %@.";
 "Enable Game Trainer" = "تمكين مدرب اللعبة";
@@ -310,6 +336,39 @@ Copyright © 2017 ned. All rights reserved.
 "Reinstall everything" = "أعد تثبيت كل شيء";
 "Clear IPA cache" = "مسح ذاكرة التخزين المؤقت IPA";
 "Re-validate IPA cache" = "إعادة التحقق من صحة ذاكرة التخزين المؤقت IPA";
+
+/////////////////////
+//       PLUS      //
+/////////////////////
+"Most Reliable Signing Certificate + Service guarantee for 1 year + Instant Activation!" = "أكثر شهادة توقيع موثوقة + ضمان خدمة لسنة واحدة + تفعيل فوري!";
+"Guaranteed 1 year signing certificates" = "شهادات توقيع مضمونة لسنة واحدة";
+"Public Free Enterprise Certificates (frequent revokes and device blacklists)" = "شهادات Enterprise عامة مجانية (إبطال متكرر وقوائم سوداء للأجهزة)";
+"Available PLUS subscriptions" = "اشتراكات PLUS المتاحة";
+"Purchase PLUS" = "شراء PLUS";
+"Pay by" = "الدفع عبر";
+"excl. VAT" = "بدون ضريبة القيمة المضافة";
+"What is appdb PLUS?" = "ما هو appdb PLUS؟";
+"appdb PLUS allows you to use appdb on non-jailbroken device or Apple Silicon Mac with your own developer account and sign apps in the cloud without any limitations\n\nPLUS is activated per device, separately for each of your devices\n\nWe use this money to pay for servers, traffic, and support the community\n\nPLUS is not transferable between devices, you can cancel it at any time, or we will notify your about existing subscription for unlinked device, so you can cancel it if you sold your device\n\nPLUS is not compatible with corporate-owned devices with MDM. Please use appdb on your personal devices" = "يتيح لك appdb PLUS استخدام appdb على جهاز غير مفكوك أو Mac بشرائح Apple مع حساب المطور الخاص بك وتوقيع التطبيقات في السحابة دون قيود.\n\nيُفعّل PLUS لكل جهاز على حدة.\n\nنستخدم هذه الأموال لخوادمنا والاتصال ودعم المجتمع.\n\nPLUS غير قابل للتحويل بين الأجهزة، يمكنك إلغاؤه في أي وقت، أو سنعلمك بالاشتراك الحالي للجهاز غير المرتبط.\n\nPLUS غير متوافق مع أجهزة الشركات ذات MDM. استخدم appdb على أجهزتك الشخصية فقط.";
+
+/////////////////////
+//     ALTSTORE    //
+/////////////////////
+"AltStore Repos" = "مستودعات AltStore";
+"Please enter repository URL" = "الرجاء إدخال رابط المستودع";
+"Repository URL" = "رابط المستودع";
+"Add repo" = "إضافة مستودع";
+"%@ Apps" = "%@ تطبيقات";
+"Search Apps" = "بحث التطبيقات";
+"No repos found" = "لم يتم العثور على مستودعات";
+"The repository was deleted successfully" = "تم حذف المستودع بنجاح";
+
+/////////////////////
+//      DYLIBS     //
+/////////////////////
+"My Dylibs, Frameworks and Debs" = "ملفات Dylibs وFrameworks وDebs الخاصة بي";
+"No dylibs found" = "لم يتم العثور على dylibs";
+"The dylib was deleted successfully" = "تم حذف الـ dylib بنجاح";
+"Here you can upload or import dynamic libraries, frameworks or debian packages or ZIP archives with tweaks to inject into apps that you are installing via appdb. Uploading or importing of any file will enable “Ask for Installation Options” feature for current device, so you can choose what tweaks you want to include in the app. You can disable this option later on device features configuration page.\n\nPlease note that not all packages, dylibs or frameworks that were built for jailbroken devices will work on your non-jailbroken devices." = "هنا يمكنك رفع أو استيراد مكتبات ديناميكية أو أطر عمل أو حزم debian أو أرشيفات ZIP مع تعديلات لحقنها في التطبيقات التي تثبتها عبر appdb. رفع أو استيراد أي ملف سيفعّل خيار \"طلب خيارات التثبيت\" للجهاز الحالي. لاحظ أن عدم كل الحزم أو الـ dylibs أو الأطر المُنشأة لأجهزة مفكوكة ستعمل على جهازك غير المفكوك.";
 
 /////////////////////
 // UPDATES //
@@ -377,6 +436,7 @@ Copyright © 2017 ned. All rights reserved.
 "Invalid voucher." = "قسيمة خاطئة.";
 "Voucher already used." = "القسيمة مستخدمة بالفعل.";
 "No devices with this email." = "لا جهاز مسجل على الآيميل";
+"We've got reports reg. this link: \"%@\"" = "تلقينا تقارير بخصوص هذا الرابط: \"%@\"";
 
 ////////////////////////////
 // LINK REPORTING //
@@ -399,6 +459,9 @@ Copyright © 2017 ned. All rights reserved.
 "appdb team" = "فريق appdb";
 "Icon and banner designer" = "مصمم آيقونة وبانر";
 "View project on GitHub" = "شاهد المشروع على GitHub";
+"Original Developer" = "المطور الأصلي";
+"Current Maintainer" = "المشرف الحالي";
+"Previous Maintainer" = "المشرف السابق";
 
 /////////////////////////////////////////
 // WISHES / AUTOMATIC REQUESTS //
@@ -436,3 +499,18 @@ Copyright © 2017 ned. All rights reserved.
 "%@h ago" = "%@h ago"; // hours, e.g. 6h ago
 "%@d ago" = "%@d ago"; // days, e.g. 3d ago
 "now" = "الآن";
+
+///////////////////
+//     ICONS     //
+///////////////////
+"Main (by aesign)" = "الرئيسي (بواسطة aesign)";
+"Dark (by stayxnegative)" = "الداكن (بواسطة stayxnegative)";
+"Green" = "أخضر";
+"Purple" = "بنفسجي";
+"Yellow" = "أصفر";
+"Pink" = "وردي";
+"Red" = "أحمر";
+"Aqua" = "أكوَا";
+"Black" = "أسود";
+"Alternate icons seem to not work on this device" = "يبدو أن الأيقونات البديلة لا تعمل على هذا الجهاز";
+"App icon was set to '%@'" = "تم تعيين أيقونة التطبيق إلى '%@'";

@@ -17,6 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
 
     var window: UIWindow?
 
+    /// Observer for device-link bulletin "Open in Safari" so it works when bulletin is shown from any screen (edit repos, My Apps, detail).
+    private var openSafariObserver: NSObjectProtocol?
+
     func applicationWillTerminate(_ application: UIApplication) {
         IPAFileManager.shared.clearTmpDirectory()
 
@@ -94,6 +97,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         NetworkActivityIndicatorManager.shared.isEnabled = true
 
         application.shortcutItems = Global.ShortcutItem.createItems(for: [.search, .wishes, .news])
+
+        openSafariObserver = NotificationCenter.default.addObserver(forName: .OpenSafari, object: nil, queue: .main) { [weak self] note in
+            guard let urlString = note.userInfo?["URLString"] as? String, let url = URL(string: urlString) else { return }
+            UIApplication.shared.open(url)
+        }
 
         if #available(iOS 14.0, *) {
             WidgetCenter.shared.reloadAllTimelines()

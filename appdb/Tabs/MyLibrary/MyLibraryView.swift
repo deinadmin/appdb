@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import Localize_Swift
 
 private typealias SColor = SwiftUI.Color
 
@@ -11,9 +12,18 @@ private typealias SColor = SwiftUI.Color
 struct MyLibraryView: SwiftUI.View {
     @EnvironmentObject var viewModel: MyLibraryViewModel
 
+    /// When set, Get button uses the same install flow as home (UIKit sheet + askForInstallationOptions). Otherwise uses the legacy SwiftUI sheet.
+    var onInstallApp: ((MyAppStoreApp) -> Void)? = nil
+    /// Called when user taps "Login with AppDB" on the sign-in screen (opens device-link bulletin).
+    var onPresentLogin: (() -> Void)? = nil
+
+    @State private var isLoggedIn = Preferences.deviceIsLinked
+
     var body: some SwiftUI.View {
         Group {
-            if viewModel.isLoading {
+            if !isLoggedIn {
+                SignInToAppDBView(onLogin: { onPresentLogin?() })
+            } else if viewModel.isLoading {
                 loadingView
             } else if viewModel.hasError {
                 errorView
@@ -23,7 +33,16 @@ struct MyLibraryView: SwiftUI.View {
                 contentView
             }
         }
+        .onAppear { isLoggedIn = Preferences.deviceIsLinked }
+        .onReceive(NotificationCenter.default.publisher(for: .RefreshSettings)) { _ in
+            isLoggedIn = Preferences.deviceIsLinked
+        }
         .background(SColor(.systemGroupedBackground))
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: "Search apps".localized()
+        )
     }
 
     // MARK: - Content
@@ -42,32 +61,35 @@ struct MyLibraryView: SwiftUI.View {
     }
 
     private var contentView: some SwiftUI.View {
-        List {
-            Section {
-                HStack(spacing: 8) {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.secondary)
-                    TextField("Search apps".localized(), text: $searchText)
-                        .textFieldStyle(.plain)
-                }
-            }
-            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-            .listRowBackground(SColor(.secondarySystemGroupedBackground))
-
-            if viewModel.isUploading {
-                Section {
+        ScrollView {
+            LazyVStack(spacing: 6) {
+                if viewModel.isUploading {
                     uploadProgressRow
+                        .background(
+                            SColor.clear
+                                .glassEffect(.regular, in: .rect(cornerRadius: 24))
+                        )
+                        .padding(.horizontal, 16)
                 }
-            }
 
-            Section {
                 ForEach(filteredApps, id: \.id) { app in
                     appRow(app)
+                        .background(
+                            SColor.clear
+                                .glassEffect(.regular, in: .rect(cornerRadius: 24))
+                        )
+                        .padding(.horizontal, 16)
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                viewModel.deleteApp(app)
+                            } label: {
+                                Label("Delete".localized(), systemImage: "trash")
+                            }
+                        }
                 }
             }
+            .padding(.vertical, 8)
         }
-        .listStyle(.insetGrouped)
-        .contentMargins(.top, 0, for: .scrollContent)
         .refreshable {
             await withCheckedContinuation { continuation in
                 viewModel.loadApps()
@@ -89,66 +111,65 @@ struct MyLibraryView: SwiftUI.View {
         }
     }
 
-    // MARK: - App Row
+    // MARK: - App Row (concentric glass cards; Get button + version like AppSectionView rows)
+
+    private let libraryRowIconSize: CGFloat = 60
 
     private func appRow(_ app: MyAppStoreApp) -> some SwiftUI.View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: .center, spacing: 12) {
             AsyncImageWithPlaceholder(
                 url: URL(string: app.iconUri),
-                size: 50
+                size: libraryRowIconSize
             )
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(app.name)
-                    .font(.body)
-                    .fontWeight(.medium)
+                    .font(.headline)
                     .foregroundStyle(.primary)
                     .lineLimit(1)
 
                 Text(app.bundleId)
-                    .font(.caption)
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }
 
-            Spacer(minLength: 8)
+            Spacer()
 
-            VStack(alignment: .trailing, spacing: 4) {
+            VStack(spacing: 2) {
                 Button {
-                    startLoadingOptionsThenPresentSheet(for: app)
+                    if let onInstallApp {
+                        onInstallApp(app)
+                    } else {
+                        startLoadingOptionsThenPresentSheet(for: app)
+                    }
                 } label: {
                     ZStack {
-                        Text("Install".localized())
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
+                        Text("Get".localized())
+                            .font(.system(size: 15, weight: .bold))
+                            .foregroundStyle(.white)
                             .opacity(showSpinnerForAppId == app.id ? 0 : 1)
                         ProgressView()
                             .controlSize(.small)
+                            .tint(.white)
                             .opacity(showSpinnerForAppId == app.id ? 1 : 0)
                     }
+                    .padding(.horizontal, 22)
+                    .padding(.vertical, 6)
+                    .background(SColor.accentColor)
+                    .clipShape(Capsule())
                 }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.capsule)
-                .controlSize(.small)
-                .tint(.accentColor)
+                .buttonStyle(.plain)
                 .disabled(app.installationTicket.isEmpty)
+                .opacity(app.installationTicket.isEmpty ? 0.6 : 1)
 
-                if !app.version.isEmpty {
-                    Text("v\(app.version)")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
+                Text(app.version.isEmpty ? "Latest" : "v\(app.version)")
+                    .opacity(0.6)
+                    .font(.caption2)
             }
         }
-        .padding(.vertical, 4)
-        .contextMenu {
-            Button(role: .destructive) {
-                viewModel.deleteApp(app)
-            } label: {
-                Label("Delete".localized(), systemImage: "trash")
-            }
-        }
+        .padding(12)
+        .contentShape(Rectangle())
     }
 
     private func startLoadingOptionsThenPresentSheet(for app: MyAppStoreApp) {
@@ -189,7 +210,7 @@ struct MyLibraryView: SwiftUI.View {
             ProgressView(value: viewModel.uploadProgress)
                 .tint(.accentColor)
         }
-        .padding(.vertical, 4)
+        .padding(12)
     }
 
     // MARK: - Loading

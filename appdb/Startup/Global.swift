@@ -134,8 +134,7 @@ enum Global {
 
     static func refreshAppearanceForCurrentTheme() {
         if #available(iOS 13.0, *) {
-            var style: UIUserInterfaceStyle = Themes.current == .light ? .light : .dark
-            if Preferences.followSystemAppearance { style = .unspecified }
+            var style: UIUserInterfaceStyle = Themes.current == .system ? .unspecified : (Themes.current == .light ? .light : .dark)
             if UINavigationBar.appearance().overrideUserInterfaceStyle != style {
                 UINavigationBar.appearance().overrideUserInterfaceStyle = style
                 UITabBar.appearance().overrideUserInterfaceStyle = style
@@ -228,6 +227,28 @@ enum Global {
     // Human readable size from byte count
     static func humanReadableSize(bytes: Int64) -> String {
         ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file)
+    }
+
+    static var deviceTotalStorage: String {
+        let fileManager = FileManager.default
+        if let attributes = try? fileManager.attributesOfFileSystem(forPath: NSHomeDirectory()),
+           let size = attributes[.systemSize] as? Int64 {
+            let gb = Double(size) / 1_000_000_000
+            let typicalCapacitiesGB = [16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
+            
+            // Find the closest typical capacity that is greater than or equal to the reported size
+            // We use a small buffer (0.85) because the reported system size is always less than marketing size
+            if let roundedGB = typicalCapacitiesGB.first(where: { Double($0) >= gb * 0.85 }) {
+                if roundedGB >= 1024 {
+                    return "\(roundedGB / 1024) TB"
+                } else {
+                    return "\(roundedGB) GB"
+                }
+            }
+            
+            return ByteCountFormatter.string(fromByteCount: size, countStyle: .decimal)
+        }
+        return ""
     }
 
     // Sets app language the same as device language, unless it's been previously changed from Settings

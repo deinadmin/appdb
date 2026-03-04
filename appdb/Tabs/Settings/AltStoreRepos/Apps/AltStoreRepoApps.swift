@@ -48,8 +48,6 @@ class AltStoreRepoApps: LoadingTableView {
         tableView.rowHeight = (125 ~~ 105)
 
         tableView.theme_separatorColor = Color.borderColor
-        tableView.theme_backgroundColor = Color.tableViewBackgroundColor
-        view.theme_backgroundColor = Color.tableViewBackgroundColor
 
         animated = false
         showsErrorButton = false
