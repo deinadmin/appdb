@@ -108,20 +108,15 @@ class Details: UIHostingController<AnyView> {
 
         detailView.onDeveloperTap = { [weak self] (title: String, type: ItemType, devId: String) in
             guard let self else { return }
-            if #available(iOS 15.0, *) {
-                let viewModel = SeeAllViewModel(title: title, type: type, devId: devId)
-                let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
-                    guard let self else { return }
-                    let vc = Details(content: item)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                })
-                let vc = UIHostingController(rootView: seeAllView)
-                vc.title = title
+            let viewModel = SeeAllViewModel(title: title, type: type, devId: devId)
+            let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
+                guard let self else { return }
+                let vc = Details(content: item)
                 self.navigationController?.pushViewController(vc, animated: true)
-            } else {
-                let vc = SeeAll(title: title, type: type, devId: devId)
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
+            })
+            let vc = UIHostingController(rootView: seeAllView)
+            vc.title = title
+            self.navigationController?.pushViewController(vc, animated: true)
         }
 
         detailView.onExternalLink = { [weak self] (urlString: String) in
@@ -165,21 +160,16 @@ class Details: UIHostingController<AnyView> {
             }()
 
             // Use .all (clicks_all) so we show the full catalog for this category,
-            // matching the original appdb site’s category browsing behavior.
-            if #available(iOS 15.0, *) {
-                let viewModel = SeeAllViewModel(title: categoryName, type: itemType, category: categoryId, price: .all, order: .all)
-                let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
-                    guard let self else { return }
-                    let vc = Details(content: item)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                })
-                let vc = UIHostingController(rootView: seeAllView)
-                vc.title = categoryName
+            // matching the original appdb site's category browsing behavior.
+            let viewModel = SeeAllViewModel(title: categoryName, type: itemType, category: categoryId, price: .all, order: .all)
+            let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
+                guard let self else { return }
+                let vc = Details(content: item)
                 self.navigationController?.pushViewController(vc, animated: true)
-            } else {
-                let vc = SeeAll(title: categoryName, type: itemType, category: categoryId, price: .all, order: .all)
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
+            })
+            let vc = UIHostingController(rootView: seeAllView)
+            vc.title = categoryName
+            self.navigationController?.pushViewController(vc, animated: true)
         }
 
         detailView.onScreenshotTap = { [weak self] (index: Int, allLandscape: Bool, mixedClasses: Bool, magic: CGFloat) in

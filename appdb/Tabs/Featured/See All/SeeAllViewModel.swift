@@ -47,7 +47,7 @@ final class SeeAllViewModel: ObservableObject {
 
     // MARK: - Pagination
 
-    private let pageSize = 15
+    private let pageSize = 25
     private var currentPage = 1
 
     // MARK: - Search debounce

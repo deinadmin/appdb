@@ -373,6 +373,9 @@
 		MYLIB00100000000000000002 /* MyLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = MYLIB00100000000000000001 /* MyLibraryView.swift */; };
 		MYLIB00100000000000000004 /* MyLibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = MYLIB00100000000000000003 /* MyLibraryViewModel.swift */; };
 		MYLIB00100000000000000006 /* MyLibraryHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = MYLIB00100000000000000005 /* MyLibraryHostingController.swift */; };
+		SEEALL01000000000000002 /* SeeAllView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SEEALL01000000000000001 /* SeeAllView.swift */; };
+		SEEALL01000000000000004 /* SeeAllAppRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = SEEALL01000000000000003 /* SeeAllAppRow.swift */; };
+		SEEALL01000000000000006 /* SeeAllViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = SEEALL01000000000000005 /* SeeAllViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -761,6 +764,9 @@
 		MYLIB00100000000000000001 /* MyLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLibraryView.swift; sourceTree = "<group>"; };
 		MYLIB00100000000000000003 /* MyLibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLibraryViewModel.swift; sourceTree = "<group>"; };
 		MYLIB00100000000000000005 /* MyLibraryHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLibraryHostingController.swift; sourceTree = "<group>"; };
+		SEEALL01000000000000001 /* SeeAllView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeAllView.swift; sourceTree = "<group>"; };
+		SEEALL01000000000000003 /* SeeAllAppRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeAllAppRow.swift; sourceTree = "<group>"; };
+		SEEALL01000000000000005 /* SeeAllViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeAllViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -939,6 +945,9 @@
 				8133C45B208B629600F2F9F5 /* SeeAll.swift */,
 				81DBDB55208CD67F00BDE600 /* SeeAllCell+WithStars.swift */,
 				8133C45D208B874600F2F9F5 /* SeeAllCell.swift */,
+				SEEALL01000000000000001 /* SeeAllView.swift */,
+				SEEALL01000000000000003 /* SeeAllAppRow.swift */,
+				SEEALL01000000000000005 /* SeeAllViewModel.swift */,
 			);
 			path = "See All";
 			sourceTree = "<group>";
@@ -2495,6 +2504,9 @@
 				819AE78C1E63135A009D6AF3 /* Details+Changelog.swift in Sources */,
 				817A40E71E5E393A003FD6F1 /* Details+ScreenshotsCell.swift in Sources */,
 				8133C45C208B629600F2F9F5 /* SeeAll.swift in Sources */,
+					SEEALL01000000000000002 /* SeeAllView.swift in Sources */,
+					SEEALL01000000000000004 /* SeeAllAppRow.swift in Sources */,
+					SEEALL01000000000000006 /* SeeAllViewModel.swift in Sources */,
 				819AF4EA1E82CB8700B4D2EF /* Details+Related.swift in Sources */,
 				813F01222A7BFE9E008DCA2E /* ThemeColorPicker.swift in Sources */,
 				8148D85A226DD230006AD9E0 /* QueuedApps.swift in Sources */,

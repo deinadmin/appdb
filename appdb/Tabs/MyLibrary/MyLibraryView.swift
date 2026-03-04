@@ -50,7 +50,6 @@ struct MyLibraryView: SwiftUI.View {
                     TextField("Search apps".localized(), text: $searchText)
                         .textFieldStyle(.plain)
                 }
-                .padding(.vertical, 6)
             }
             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
             .listRowBackground(SColor(.secondarySystemGroupedBackground))
@@ -68,7 +67,7 @@ struct MyLibraryView: SwiftUI.View {
             }
         }
         .listStyle(.insetGrouped)
-        .contentMargins(.top, -10, for: .scrollContent)
+        .contentMargins(.top, 0, for: .scrollContent)
         .refreshable {
             await withCheckedContinuation { continuation in
                 viewModel.loadApps()

@@ -195,29 +195,18 @@ class HomeHostingController: UIViewController {
     }
 
     private func pushSeeAll(title: String, type: ItemType, category: String, price: Price, order: Order) {
-        if #available(iOS 15.0, *) {
-            let viewModel = SeeAllViewModel(title: title, type: type, category: category, price: price, order: order)
-            let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
-                self?.pushDetails(for: item)
-            })
-            let seeAllViewController = UIHostingController(rootView: seeAllView)
-            seeAllViewController.title = title
-            if Global.isIpad {
-                let nav = DismissableModalNavController(rootViewController: seeAllViewController)
-                nav.modalPresentationStyle = .formSheet
-                navigationController?.present(nav, animated: true)
-            } else {
-                navigationController?.pushViewController(seeAllViewController, animated: true)
-            }
+        let viewModel = SeeAllViewModel(title: title, type: type, category: category, price: price, order: order)
+        let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
+            self?.pushDetails(for: item)
+        })
+        let seeAllViewController = UIHostingController(rootView: seeAllView)
+        seeAllViewController.title = title
+        if Global.isIpad {
+            let nav = DismissableModalNavController(rootViewController: seeAllViewController)
+            nav.modalPresentationStyle = .formSheet
+            navigationController?.present(nav, animated: true)
         } else {
-            let seeAllViewController = SeeAll(title: title, type: type, category: category, price: price, order: order)
-            if Global.isIpad {
-                let nav = DismissableModalNavController(rootViewController: seeAllViewController)
-                nav.modalPresentationStyle = .formSheet
-                navigationController?.present(nav, animated: true)
-            } else {
-                navigationController?.pushViewController(seeAllViewController, animated: true)
-            }
+            navigationController?.pushViewController(seeAllViewController, animated: true)
         }
     }
 

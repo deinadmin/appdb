@@ -13,8 +13,7 @@ import Localize_Swift
 private typealias SColor = SwiftUI.Color
 
 /// Modern SwiftUI replacement for the UIKit SeeAll view.
-/// Shows a paginated, searchable, filterable list of apps with Liquid Glass design on iOS 26.
-@available(iOS 15.0, *)
+/// Shows a paginated, searchable, filterable list of apps with Liquid Glass design.
 struct SeeAllView: SwiftUI.View {
     @ObservedObject var viewModel: SeeAllViewModel
     var onSelectItem: ((Item) -> Void)?
@@ -96,10 +95,25 @@ struct SeeAllView: SwiftUI.View {
 
     private var listContent: some SwiftUI.View {
         ScrollView {
-            LazyVStack(spacing: 2) {
+            LazyVStack(spacing: 6) {
                 let items = viewModel.displayedItems
-                ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                    appRow(item: item, isLast: index == items.count - 1)
+                ForEach(0..<items.count, id: \.self) { index in
+                    let item = items[index]
+                    SeeAllAppRow(item: item) {
+                        onSelectItem?(item)
+                    }
+                    .padding(.horizontal, 12)
+                    .background(
+                        SColor.clear
+                            .glassEffect(.regular, in: .rect(cornerRadius: 14))
+                            .padding(.horizontal, 12)
+                    )
+                    .onAppear {
+                        // Trigger pagination when near the end of the list
+                        if !viewModel.isShowingSearch && index >= items.count - 5 {
+                            viewModel.loadMore()
+                        }
+                    }
                 }
 
                 // Loading more indicator
@@ -137,35 +151,6 @@ struct SeeAllView: SwiftUI.View {
                 }
             }
             .padding(.vertical, 8)
-        }
-    }
-
-    // MARK: - App Row with Glass Effect
-
-    @SwiftUI.ViewBuilder
-    private func appRow(item: Item, isLast: Bool) -> some SwiftUI.View {
-        SeeAllAppRow(item: item) {
-            onSelectItem?(item)
-        }
-        .background(rowBackground)
-        .onAppear {
-            // Trigger pagination when the last item appears
-            if isLast && !viewModel.isShowingSearch {
-                viewModel.loadMore()
-            }
-        }
-    }
-
-    @SwiftUI.ViewBuilder
-    private var rowBackground: some SwiftUI.View {
-        if #available(iOS 26, *) {
-            SColor.clear
-                .glassEffect(.regular, in: .rect(cornerRadius: 14))
-                .padding(.horizontal, 12)
-        } else {
-            SColor(.secondarySystemGroupedBackground)
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                .padding(.horizontal, 12)
         }
     }
 
@@ -207,7 +192,7 @@ struct SeeAllView: SwiftUI.View {
                     .padding(.horizontal, 32)
                     .padding(.vertical, 10)
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.glassProminent)
             .padding(.top, 8)
             Spacer()
         }

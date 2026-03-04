@@ -12,7 +12,6 @@ import SwiftUI
 private typealias SColor = SwiftUI.Color
 
 /// A single row in the SeeAll list, displaying an app icon, name, subtitle, and metadata.
-@available(iOS 15.0, *)
 struct SeeAllAppRow: SwiftUI.View {
     let item: Item
     var onTap: (() -> Void)?
