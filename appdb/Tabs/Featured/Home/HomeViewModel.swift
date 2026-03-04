@@ -51,6 +51,9 @@ final class HomeViewModel: ObservableObject {
     /// Dynamic sections sourced from the user's AltStore repos
     @Published var repoSections: [HomeSection] = []
 
+    /// Genres data
+    @Published var genres: [Genre] = Preferences.genres
+
     /// Banner image names (local assets)
     let bannerImages: [String] = {
         var banners = ["update_banner", "main_banner", "tweaked_apps_banner", "delta_banner"]
@@ -85,7 +88,11 @@ final class HomeViewModel: ObservableObject {
         repoSections = []
 
         // Load genres (enables Categories button in the future)
-        API.listGenres(completion: {})
+        API.listGenres(completion: { [weak self] in
+            DispatchQueue.main.async {
+                self?.genres = Preferences.genres
+            }
+        })
 
         // Fetch each section
         fetchCydiaApps()

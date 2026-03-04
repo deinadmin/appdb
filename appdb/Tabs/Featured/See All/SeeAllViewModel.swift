@@ -18,6 +18,7 @@ final class SeeAllViewModel: ObservableObject {
     let type: ItemType
     private let categoryId: String
     private let devId: String
+    private let repo: AltStoreRepo?
 
     // MARK: - Published State
 
@@ -61,6 +62,7 @@ final class SeeAllViewModel: ObservableObject {
         self.type = type
         self.categoryId = category
         self.devId = "0"
+        self.repo = nil
         self.price = price
         self.order = order
         setupSearchDebounce()
@@ -74,6 +76,21 @@ final class SeeAllViewModel: ObservableObject {
         self.type = type
         self.categoryId = "0"
         self.devId = devId
+        self.repo = nil
+        self.price = .all
+        self.order = .added
+        setupSearchDebounce()
+        loadFirstPage()
+    }
+
+    // MARK: - Init (for AltStore Repo)
+
+    init(repo: AltStoreRepo) {
+        self.title = repo.name
+        self.type = .altstore
+        self.categoryId = "0"
+        self.devId = "0"
+        self.repo = repo
         self.price = .all
         self.order = .added
         setupSearchDebounce()
@@ -108,14 +125,58 @@ final class SeeAllViewModel: ObservableObject {
     }
 
     private func fetchPage() {
-        switch type {
-        case .ios:
-            fetchItems(type: App.self)
-        case .cydia, .altstore:
-            fetchItems(type: CydiaApp.self)
-        default:
-            break
+        if let repo = repo {
+            fetchRepoApps()
+        } else if categoryId != "0" || devId != "0" {
+            fetchMixedItems()
+        } else {
+            switch type {
+            case .ios:
+                fetchItems(type: App.self)
+            case .cydia, .altstore:
+                fetchItems(type: CydiaApp.self)
+            default:
+                break
+            }
         }
+    }
+
+    private func fetchMixedItems() {
+        API.searchMixed(
+            order: order,
+            price: price,
+            genre: categoryId,
+            dev: devId,
+            page: currentPage,
+            pageSize: pageSize,
+            success: { [weak self] array in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    if array.isEmpty {
+                        self.allLoaded = true
+                    } else {
+                        self.items += array
+                        // If fewer items returned than a full page, we've reached the end
+                        if array.count < self.pageSize {
+                            self.allLoaded = true
+                        }
+                    }
+                    self.isLoading = false
+                    self.isLoadingMore = false
+                }
+            },
+            fail: { [weak self] error in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    if self.items.isEmpty {
+                        self.hasError = true
+                        self.errorMessage = error
+                    }
+                    self.isLoading = false
+                    self.isLoadingMore = false
+                }
+            }
+        )
     }
 
     private func fetchItems<T>(type: T.Type) where T: Item {
@@ -157,6 +218,66 @@ final class SeeAllViewModel: ObservableObject {
         )
     }
 
+    private func fetchRepoApps() {
+        guard let repo = repo else { return }
+        
+        // Repos do not currently paginate. We fetch all and show them locally.
+        if currentPage > 1 {
+            self.allLoaded = true
+            self.isLoadingMore = false
+            return
+        }
+        
+        API.getRepo(id: String(repo.id), success: { [weak self] _repo in
+            guard let self = self else { return }
+            
+            if !_repo.contentsUri.isEmpty {
+                API.getRepoContents(contentsUri: _repo.contentsUri, success: { [weak self] contents in
+                    guard let self = self else { return }
+                    DispatchQueue.main.async {
+                        if !contents.apps.isEmpty {
+                            self.items = contents.apps
+                        }
+                        self.allLoaded = true
+                        self.isLoading = false
+                        self.isLoadingMore = false
+                    }
+                }, fail: { [weak self] error in
+                    guard let self = self else { return }
+                    DispatchQueue.main.async {
+                        if let inlineApps = _repo.apps, !inlineApps.isEmpty {
+                            self.items = inlineApps
+                        } else {
+                            // If both fail, error out
+                            self.hasError = true
+                            self.errorMessage = error
+                        }
+                        self.allLoaded = true
+                        self.isLoading = false
+                        self.isLoadingMore = false
+                    }
+                })
+            } else {
+                DispatchQueue.main.async {
+                    if let inlineApps = _repo.apps, !inlineApps.isEmpty {
+                        self.items = inlineApps
+                    }
+                    self.allLoaded = true
+                    self.isLoading = false
+                    self.isLoadingMore = false
+                }
+            }
+        }, fail: { [weak self] error in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.hasError = true
+                self.errorMessage = error
+                self.isLoading = false
+                self.isLoadingMore = false
+            }
+        })
+    }
+
     // MARK: - Search
 
     private func setupSearchDebounce() {
@@ -176,6 +297,13 @@ final class SeeAllViewModel: ObservableObject {
 
     private func performSearch(query: String) {
         isSearching = true
+
+        if repo != nil {
+            let filtered = items.filter { $0.itemName.localizedCaseInsensitiveContains(query) }
+            searchResults = filtered
+            isSearching = false
+            return
+        }
 
         switch type {
         case .ios:

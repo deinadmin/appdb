@@ -82,8 +82,7 @@ struct SeeAllAppRow: SwiftUI.View {
                 .font(.caption)
                 .foregroundStyle(.quaternary)
         }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 16)
+        .padding(12)
         .contentShape(Rectangle())
     }
 

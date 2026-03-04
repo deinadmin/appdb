@@ -63,6 +63,66 @@ extension API {
         })
     }
 
+    /// Fetches a heterogeneous list of items (Apps, CydiaApps, Books) without restricting to a specific v1.7 newContentType
+    static func searchMixed(order: Order = .all, price: Price = .all, genre: String = "0", dev: String = "0", q: String = "", page: Int = 1, pageSize: Int = 25, success: @escaping (_ items: [Item]) -> Void, fail: @escaping (_ error: String) -> Void) {
+        var params: [String: Any] = [
+            "start": pageSize * (page - 1),
+            "length": pageSize,
+            "lang": languageCode
+        ]
+
+        if q != "" { params["name"] = q }
+        if genre != "0" { params["genre_id"] = genre }
+        if dev != "0" { params["developer_name"] = dev }
+
+        switch price {
+        case .free: params["cents_max"] = 0
+        case .paid: params["cents_min"] = 1
+        case .all: break
+        }
+
+        let request = AF.request(endpoint + Actions.searchIndex.rawValue, parameters: params, headers: headers)
+
+        quickCheckForErrors(request, completion: { ok, hasError, _ in
+            if ok {
+                request.responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+                        var items: [Item] = []
+                        if let dataArray = json["data"].array {
+                            for subJson in dataArray {
+                                let type = subJson["type"].stringValue
+                                guard let dict = subJson.dictionaryObject else { continue }
+                                
+                                let item: Item?
+                                switch type {
+                                case "official_app":
+                                    item = Mapper<App>().map(JSON: dict)
+                                case "repo_app", "user_app", "enhancement":
+                                    item = Mapper<CydiaApp>().map(JSON: dict)
+                                case "book":
+                                    item = Mapper<Book>().map(JSON: dict)
+                                default:
+                                    item = nil
+                                }
+                                
+                                if let validItem = item {
+                                    items.append(validItem)
+                                }
+                            }
+                        }
+                        success(items)
+                    case .failure(let error):
+                        fail(error.localizedDescription)
+                    }
+                }
+            } else {
+                fail((hasError ?? "Cannot connect").localized())
+            }
+        })
+    }
+
     /// Fetch a single item's full details via universal_gateway (replaces search by trackid)
     private static func getContentViaGateway<T>(type: T.Type, trackid: String, success: @escaping (_ items: [T]) -> Void, fail: @escaping (_ error: String) -> Void) where T: Item {
         let params: [String: Any] = [

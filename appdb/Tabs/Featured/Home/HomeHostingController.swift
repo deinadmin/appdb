@@ -82,6 +82,21 @@ class HomeHostingController: UIViewController {
         homeView.onBannerTap = { [weak self] bannerName in
             self?.handleBannerTap(bannerName: bannerName)
         }
+        homeView.onCategoryTap = { [weak self] categoryName, itemType, categoryId in
+            let viewModel = SeeAllViewModel(title: categoryName, type: itemType, category: categoryId, price: .all, order: .all)
+            let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
+                self?.pushDetails(for: item)
+            })
+            let seeAllViewController = UIHostingController(rootView: seeAllView)
+            seeAllViewController.title = categoryName
+            if Global.isIpad {
+                let nav = DismissableModalNavController(rootViewController: seeAllViewController)
+                nav.modalPresentationStyle = .formSheet
+                self?.navigationController?.present(nav, animated: true)
+            } else {
+                self?.navigationController?.pushViewController(seeAllViewController, animated: true)
+            }
+        }
 
         // Inject the shared view model into the SwiftUI environment
         let rootView = homeView.environmentObject(viewModel)
@@ -211,14 +226,18 @@ class HomeHostingController: UIViewController {
     }
 
     private func pushRepoApps(repo: AltStoreRepo) {
-        let repoAppsViewController = AltStoreRepoApps(repo: repo)
-        repoAppsViewController.title = repo.name
+        let viewModel = SeeAllViewModel(repo: repo)
+        let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
+            self?.pushDetails(for: item)
+        })
+        let seeAllViewController = UIHostingController(rootView: seeAllView)
+        seeAllViewController.title = repo.name
         if Global.isIpad {
-            let nav = DismissableModalNavController(rootViewController: repoAppsViewController)
+            let nav = DismissableModalNavController(rootViewController: seeAllViewController)
             nav.modalPresentationStyle = .formSheet
             navigationController?.present(nav, animated: true)
         } else {
-            navigationController?.pushViewController(repoAppsViewController, animated: true)
+            navigationController?.pushViewController(seeAllViewController, animated: true)
         }
     }
 

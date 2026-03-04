@@ -102,12 +102,11 @@ struct SeeAllView: SwiftUI.View {
                     SeeAllAppRow(item: item) {
                         onSelectItem?(item)
                     }
-                    .padding(.horizontal, 12)
                     .background(
                         SColor.clear
-                            .glassEffect(.regular, in: .rect(cornerRadius: 14))
-                            .padding(.horizontal, 12)
+                            .glassEffect(.regular, in: .rect(cornerRadius: 24))
                     )
+                    .padding(.horizontal, 16)
                     .onAppear {
                         // Trigger pagination when near the end of the list
                         if !viewModel.isShowingSearch && index >= items.count - 5 {

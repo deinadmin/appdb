@@ -6,6 +6,7 @@
 //  Copyright © 2017 ned. All rights reserved.
 //
 
+import Foundation
 import Alamofire
 import SwiftyJSON
 
@@ -14,7 +15,7 @@ extension API {
     // MARK: - Genres
 
     static func listGenres(completion: @escaping () -> Void) {
-        AF.request(endpoint + Actions.listGenres.rawValue, parameters: ["lang": languageCode], headers: headers)
+        AF.request(endpoint + Actions.listGenres.rawValue + "/", parameters: ["lang": languageCode], headers: headers)
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -26,10 +27,13 @@ extension API {
                     // In v1.7, only "official" genres are returned as a flat array
                     genres.append(Genre(category: "official", id: "0", name: "All Categories".localized()))
 
-                    for value in data.arrayValue {
-                        genres.append(
-                            Genre(category: "official", id: value["id"].stringValue, name: value["name"].stringValue, amount: value["content_amount"].stringValue)
-                        )
+                    let officialGenres = data["official"].arrayValue
+                    for value in officialGenres {
+                        if value["is_verified"].intValue == 1 {
+                            genres.append(
+                                Genre(category: "official", id: value["id"].stringValue, name: value["name"].stringValue, amount: value["content_amount"].stringValue)
+                            )
+                        }
                     }
 
                     // Remove deleted genres
@@ -40,27 +44,33 @@ extension API {
                     guard !genres.isEmpty else { completion(); return }
 
                     // Save genres
-                    for (index, var genre) in genres.enumerated() {
+                    let group = DispatchGroup()
+
+                    for (i, var genre) in genres.enumerated() {
                         if let index = Preferences.genres.firstIndex(where: { $0.compound == genre.compound }) {
                             // Genre exists
                             if Preferences.genres[index].icon.isEmpty {
+                                group.enter()
                                 getIcon(genreId: genre.id, completion: { icon in
                                     genre.icon = icon
                                     Preferences.remove(.genres, at: index)
                                     Preferences.append(.genres, element: genre)
+                                    group.leave()
                                 })
                             }
                         } else {
                             // Genre does not exist
+                            group.enter()
                             getIcon(genreId: genre.id, completion: { icon in
                                 genre.icon = icon
                                 Preferences.append(.genres, element: genre)
+                                group.leave()
                             })
                         }
+                    }
 
-                        if index == genres.count - 1 {
-                            completion()
-                        }
+                    group.notify(queue: .main) {
+                        completion()
                     }
 
                 case .failure:

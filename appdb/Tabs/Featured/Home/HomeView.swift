@@ -22,6 +22,7 @@ struct HomeView: SwiftUI.View {
     var onSeeAll: ((String, ItemType, String, Price, Order) -> Void)?
     var onSeeAllRepo: ((AltStoreRepo) -> Void)?
     var onBannerTap: ((String) -> Void)?
+    var onCategoryTap: ((String, ItemType, String) -> Void)?
 
     var body: some SwiftUI.View {
         Group {
@@ -47,6 +48,15 @@ struct HomeView: SwiftUI.View {
                     onBannerTap: onBannerTap
                 )
                 .padding(.bottom, 8)
+                
+                // Genres Section
+                if !viewModel.genres.isEmpty {
+                    GenreSectionView(
+                        genres: viewModel.genres,
+                        onCategoryTap: onCategoryTap
+                    )
+                    .padding(.bottom, 8)
+                }
 
                 // Built-in sections
                 ForEach(viewModel.sections) { section in
@@ -130,5 +140,101 @@ struct HomeView: SwiftUI.View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+@available(iOS 15.0, *)
+struct GenreSectionView: SwiftUI.View {
+    let genres: [Genre]
+    var onCategoryTap: ((String, ItemType, String) -> Void)?
+
+    var body: some SwiftUI.View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Categories".localized())
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
+                .padding(.horizontal, 20)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 14) {
+                    ForEach(genres, id: \.id) { genre in
+                        GenreCardView(genre: genre)
+                            .onTapGesture {
+                                // Defaulting to .ios for categories on the Home tab. 
+                                // The specific category ID is used to filter by SeeAllViewModel.
+                                onCategoryTap?(genre.name, .ios, genre.id)
+                            }
+                            .scrollTransition { content, phase in
+                                content
+                            }
+                    }
+                }
+                .scrollTargetLayout()
+                .padding(.horizontal, 20)
+            }
+            .scrollTargetBehavior(.viewAligned)
+            .scrollBounceBehavior(.basedOnSize)
+        }
+        .padding(.top, 12)
+        .padding(.bottom, 4)
+    }
+}
+
+@available(iOS 15.0, *)
+struct GenreCardView: SwiftUI.View {
+    let genre: Genre
+
+    private var gradient: LinearGradient {
+        let colorsList: [[SColor]] = [
+            [.blue, .purple],
+            [.orange, .red],
+            [.green, .mint],
+            [.pink, .orange],
+            [.teal, .blue],
+            [.indigo, .purple],
+            [.cyan, .teal],
+            [.yellow, .orange]
+        ]
+        
+        // Simple stable hash-based index
+        let index = abs(genre.name.hashValue) % colorsList.count
+        return LinearGradient(
+            colors: colorsList[index],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+
+    var body: some SwiftUI.View {
+        VStack(spacing: 8) {
+            AsyncImage(url: URL(string: genre.icon)) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .renderingMode(.template) // Usually category icons in API are white masks
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundStyle(.white)
+                default:
+                    Image(systemName: "square.grid.2x2.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundStyle(.white.opacity(0.8))
+                }
+            }
+            .frame(width: 32, height: 32)
+            
+            Text(genre.name)
+                .font(.caption)
+                .fontWeight(.bold)
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+        }
+        .padding(.horizontal, 8)
+        .frame(width: 110, height: 90)
+        .background(gradient)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 }
