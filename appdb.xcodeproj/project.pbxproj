@@ -177,6 +177,9 @@
 		C10A00012E670001000A0001 /* QueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000A0004 /* QueueViewModel.swift */; };
 		C10A00012E670001000A0002 /* QueueAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000A0005 /* QueueAccessoryView.swift */; };
 		C10A00012E670001000A0003 /* QueueSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000A0006 /* QueueSheetView.swift */; };
+		C10A00012E670001000B0001 /* SigningActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000B0004 /* SigningActivityAttributes.swift */; };
+		C10A00012E670001000B0002 /* SigningActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000B0004 /* SigningActivityAttributes.swift */; };
+		C10A00012E670001000B0003 /* SigningLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000B0005 /* SigningLiveActivity.swift */; };
 		8148D85C226DE68E006AD9E0 /* Downloading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8148D85B226DE68E006AD9E0 /* Downloading.swift */; };
 		8148D85E226DE9A5006AD9E0 /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8148D85D226DE9A5006AD9E0 /* Library.swift */; };
 		814AEBF21E68312C00A207CC /* Details+Information.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814AEBF11E68312C00A207CC /* Details+Information.swift */; };
@@ -552,6 +555,8 @@
 		C10A00012E670001000A0004 /* QueueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueViewModel.swift; sourceTree = "<group>"; };
 		C10A00012E670001000A0005 /* QueueAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueAccessoryView.swift; sourceTree = "<group>"; };
 		C10A00012E670001000A0006 /* QueueSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueSheetView.swift; sourceTree = "<group>"; };
+		C10A00012E670001000B0004 /* SigningActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningActivityAttributes.swift; sourceTree = "<group>"; };
+		C10A00012E670001000B0005 /* SigningLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningLiveActivity.swift; sourceTree = "<group>"; };
 		8148D85B226DE68E006AD9E0 /* Downloading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloading.swift; sourceTree = "<group>"; };
 		8148D85D226DE9A5006AD9E0 /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		814AEBF11E68312C00A207CC /* Details+Information.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Details+Information.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -589,6 +594,7 @@
 		8167A61E1DAC246000F96AC2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8167A6201DAC246000F96AC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8167A6261DAC24F700F96AC2 /* appdb.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = appdb.entitlements; sourceTree = "<group>"; };
+		C10A00012E680001000B0006 /* WidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetsExtension.entitlements; sourceTree = "<group>"; };
 		816A376C23E894830021BFBE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		816CEED81DBCE8A2002CFF6E /* Categories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Categories.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		816CEEDA1DBD00E5002CFF6E /* CategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CategoryCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1181,8 +1187,10 @@
 				812F349225F68CEF00426AED /* Models */,
 				812E366825F81D790097B6CC /* Widgets.intentdefinition */,
 				81521EB025F672600064CA84 /* Widgets.swift */,
+				C10A00012E670001000B0005 /* SigningLiveActivity.swift */,
 				81521EB325F672620064CA84 /* Assets.xcassets */,
 				81521EB525F672620064CA84 /* Info.plist */,
+				C10A00012E680001000B0006 /* WidgetsExtension.entitlements */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -2044,6 +2052,7 @@
 				C10A00012E670001000A0004 /* QueueViewModel.swift */,
 				C10A00012E670001000A0005 /* QueueAccessoryView.swift */,
 				C10A00012E670001000A0006 /* QueueSheetView.swift */,
+				C10A00012E670001000B0004 /* SigningActivityAttributes.swift */,
 				8148D859226DD230006AD9E0 /* QueuedApps.swift */,
 			);
 			path = "Queued Apps";
@@ -2296,6 +2305,8 @@
 				81B63EDD25F8013800108E71 /* Extensions.swift in Sources */,
 				812E368E25F82BAB0097B6CC /* AppListView.swift in Sources */,
 				812E368A25F82B4D0097B6CC /* AppsWidgetHeader.swift in Sources */,
+				C10A00012E670001000B0002 /* SigningActivityAttributes.swift in Sources */,
+				C10A00012E670001000B0003 /* SigningLiveActivity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2490,6 +2501,7 @@
 				C10A00012E670001000A0001 /* QueueViewModel.swift in Sources */,
 				C10A00012E670001000A0002 /* QueueAccessoryView.swift in Sources */,
 				C10A00012E670001000A0003 /* QueueSheetView.swift in Sources */,
+				C10A00012E670001000B0001 /* SigningActivityAttributes.swift in Sources */,
 				81EC00711DAD7979009EEFFA /* FeaturedApp.swift in Sources */,
 				819DFD582279EBBA00A811F9 /* LibrarySectionFooterView.swift in Sources */,
 				81ED9A61226CB86100F45B75 /* ObserveQueuedApps.swift in Sources */,
@@ -2664,6 +2676,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Widgets/WidgetsExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -2697,6 +2710,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Widgets/WidgetsExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -2868,7 +2882,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = appdb/appdb.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -2907,7 +2921,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = appdb/appdb.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;

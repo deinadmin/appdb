@@ -18,17 +18,16 @@ private typealias SColor = SwiftUI.Color
 @available(iOS 26, *)
 struct QueueAccessoryView: SwiftUI.View {
     @ObservedObject var viewModel: QueueViewModel
-    @State private var showSheet = false
 
     var body: some SwiftUI.View {
         if let app = viewModel.latestApp {
             Button {
-                showSheet = true
+                viewModel.showQueueSheet = true
             } label: {
                 accessoryContent(for: app)
             }
             .buttonStyle(.plain)
-            .sheet(isPresented: $showSheet) {
+            .sheet(isPresented: $viewModel.showQueueSheet) {
                 QueueSheetView(viewModel: viewModel)
             }
         }

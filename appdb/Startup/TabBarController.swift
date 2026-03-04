@@ -50,6 +50,14 @@ class TabBarController: UITabBarController {
         tabs = [homeTab, searchTab, downloadsTab, libraryTab, settingsTab]
 
         configureQueueAccessory()
+        
+        // Listen for notifications to show the queue sheet (from Live Activity deep links)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(showQueueSheetFromNotification),
+            name: NSNotification.Name("ShowQueueSheet"),
+            object: nil
+        )
     }
 
     // MARK: - Queue Bottom Accessory
@@ -82,5 +90,12 @@ class TabBarController: UITabBarController {
                     }
                 }
             }
+    }
+
+    // MARK: - Queue Sheet Presentation
+
+    @objc private func showQueueSheetFromNotification() {
+        // Trigger the sheet display by updating the view model
+        queueViewModel.showQueueSheet = true
     }
 }

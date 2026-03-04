@@ -322,6 +322,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             return true
         }
 
+        // Show queue sheet from Live Activity deep link, e.g. appdb-ios://?action=show-queue
+
+        if let index = queryItems.firstIndex(where: { $0.name == "action" }), 
+           let action = queryItems[index].value, action == "show-queue" {
+            // Post notification to TabBarController to show the queue sheet
+            NotificationCenter.default.post(name: NSNotification.Name("ShowQueueSheet"), object: nil)
+            return true
+        }
+
+        // Install manifest from Live Activity deep link, e.g. appdb-ios://?action=install-manifest&uri=x&linkId=y
+
+        if let index1 = queryItems.firstIndex(where: { $0.name == "action" }), let index2 = queryItems.firstIndex(where: { $0.name == "uri" }) {
+            guard let action = queryItems[index1].value, action == "install-manifest" else {
+                // Not an install-manifest action — fall through to other handlers
+                return false
+            }
+            guard let manifestUri = queryItems[index2].value, !manifestUri.isEmpty else { return false }
+
+            // Find the matching queued app by linkId (if provided) or by manifestUri
+            let linkId = queryItems.first(where: { $0.name == "linkId" })?.value
+            let matchingApp: RequestedApp? = {
+                if let linkId, let app = ObserveQueuedApps.shared.requestedApps.first(where: { $0.linkId == linkId }) {
+                    return app
+                }
+                // Fallback: find by manifestUri
+                return ObserveQueuedApps.shared.requestedApps.first(where: { $0.manifestUri == manifestUri })
+            }()
+
+            if let app = matchingApp {
+                ObserveQueuedApps.shared.openManifest(for: app)
+            } else {
+                // No matching app found — open the manifest URI directly
+                guard let encoded = manifestUri.urlEncoded else { return false }
+                let urlString = "itms-services://?action=download-manifest&url=\(encoded)"
+                if let url = URL(string: urlString) {
+                    UIApplication.shared.open(url)
+                }
+            }
+
+            return true
+        }
+
         // Authorize app with link code, e.g. appdb-ios://?action=authorize&code=x
 
         if let index1 = queryItems.firstIndex(where: { $0.name == "action" }), let index2 = queryItems.firstIndex(where: { $0.name == "code" }) {

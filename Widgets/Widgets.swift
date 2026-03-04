@@ -6,6 +6,7 @@
 //  Copyright © 2021 ned. All rights reserved.
 //
 
+import ActivityKit
 import WidgetKit
 import SwiftUI
 import Intents
@@ -15,5 +16,6 @@ struct Widgets: WidgetBundle {
    var body: some Widget {
         AppsWidgets()
         NewsWidgets()
+        SigningLiveActivity()
    }
 }

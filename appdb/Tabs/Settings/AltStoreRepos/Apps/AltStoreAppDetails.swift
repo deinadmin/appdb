@@ -73,7 +73,7 @@ class AltStoreAppDetails: UIHostingController<AnyView> {
     func installAction() {
         if Preferences.deviceIsLinked {
             func install(_ additionalOptions: [String: Any] = [:]) {
-                API.customInstall(ipaUrl: app.downloadURL, iconUrl: app.image, name: app.name, additionalOptions: additionalOptions) { [weak self] result in
+                API.customInstall(ipaUrl: app.downloadURL, iconUrl: app.image, name: app.name, type: "repo", additionalOptions: additionalOptions) { [weak self] result in
                     guard let self = self else { return }
 
                     switch result {

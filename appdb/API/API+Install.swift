@@ -93,8 +93,8 @@ extension API {
         install(id: "", type: "universal", installationTicket: id, additionalOptions: additionalOptions, completion: completion)
     }
 
-    static func customInstall(ipaUrl: String, iconUrl: String, name: String, additionalOptions: [String: Any] = [:], completion: @escaping (_ result: Result<InstallResult, InstallError>) -> Void) {
-        var parameters: [String: Any] = ["type": "universal", "link": ipaUrl, "image": iconUrl, "name": name, "lang": languageCode]
+    static func customInstall(ipaUrl: String, iconUrl: String, name: String, type: String = "universal", additionalOptions: [String: Any] = [:], completion: @escaping (_ result: Result<InstallResult, InstallError>) -> Void) {
+        var parameters: [String: Any] = ["type": type, "link": ipaUrl, "image": iconUrl, "name": name, "lang": languageCode]
         for (key, value) in additionalOptions { parameters[key] = value }
 
         debugLog("API.customInstall — parameters: \(parameters)")
