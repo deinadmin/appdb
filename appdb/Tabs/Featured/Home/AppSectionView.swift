@@ -18,47 +18,56 @@ private typealias SColor = SwiftUI.Color
 struct AppSectionView: SwiftUI.View {
     let section: HomeSection
     var onSelectItem: ((Item) -> Void)?
+    var onInstallItem: ((Item) -> Void)?
     var onSeeAll: ((String, ItemType, String, Price, Order) -> Void)?
     var onSeeAllRepo: ((AltStoreRepo) -> Void)?
 
     var body: some SwiftUI.View {
         VStack(alignment: .leading, spacing: 12) {
-            // Header: Title + See All
-            HStack(alignment: .firstTextBaseline) {
-                Text(section.title)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.primary)
-
-                Spacer()
-
-                Button {
-                    if let repo = section.repo {
-                        onSeeAllRepo?(repo)
-                    } else {
-                        onSeeAll?(section.title, section.itemType, section.category, section.price, section.order)
-                    }
-                } label: {
-                    Text("See All".localized())
-                        .font(.callout)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.blue)
+            // Header: Tappable title + chevron
+            Button {
+                if let repo = section.repo {
+                    onSeeAllRepo?(repo)
+                } else {
+                    onSeeAll?(section.title, section.itemType, section.category, .all, section.order)
                 }
-                .buttonStyle(.plain)
+            } label: {
+                HStack(alignment: .center, spacing: 4) {
+                    Text(section.title)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+
+                    Image(systemName: "chevron.right")
+                        .font(.title2.weight(.bold))
+                        .foregroundStyle(.secondary)
+                }
             }
+            .buttonStyle(.plain)
             .padding(.horizontal, 20)
 
-            // Horizontal scroll of app icons (show up to 10)
+            // Paginated horizontal scroll of app rows (up to 15 items, 3 per page)
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: 14) {
-                    ForEach(Array(section.items.prefix(10).enumerated()), id: \.offset) { _, item in
-                        AppIconCell(item: item)
-                            .onTapGesture {
-                                onSelectItem?(item)
+                LazyHStack(spacing: 8) {
+                    ForEach(Array(pages.enumerated()), id: \.offset) { _, pageItems in
+                        VStack(alignment: .leading, spacing: 12) {
+                            ForEach(Array(pageItems.enumerated()), id: \.offset) { index, item in
+                                AppListRow(item: item, onInstall: {
+                                    onInstallItem?(item)
+                                })
+                                .onTapGesture {
+                                    onSelectItem?(item)
+                                }
+                                
+                                if index < pageItems.count - 1 {
+                                    Divider()
+                                        .padding(.leading, 60 + 12) // Align with text (icon size + spacing)
+                                }
                             }
-                            .scrollTransition { content, phase in
-                                content
-                            }
+                        }
+                        .containerRelativeFrame(.horizontal) { length, _ in
+                            length - 44 // 20 leading padding + 12 spacing + 12 next peek
+                        }
                     }
                 }
                 .scrollTargetLayout()
@@ -70,39 +79,66 @@ struct AppSectionView: SwiftUI.View {
         .padding(.top, 12)
         .padding(.bottom, 4)
     }
+
+    /// Chunk items into pages of 3 for the vertical stacks
+    private var pages: [[Item]] {
+        let maxItems = 15 // 5 pages * 3 apps
+        let prefixItems = Array(section.items.prefix(maxItems))
+        var chunks: [[Item]] = []
+        for i in stride(from: 0, to: prefixItems.count, by: 3) {
+            let end = min(i + 3, prefixItems.count)
+            chunks.append(Array(prefixItems[i..<end]))
+        }
+        return chunks
+    }
 }
 
-/// A single app icon cell with icon, name, and subtitle.
+/// A single app row with icon, title, author, and install button.
 @available(iOS 15.0, *)
-struct AppIconCell: SwiftUI.View {
+struct AppListRow: SwiftUI.View {
     let item: Item
+    var onInstall: (() -> Void)?
 
-    /// Icon size — matches the existing Global.Size.itemWidth values
-    private let iconSize: CGFloat = Global.isIpad ? 83 : 73
+    private let iconSize: CGFloat = 60
 
     var body: some SwiftUI.View {
-        VStack(alignment: .leading, spacing: 5) {
+        HStack(alignment: .center, spacing: 12) {
             // App icon
             AsyncImageWithPlaceholder(
                 url: URL(string: item.itemIconUrl),
                 size: iconSize
             )
 
-            // App name
-            Text(item.itemName)
-                .font(.caption)
-                .foregroundStyle(.primary)
-                .lineLimit(2)
-                .frame(width: iconSize, alignment: .leading)
+            // Name and Author
+            VStack(alignment: .leading, spacing: 2) {
+                Text(item.itemName)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
 
-            // Category / subtitle
-            Text(item.itemCategoryName.isEmpty ? item.itemSeller : item.itemCategoryName)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
-                .frame(width: iconSize, alignment: .leading)
+                Text(item.itemCategoryName.isEmpty ? item.itemSeller : item.itemCategoryName)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+
+            Spacer()
+
+            // Install button pill (Accent color with white/black text)
+            Button {
+                onInstall?()
+            } label: {
+                Text("Get".localized())
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundStyle(.white) // Standard for most accent colors
+                    .padding(.horizontal, 22)
+                    .padding(.vertical, 6)
+                    .background(SColor.accentColor)
+                    .clipShape(Capsule())
+            }
+            .buttonStyle(.plain)
         }
-        .frame(width: iconSize)
+        .contentShape(Rectangle()) // Ensure the whole row is tappable
     }
 }
 

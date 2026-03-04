@@ -45,50 +45,123 @@ struct SeeAllView: SwiftUI.View {
     // MARK: - Search Placeholder
 
     private var searchPlaceholder: String {
-        switch viewModel.type {
-        case .ios: return "Search iOS Apps".localized()
-        case .cydia: return "Search Custom Apps".localized()
-        default: return "Search".localized()
-        }
+        "Search for Apps & Games".localized()
     }
 
     // MARK: - Filters Menu
 
     private var filtersMenu: some SwiftUI.View {
         Menu {
-            // Order section
-            Section {
-                ForEach(Order.allCases, id: \.rawValue) { order in
-                    Button {
-                        viewModel.order = order
-                    } label: {
-                        Label(order.pretty, systemImage: order.associatedImage)
-                        if viewModel.order == order {
-                            Image(systemName: "checkmark")
-                        }
-                    }
+            // Sort section
+            Section("Sort".localized()) {
+                // Date sort button
+                Button {
+                    viewModel.toggleSort(.date)
+                } label: {
+                    sortLabel(for: .date)
+                }
+
+                // Name sort button
+                Button {
+                    viewModel.toggleSort(.name)
+                } label: {
+                    sortLabel(for: .name)
                 }
             }
 
-            // Price section (iOS apps only)
-            if viewModel.type == .ios {
-                Section {
-                    ForEach(Price.allCases, id: \.rawValue) { price in
+            // Categories submenu — only when browsing all categories / popular
+            if viewModel.showCategoryFilter {
+                let cats = viewModel.verifiedCategories
+                if !cats.isEmpty {
+                    Menu {
+                        // "All" clear option
                         Button {
-                            viewModel.price = price
+                            viewModel.selectedCategories.removeAll()
                         } label: {
-                            Label(price.pretty, systemImage: price.associatedImage)
-                            if viewModel.price == price {
+                            Label("All".localized(), systemImage: "square.grid.2x2")
+                            if viewModel.selectedCategories.isEmpty {
                                 Image(systemName: "checkmark")
                             }
                         }
+
+                        Divider()
+
+                        ForEach(cats, id: \.id) { genre in
+                            Button {
+                                if viewModel.selectedCategories.contains(genre.name) {
+                                    viewModel.selectedCategories.remove(genre.name)
+                                } else {
+                                    viewModel.selectedCategories.insert(genre.name)
+                                }
+                            } label: {
+                                Label(genre.name, systemImage: categoryIcon(for: genre.name))
+                                if viewModel.selectedCategories.contains(genre.name) {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                        }
+                    } label: {
+                        let active = !viewModel.selectedCategories.isEmpty
+                        Label("Categories".localized(), systemImage: active ? "tag.fill" : "tag")
                     }
                 }
             }
         } label: {
-            Image(systemName: "line.horizontal.3.decrease.circle")
+            let hasFilter = !viewModel.selectedCategories.isEmpty
+            Image(systemName: hasFilter
+                  ? "line.horizontal.3.decrease.circle.fill"
+                  : "line.horizontal.3.decrease.circle")
                 .imageScale(.large)
         }
+    }
+
+    @ViewBuilder
+    private func sortLabel(for field: SeeAllViewModel.SortField) -> some SwiftUI.View {
+        let isActive = viewModel.sortField == field
+        let ascending = viewModel.sortAscending
+        let (icon, label): (String, String) = field == .date
+            ? ("calendar", "Date".localized())
+            : ("textformat.abc", "Name".localized())
+
+        Label {
+            HStack {
+                Text(label)
+                if isActive {
+                    Image(systemName: ascending ? "arrow.up" : "arrow.down")
+                        .font(.caption.weight(.bold))
+                }
+            }
+        } icon: {
+            Image(systemName: icon)
+        }
+    }
+
+    private func categoryIcon(for category: String) -> String {
+        let cat = category.lowercased()
+        if cat.contains("game") { return "gamecontroller" }
+        if cat.contains("book") { return "book" }
+        if cat.contains("tool") || cat.contains("util") { return "wrench.and.screwdriver" }
+        if cat.contains("social") || cat.contains("chat") { return "bubble.left.and.bubble.right" }
+        if cat.contains("photo") || cat.contains("video") { return "camera" }
+        if cat.contains("music") || cat.contains("audio") { return "music.note" }
+        if cat.contains("news") { return "newspaper" }
+        if cat.contains("education") { return "graduationcap" }
+        if cat.contains("finance") { return "banknote" }
+        if cat.contains("health") { return "heart" }
+        if cat.contains("lifestyle") { return "house" }
+        if cat.contains("productivity") { return "checkmark.circle" }
+        if cat.contains("reference") { return "info.circle" }
+        if cat.contains("shopping") { return "cart" }
+        if cat.contains("travel") { return "airplane" }
+        if cat.contains("weather") { return "cloud.sun" }
+        if cat.contains("entertainment") { return "film.stack" }
+        if cat.contains("sport") { return "sportscourt" }
+        if cat.contains("navigation") || cat.contains("map") { return "map" }
+        if cat.contains("food") || cat.contains("drink") { return "fork.knife" }
+        if cat.contains("medical") { return "cross.case" }
+        if cat.contains("developer") { return "hammer" }
+        if cat.contains("graphic") { return "paintpalette" }
+        return "tag"
     }
 
     // MARK: - List Content

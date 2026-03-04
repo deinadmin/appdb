@@ -10,8 +10,13 @@ private typealias SColor = SwiftUI.Color
 struct EditRepositoriesView: SwiftUI.View {
     @Environment(\.dismiss) private var dismiss
 
-    @State private var repos: [AltStoreRepo] = []
-    @State private var isLoading = true
+    init(initialRepos: [AltStoreRepo] = []) {
+        _repos = State(initialValue: initialRepos)
+        _isLoading = State(initialValue: initialRepos.isEmpty)
+    }
+
+    @State private var repos: [AltStoreRepo]
+    @State private var isLoading: Bool
     @State private var errorMessage: String?
     @State private var showingAddAlert = false
     @State private var newRepoURL = ""
@@ -19,7 +24,7 @@ struct EditRepositoriesView: SwiftUI.View {
     var body: some SwiftUI.View {
         NavigationStack {
             content
-                .navigationTitle("Edit Repositories".localized())
+                .navigationTitle("Manage Repositories".localized())
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
@@ -43,7 +48,7 @@ struct EditRepositoriesView: SwiftUI.View {
                 } message: {
                     EmptyView()
                 }
-                .onAppear { loadRepos() }
+                .onAppear { if repos.isEmpty { loadRepos() } }
         }
     }
 

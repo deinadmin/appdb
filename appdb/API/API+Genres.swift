@@ -46,20 +46,29 @@ extension API {
                     // Save genres
                     let group = DispatchGroup()
 
-                    for (i, var genre) in genres.enumerated() {
+                    for var genre in genres {
                         if let index = Preferences.genres.firstIndex(where: { $0.compound == genre.compound }) {
-                            // Genre exists
+                            // Genre exists, update name if it changed (e.g. language change)
+                            if Preferences.genres[index].name != genre.name {
+                                var updatedGenres = Preferences.genres
+                                updatedGenres[index].name = genre.name
+                                Preferences.genres = updatedGenres
+                            }
+
+                            // Update icon if missing
                             if Preferences.genres[index].icon.isEmpty {
                                 group.enter()
                                 getIcon(genreId: genre.id, completion: { icon in
-                                    genre.icon = icon
-                                    Preferences.remove(.genres, at: index)
-                                    Preferences.append(.genres, element: genre)
+                                    if let idx = Preferences.genres.firstIndex(where: { $0.compound == genre.compound }) {
+                                        var updatedGenres = Preferences.genres
+                                        updatedGenres[idx].icon = icon
+                                        Preferences.genres = updatedGenres
+                                    }
                                     group.leave()
                                 })
                             }
                         } else {
-                            // Genre does not exist
+                            // Genre does not exist, fetch icon and add
                             group.enter()
                             getIcon(genreId: genre.id, completion: { icon in
                                 genre.icon = icon

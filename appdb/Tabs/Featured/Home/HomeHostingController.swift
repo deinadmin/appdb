@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import TelemetryClient
+import SwiftMessages
 
 // Typealias to disambiguate project's Color enum from SwiftUI.Color
 private typealias AppColor = Color
@@ -25,15 +26,6 @@ class HomeHostingController: UIViewController {
         super.viewDidLoad()
 
         title = "Home".localized()
-
-        // Repos button
-        let reposButton = UIBarButtonItem(
-            image: UIImage(systemName: "list.bullet.below.rectangle"),
-            style: .plain,
-            target: self,
-            action: #selector(presentReposSheet)
-        )
-        navigationItem.leftBarButtonItem = reposButton
 
         // Set up the SwiftUI view
         if #available(iOS 15.0, *) {
@@ -73,6 +65,9 @@ class HomeHostingController: UIViewController {
         homeView.onSelectItem = { [weak self] item in
             self?.pushDetails(for: item)
         }
+        homeView.onInstallItem = { [weak self] item in
+            self?.handleInstall(item: item)
+        }
         homeView.onSeeAll = { [weak self] title, itemType, category, price, order in
             self?.pushSeeAll(title: title, type: itemType, category: category, price: price, order: order)
         }
@@ -83,7 +78,15 @@ class HomeHostingController: UIViewController {
             self?.handleBannerTap(bannerName: bannerName)
         }
         homeView.onCategoryTap = { [weak self] categoryName, itemType, categoryId in
-            let viewModel = SeeAllViewModel(title: categoryName, type: itemType, category: categoryId, price: .all, order: .all)
+            let isAll = categoryId == "0"
+            let viewModel = SeeAllViewModel(
+                title: categoryName,
+                type: itemType,
+                category: categoryId,
+                price: .all,
+                order: isAll ? .added : .all,
+                isAllCategories: isAll
+            )
             let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
                 self?.pushDetails(for: item)
             })
@@ -96,6 +99,9 @@ class HomeHostingController: UIViewController {
             } else {
                 self?.navigationController?.pushViewController(seeAllViewController, animated: true)
             }
+        }
+        homeView.onEditRepos = { [weak self] in
+            self?.presentReposSheet()
         }
 
         // Inject the shared view model into the SwiftUI environment
@@ -186,9 +192,23 @@ class HomeHostingController: UIViewController {
     // MARK: - Navigation
 
     @objc private func presentReposSheet() {
-        let sheet = UIHostingController(rootView: EditRepositoriesView())
-        sheet.modalPresentationStyle = .formSheet
-        present(sheet, animated: true)
+        homeViewModel?.isLoadingRepos = true
+        API.getRepos(isPublic: false, success: { [weak self] repos in
+            DispatchQueue.main.async {
+                self?.homeViewModel?.isLoadingRepos = false
+                let sheet = UIHostingController(rootView: EditRepositoriesView(initialRepos: repos))
+                sheet.modalPresentationStyle = .formSheet
+                self?.present(sheet, animated: true)
+            }
+        }, fail: { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.homeViewModel?.isLoadingRepos = false
+                // Fall back to empty sheet so the user isn't stuck — it will load inside
+                let sheet = UIHostingController(rootView: EditRepositoriesView())
+                sheet.modalPresentationStyle = .formSheet
+                self?.present(sheet, animated: true)
+            }
+        })
     }
 
     private func pushDetails(for content: Item) {
@@ -241,5 +261,103 @@ class HomeHostingController: UIViewController {
         }
     }
 
+    // MARK: - Installation Flow
+
+    private func handleInstall(item: Item) {
+        if !Preferences.deviceIsLinked {
+            Messages.shared.showError(message: "Please authorize app from Settings first".localized(), context: .viewController(self))
+            return
+        }
+
+        if let altStoreApp = item as? AltStoreApp {
+            actualAltStoreInstall(app: altStoreApp)
+        } else {
+            // Fetch links first via gateway
+            API.getLinks(universalObjectIdentifier: item.itemUniversalObjectIdentifier, success: { [weak self] versions in
+                guard let self = self else { return }
+                if let firstLink = versions.first?.links.first, !firstLink.id.isEmpty {
+                    self.actualCatalogInstall(item: item, linkId: firstLink.id)
+                } else {
+                    let reason = versions.first?.links.first?.compatibility ?? "No installable links found".localized()
+                    Messages.shared.showError(message: reason, context: .viewController(self))
+                }
+            }, fail: { [weak self] error in
+                guard let self = self else { return }
+                Messages.shared.showError(message: error, context: .viewController(self))
+            })
+        }
+    }
+
+    private func actualCatalogInstall(item: Item, linkId: String) {
+        let type: ItemType = (item is CydiaApp) ? .cydia : (item is Book ? .books : .ios)
+
+        func install(_ additionalOptions: [String: Any] = [:]) {
+            API.install(id: linkId, type: type, additionalOptions: additionalOptions) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .failure(let error):
+                    Messages.shared.showError(message: error.prettified, context: .viewController(self))
+                case .success(let installResult):
+                    if #available(iOS 10.0, *) { UINotificationFeedbackGenerator().notificationOccurred(.success) }
+                    if installResult.installationType == .itmsServices {
+                        Messages.shared.showSuccess(message: "App is being signed, please wait...".localized(), context: .viewController(self))
+                    } else {
+                        Messages.shared.showSuccess(message: "Installation has been queued to your device".localized(), context: .viewController(self))
+                    }
+                    if type != .books {
+                        ObserveQueuedApps.shared.addApp(
+                            type: type, linkId: linkId,
+                            name: item.itemName, image: item.itemIconUrl,
+                            bundleId: item.itemBundleId,
+                            commandUUID: installResult.commandUUID,
+                            installationType: installResult.installationType.rawValue
+                        )
+                    }
+                }
+            }
+        }
+
+        if Preferences.askForInstallationOptions {
+            self.loadInstallationOptionsAndPresentSheet(
+                onInstall: { install($0) }
+            )
+        } else {
+            install()
+        }
+    }
+
+    private func actualAltStoreInstall(app: AltStoreApp) {
+        func install(_ additionalOptions: [String: Any] = [:]) {
+            API.customInstall(ipaUrl: app.downloadURL, iconUrl: app.image, name: app.name, type: "repo", additionalOptions: additionalOptions) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .failure(let error):
+                    Messages.shared.showError(message: error.prettified, context: .viewController(self))
+                case .success(let installResult):
+                    if #available(iOS 10.0, *) { UINotificationFeedbackGenerator().notificationOccurred(.success) }
+                    if installResult.installationType == .itmsServices {
+                        Messages.shared.showSuccess(message: "App is being signed, please wait...".localized(), context: .viewController(self))
+                    } else {
+                        Messages.shared.showSuccess(message: "Installation has been queued to your device".localized(), context: .viewController(self))
+                    }
+                    ObserveQueuedApps.shared.addApp(
+                        type: .altstore, linkId: "",
+                        name: app.name, image: app.image,
+                        bundleId: app.bundleId,
+                        commandUUID: installResult.commandUUID,
+                        installationType: installResult.installationType.rawValue
+                    )
+                }
+            }
+        }
+
+        if Preferences.askForInstallationOptions {
+            self.loadInstallationOptionsAndPresentSheet(
+                onInstall: { install($0) }
+            )
+        } else {
+            install()
+        }
+    }
 }
 

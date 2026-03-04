@@ -19,10 +19,16 @@ struct HomeView: SwiftUI.View {
 
     /// Navigation callbacks — bridge into the UIKit navigation stack
     var onSelectItem: ((Item) -> Void)?
+    var onInstallItem: ((Item) -> Void)?
     var onSeeAll: ((String, ItemType, String, Price, Order) -> Void)?
     var onSeeAllRepo: ((AltStoreRepo) -> Void)?
     var onBannerTap: ((String) -> Void)?
     var onCategoryTap: ((String, ItemType, String) -> Void)?
+    var onEditRepos: (() -> Void)?
+
+    // Delayed spinner — only visible if loading takes > 2 seconds
+    @State private var showReposSpinner = false
+    @State private var spinnerTask: Task<Void, Never>?
 
     var body: some SwiftUI.View {
         Group {
@@ -64,6 +70,7 @@ struct HomeView: SwiftUI.View {
                         AppSectionView(
                             section: section,
                             onSelectItem: onSelectItem,
+                            onInstallItem: onInstallItem,
                             onSeeAll: onSeeAll
                         )
                     }
@@ -75,9 +82,52 @@ struct HomeView: SwiftUI.View {
                         AppSectionView(
                             section: section,
                             onSelectItem: onSelectItem,
+                            onInstallItem: onInstallItem,
                             onSeeAll: onSeeAll,
                             onSeeAllRepo: onSeeAllRepo
                         )
+                    }
+                }
+
+                // Manage Repositories button
+                Button {
+                    // Guard against re-taps while prefetch is in flight
+                    guard !viewModel.isLoadingRepos else { return }
+                    onEditRepos?()
+                } label: {
+                    ZStack {
+                        Label("Manage Repositories".localized(), systemImage: "list.bullet.below.rectangle")
+                            .font(.body.weight(.semibold))
+                            .opacity(showReposSpinner ? 0 : 1)
+
+                        if showReposSpinner {
+                            ProgressView()
+                                .tint(.white)
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 14)
+                    .frame(maxWidth: .infinity)
+                    .background(SColor.accentColor.opacity(showReposSpinner ? 0.6 : 1))
+                    .foregroundStyle(.white)
+                    .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .animation(.easeInOut, value: showReposSpinner)
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                .onChange(of: viewModel.isLoadingRepos) { isLoading in
+                    if isLoading {
+                        spinnerTask = Task {
+                            try? await Task.sleep(nanoseconds: 2_000_000_000)
+                            if !Task.isCancelled {
+                                showReposSpinner = true
+                            }
+                        }
+                    } else {
+                        spinnerTask?.cancel()
+                        spinnerTask = nil
+                        showReposSpinner = false
                     }
                 }
 
@@ -185,45 +235,95 @@ struct GenreSectionView: SwiftUI.View {
 struct GenreCardView: SwiftUI.View {
     let genre: Genre
 
-    private var gradient: LinearGradient {
-        let colorsList: [[SColor]] = [
-            [.blue, .purple],
-            [.orange, .red],
-            [.green, .mint],
-            [.pink, .orange],
-            [.teal, .blue],
-            [.indigo, .purple],
-            [.cyan, .teal],
-            [.yellow, .orange]
-        ]
-        
-        // Simple stable hash-based index
-        let index = abs(genre.name.hashValue) % colorsList.count
-        return LinearGradient(
-            colors: colorsList[index],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
+    private func getStyle(for name: String) -> (icon: String, colors: [SColor]) {
+        let key = name.lowercased()
+
+        switch key {
+        case "games":
+            return ("gamecontroller.fill", [.purple, .indigo])
+        case "entertainment":
+            return ("film.stack.fill", [.pink, .red])
+        case "social networking":
+            return ("person.2.fill", [.blue, .cyan])
+        case "productivity":
+            return ("checkmark.circle.fill", [.blue, .teal])
+        case "utilities":
+            return ("wrench.and.screwdriver.fill", [.gray, .blue])
+        case "music", "audio", "rhythm game":
+            return ("music.note.list", [.pink, .purple])
+        case "photo & video", "photo and video", "photos & video":
+            return ("camera.fill", [.orange, .red])
+        case "health & fitness", "health and fitness":
+            return ("heart.fill", [.red, .pink])
+        case "education":
+            return ("graduationcap.fill", [.green, .mint])
+        case "business":
+            return ("briefcase.fill", [.cyan, .blue])
+        case "finance":
+            return ("creditcard.fill", [.green, .teal])
+        case "lifestyle":
+            return ("sparkles", [.orange, .yellow])
+        case "sports":
+            return ("sportscourt.fill", [.green, .blue])
+        case "travel":
+            return ("airplane", [.blue, .indigo])
+        case "news":
+            return ("newspaper.fill", [.red, .orange])
+        case "reference":
+            return ("book.pages.fill", [.indigo, .purple])
+        case "medical":
+            return ("cross.case.fill", [.red, .pink])
+        case "food & drink", "food and drink":
+            return ("fork.knife", [.orange, .yellow])
+        case "navigation":
+            return ("map.fill", [.blue, .cyan])
+        case "weather":
+            return ("cloud.sun.fill", [.cyan, .blue])
+        case "shopping":
+            return ("bag.fill", [.yellow, .orange])
+        case "books", "book":
+            return ("book.fill", [.orange, .red])
+        case "developer tools":
+            return ("hammer.fill", [.gray, .primary])
+        case "graphics & design", "graphics and design", "graphics":
+            return ("paintpalette.fill", [.indigo, .pink])
+        case "magazines & newspapers", "magazines", "newspapers":
+            return ("doc.richtext", [.gray, .blue])
+        case "emulators":
+            return ("dpad.fill", [.purple, .blue])
+        case "file sharing":
+            return ("square.and.arrow.up.fill", [.blue, .indigo])
+        case "jailbreak tools", "jailed tools":
+            return ("lock.open.fill", [.red, .orange])
+        case "desktop":
+            return ("desktopcomputer", [.blue, .gray])
+        case "enhanced apps", "enhanced games":
+            return ("star.fill", [.yellow, .orange])
+        case "app stores":
+            return ("bag.circle.fill", [.blue, .cyan])
+        case "anime":
+            return ("play.tv.fill", [.pink, .purple])
+        default:
+            // Fallback stable color
+            let colorsList: [[SColor]] = [
+                [.blue, .purple], [.orange, .red], [.green, .mint],
+                [.pink, .orange], [.teal, .blue], [.indigo, .purple]
+            ]
+            let index = abs(genre.name.hashValue) % colorsList.count
+            return ("square.grid.2x2.fill", colorsList[index])
+        }
     }
 
     var body: some SwiftUI.View {
+        let style = getStyle(for: genre.name)
+        let gradient = LinearGradient(colors: style.colors, startPoint: .topLeading, endPoint: .bottomTrailing)
+
         VStack(spacing: 8) {
-            AsyncImage(url: URL(string: genre.icon)) { phase in
-                switch phase {
-                case .success(let image):
-                    image
-                        .resizable()
-                        .renderingMode(.template) // Usually category icons in API are white masks
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundStyle(.white)
-                default:
-                    Image(systemName: "square.grid.2x2.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundStyle(.white.opacity(0.8))
-                }
-            }
-            .frame(width: 32, height: 32)
+            Image(systemName: style.icon)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundStyle(.white)
+                .frame(width: 32, height: 32)
             
             Text(genre.name)
                 .font(.caption)
@@ -233,7 +333,7 @@ struct GenreCardView: SwiftUI.View {
                 .minimumScaleFactor(0.8)
         }
         .padding(.horizontal, 8)
-        .frame(width: 110, height: 90)
+        .frame(width: 135, height: 90)
         .background(gradient)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }

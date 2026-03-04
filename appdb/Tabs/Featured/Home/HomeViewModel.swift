@@ -44,6 +44,7 @@ final class HomeViewModel: ObservableObject {
     @Published var isLoading = true
     @Published var hasError = false
     @Published var errorMessage = ""
+    @Published var isLoadingRepos = false
 
     /// The built-in sections: Apps, New and Noteworthy, Popular This Week
     @Published var sections: [HomeSection] = []

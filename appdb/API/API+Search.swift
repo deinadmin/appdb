@@ -23,7 +23,8 @@ extension API {
         var params: [String: Any] = [
             "start": pageSize * (page - 1),
             "length": pageSize,
-            "lang": languageCode
+            "lang": languageCode,
+            "order": order.rawValue
         ]
 
         // Map old ItemType to v1.7 newContentType
@@ -68,7 +69,8 @@ extension API {
         var params: [String: Any] = [
             "start": pageSize * (page - 1),
             "length": pageSize,
-            "lang": languageCode
+            "lang": languageCode,
+            "order": order.rawValue
         ]
 
         if q != "" { params["name"] = q }

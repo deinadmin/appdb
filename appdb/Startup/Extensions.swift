@@ -108,7 +108,14 @@ extension String {
         if let unixTime = Double(self) {
             return Date(timeIntervalSince1970: unixTime)
         }
-        return Date()
+        return Date(timeIntervalSince1970: 0)
+    }
+
+    //
+    // Returns unix time as double
+    //
+    var unixTime: Double {
+        Double(self) ?? 0
     }
 
     //

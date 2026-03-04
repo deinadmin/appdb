@@ -168,7 +168,8 @@ enum Preferences {
     }
 
     static var genres: [Genre] {
-        defaults[.genres]
+        get { defaults[.genres] }
+        set { defaults[.genres] = newValue }
     }
 
     static var followSystemAppearance: Bool {

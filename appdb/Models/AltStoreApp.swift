@@ -58,6 +58,7 @@ class AltStoreApp: Item {
     var formattedSize: String = ""
     var tintColor: UIColor = .white
     var tintColorHex: String = ""
+    var updatedRaw: Double = 0  // Raw unix timestamp, before date formatting
 
     override func mapping(map: Map) {
         id <- map["id"]
@@ -91,6 +92,7 @@ class AltStoreApp: Item {
         dateFormatter.timeStyle = .short
 
         let date = updated.unixToDate
+        updatedRaw = Double(updated) ?? 0  // Preserve raw timestamp before formatting
         updated = dateFormatter.string(from: date)
 
         if !screenshotURLs.isEmpty {

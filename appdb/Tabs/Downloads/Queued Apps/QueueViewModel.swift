@@ -206,20 +206,36 @@ final class QueueViewModel: ObservableObject {
     /// - Updates activities whose status or readiness changed
     /// - Ends activities for apps no longer in the queue
     private func syncLiveActivities(with currentApps: [RequestedApp]) {
-        let currentQueueItemIds = Set(currentApps.map(\.queueItemId))
+        // Only show a Live Activity for the most recently added app in the queue
+        // to prevent stacking on the lock screen.
+        guard let latestApp = currentApps.first else {
+            endAllLiveActivities()
+            return
+        }
 
-        // End activities for apps that are no longer queued
-        for (queueItemId, _) in liveActivities where !currentQueueItemIds.contains(queueItemId) {
+        // End any tracked activities that are NOT for the latest app.
+        // This ensures that when a new app is added to the queue (pushed to self.apps.first),
+        // the activity for the previous app is terminated.
+        let otherQueueItemIds = liveActivities.keys.filter { $0 != latestApp.queueItemId }
+        for queueItemId in otherQueueItemIds {
             endLiveActivity(for: queueItemId)
         }
 
-        // Start or update activities for each queued app
-        for app in currentApps {
-            if liveActivities[app.queueItemId] != nil {
-                updateLiveActivity(for: app)
-            } else {
-                startLiveActivity(for: app)
+        // Also proactively end any "orphaned" activities of this type on the system
+        // (e.g. from a previous launch) except for the one we want to keep.
+        Task {
+            for activity in Activity<SigningActivityAttributes>.activities {
+                if activity.attributes.commandUUID != latestApp.commandUUID || activity.attributes.linkId != latestApp.linkId {
+                    await activity.end(nil, dismissalPolicy: .immediate)
+                }
             }
+        }
+
+        // Create or update the activity for the latest app.
+        if liveActivities[latestApp.queueItemId] != nil {
+            updateLiveActivity(for: latestApp)
+        } else {
+            startLiveActivity(for: latestApp)
         }
     }
 
@@ -319,8 +335,17 @@ final class QueueViewModel: ObservableObject {
     }
 
     private func endAllLiveActivities() {
-        for (queueItemId, _) in liveActivities {
+        // Clear all tracked activities
+        for queueItemId in Array(liveActivities.keys) {
             endLiveActivity(for: queueItemId)
+        }
+
+        // Also proactively end any "orphaned" activities of this type on the device
+        // to ensure we start from a clean state.
+        Task {
+            for activity in Activity<SigningActivityAttributes>.activities {
+                await activity.end(nil, dismissalPolicy: .immediate)
+            }
         }
     }
 }

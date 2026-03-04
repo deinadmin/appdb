@@ -112,6 +112,15 @@ extension Item {
         return ""
     }
 
+    /// Raw unix timestamp as Double for reliable date-based sorting.
+    /// Returns 0 if no timestamp is available.
+    var itemRawTimestamp: Double {
+        if let app = self as? App { return app.updatedAtRaw }
+        if let cydiaApp = self as? CydiaApp { return Double(cydiaApp.updated) ?? 0 }
+        if let altStoreApp = self as? AltStoreApp { return altStoreApp.updatedRaw }
+        return 0
+    }
+
     // MARK: - v1.7 detail fields
 
     var itemSize: String {

@@ -55,6 +55,7 @@ class App: Item {
     // Information
     var bundleId: String = ""
     var updated: String = ""
+    var updatedAtRaw: Double = 0  // Raw unix timestamp from v1.7 updated_at
     var published: String = ""
     var version: String = ""
     var price: String = ""
@@ -228,8 +229,16 @@ class App: Item {
         }
 
         // Published/Updated date: use updated_at (unix timestamp string)
-        if published.isEmpty, let updatedAt = map.JSON["updated_at"] as? String, !updatedAt.isEmpty {
-            published = updatedAt.unixToString
+        if let updatedAt = map.JSON["updated_at"] as? String, !updatedAt.isEmpty {
+            updatedAtRaw = Double(updatedAt) ?? 0
+            if published.isEmpty {
+                published = updatedAt.unixToString
+            }
+        } else if let updatedAtInt = map.JSON["updated_at"] as? Int {
+            updatedAtRaw = Double(updatedAtInt)
+            if published.isEmpty {
+                published = String(updatedAtInt).unixToString
+            }
         }
 
         // Price: convert price_cents_eur (euro cents string) to display string
