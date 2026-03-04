@@ -36,6 +36,7 @@ struct AppDetailView: SwiftUI.View {
     var onDeveloperTap: (String, ItemType, String) -> Void = { _, _, _ in }
     var onExternalLink: (String) -> Void = { _ in }
     var onOriginalApp: (ItemType, String) -> Void = { _, _ in }
+    var onCategoryTap: (String, ItemType, String) -> Void = { _, _, _ in }
     var onScreenshotTap: (Int, Bool, Bool, CGFloat) -> Void = { _, _, _, _ in }
     var onRetry: () -> Void = {}
 
@@ -363,16 +364,24 @@ struct AppDetailView: SwiftUI.View {
     }
 
     private func infoPillView(_ pill: InfoPillData) -> some SwiftUI.View {
-        VStack(spacing: 3) {
+        let content = VStack(spacing: 3) {
             Text(pill.header)
                 .font(.system(size: 10, weight: .semibold))
                 .foregroundStyle(.secondary)
                 .textCase(.uppercase)
 
             if let icon = pill.icon {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
+                VStack(spacing: 2) {
+                    Image(systemName: icon)
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
+                    if !pill.value.isEmpty {
+                        Text(pill.value)
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+                }
             } else {
                 Text(pill.value)
                     .font(.system(size: 20, weight: .bold, design: .rounded))
@@ -386,6 +395,21 @@ struct AppDetailView: SwiftUI.View {
             }
         }
         .padding(.horizontal, 8)
+
+        return Group {
+            if pill.isCategory {
+                Button {
+                    if let content = state.content {
+                        onCategoryTap(content.itemCategoryName, state.contentType, content.itemCydiaCategoryId)
+                    }
+                } label: {
+                    content
+                }
+                .buttonStyle(.plain)
+            } else {
+                content
+            }
+        }
     }
 
     // MARK: - Screenshots
@@ -810,35 +834,37 @@ struct AppDetailView: SwiftUI.View {
                 header: content.itemRating + " " + "Ratings".localized(),
                 value: String(format: "%.1f", content.itemNumberOfStars),
                 icon: nil,
-                footer: nil
+                footer: nil,
+                isCategory: false
             ))
         }
 
         if !content.itemRated.isEmpty {
-            pills.append(InfoPillData(header: "Age".localized(), value: content.itemRated, icon: nil, footer: nil))
+            pills.append(InfoPillData(header: "Age".localized(), value: content.itemRated, icon: nil, footer: nil, isCategory: false))
         }
 
         if !content.itemCategoryName.isEmpty {
-            pills.append(InfoPillData(header: "Category".localized(), value: content.itemCategoryName, icon: "square.grid.2x2", footer: nil))
+            let icon = categoryIconName(for: content.itemCategoryName)
+            pills.append(InfoPillData(header: "Category".localized(), value: content.itemCategoryName, icon: icon, footer: nil, isCategory: true))
         }
 
         if !content.itemSize.isEmpty {
-            pills.append(InfoPillData(header: "Size".localized(), value: content.itemSize, icon: nil, footer: nil))
+            pills.append(InfoPillData(header: "Size".localized(), value: content.itemSize, icon: nil, footer: nil, isCategory: false))
         }
 
         if !content.itemCompatibility.isEmpty {
-            pills.append(InfoPillData(header: "Compatibility".localized(), value: "", icon: "iphone", footer: content.itemCompatibility))
+            pills.append(InfoPillData(header: "Compatibility".localized(), value: "", icon: "iphone", footer: content.itemCompatibility, isCategory: false))
         }
 
         if !content.itemPrice.isEmpty {
-            pills.append(InfoPillData(header: "Price".localized(), value: content.itemPrice, icon: nil, footer: nil))
+            pills.append(InfoPillData(header: "Price".localized(), value: content.itemPrice, icon: nil, footer: nil, isCategory: false))
         }
 
         if !content.itemLanguages.isEmpty {
             let firstLang = content.itemLanguages.components(separatedBy: ", ").first ?? content.itemLanguages
             let count = content.itemLanguages.components(separatedBy: ", ").count
             let footer = count > 1 ? "+ \(count - 1) " + "More".localized() : nil
-            pills.append(InfoPillData(header: "Language".localized(), value: firstLang, icon: nil, footer: footer))
+            pills.append(InfoPillData(header: "Language".localized(), value: firstLang, icon: nil, footer: footer, isCategory: false))
         }
 
         return pills
@@ -897,6 +923,67 @@ struct AppDetailView: SwiftUI.View {
 
         return rows.filter { !$1.trimmingCharacters(in: .whitespaces).isEmpty }
     }
+
+    // MARK: - Category Icon Mapping
+
+    private func categoryIconName(for name: String) -> String? {
+        let key = name.lowercased()
+
+        switch key {
+        case "games":
+            return "gamecontroller.fill"
+        case "entertainment":
+            return "film.stack.fill"
+        case "social networking":
+            return "person.2.fill"
+        case "productivity":
+            return "checkmark.circle.fill"
+        case "utilities":
+            return "wrench.and.screwdriver.fill"
+        case "music", "audio":
+            return "music.note.list"
+        case "photo & video", "photo and video", "photos & video":
+            return "camera.fill"
+        case "health & fitness", "health and fitness":
+            return "heart.fill"
+        case "education":
+            return "graduationcap.fill"
+        case "business":
+            return "briefcase.fill"
+        case "finance":
+            return "creditcard.fill"
+        case "lifestyle":
+            return "sparkles"
+        case "sports":
+            return "sportscourt.fill"
+        case "travel":
+            return "airplane"
+        case "news":
+            return "newspaper.fill"
+        case "reference":
+            return "book.pages.fill"
+        case "medical":
+            return "cross.case.fill"
+        case "food & drink", "food and drink":
+            return "fork.knife"
+        case "navigation":
+            return "map.fill"
+        case "weather":
+            return "cloud.sun.fill"
+        case "shopping":
+            return "bag.fill"
+        case "books":
+            return "book.fill"
+        case "developer tools":
+            return "hammer.fill"
+        case "graphics & design", "graphics and design", "graphics":
+            return "paintpalette.fill"
+        case "magazines & newspapers", "magazines", "newspapers":
+            return "doc.richtext"
+        default:
+            return "square.grid.2x2"
+        }
+    }
 }
 
 // MARK: - Info Pill Data
@@ -906,5 +993,6 @@ private struct InfoPillData {
     let value: String
     let icon: String?
     let footer: String?
+    let isCategory: Bool
 }
 

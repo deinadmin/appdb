@@ -94,7 +94,7 @@ struct EditRepositoriesView: SwiftUI.View {
                 }
                 .onDelete(perform: deleteRepos)
             }
-            .contentMargins(.top, -5, for: .scrollContent)
+            .contentMargins(.top, 0, for: .scrollContent)
         }
     }
 

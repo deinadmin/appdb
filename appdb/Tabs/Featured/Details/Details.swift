@@ -45,7 +45,25 @@ class Details: UIHostingController<AnyView> {
     init(content: Item) {
         super.init(rootView: AnyView(EmptyView()))
         self.content = content
-        loadDynamically = false
+
+        // For catalog items that have a universal object identifier (v1.7),
+        // reload full details via universal_gateway so we get screenshots_uris_by_os_type, etc.
+        if let app = content as? App, !app.universalObjectIdentifier.isEmpty {
+            loadDynamically = true
+            dynamicType = .ios
+            dynamicTrackid = app.universalObjectIdentifier
+        } else if let cydiaApp = content as? CydiaApp, !cydiaApp.universalObjectIdentifier.isEmpty {
+            loadDynamically = true
+            dynamicType = .cydia
+            dynamicTrackid = cydiaApp.universalObjectIdentifier
+        } else if let book = content as? Book, !book.universalObjectIdentifier.isEmpty {
+            loadDynamically = true
+            dynamicType = .books
+            dynamicTrackid = book.universalObjectIdentifier
+        } else {
+            // Repo apps (AltStoreApp) and legacy items fall back to the pre‑loaded content.
+            loadDynamically = false
+        }
     }
 
     @MainActor @preconcurrency required dynamic init?(coder aDecoder: NSCoder) {
@@ -90,8 +108,20 @@ class Details: UIHostingController<AnyView> {
 
         detailView.onDeveloperTap = { [weak self] (title: String, type: ItemType, devId: String) in
             guard let self else { return }
-            let vc = SeeAll(title: title, type: type, devId: devId)
-            self.navigationController?.pushViewController(vc, animated: true)
+            if #available(iOS 15.0, *) {
+                let viewModel = SeeAllViewModel(title: title, type: type, devId: devId)
+                let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
+                    guard let self else { return }
+                    let vc = Details(content: item)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                })
+                let vc = UIHostingController(rootView: seeAllView)
+                vc.title = title
+                self.navigationController?.pushViewController(vc, animated: true)
+            } else {
+                let vc = SeeAll(title: title, type: type, devId: devId)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
 
         detailView.onExternalLink = { [weak self] (urlString: String) in
@@ -104,6 +134,52 @@ class Details: UIHostingController<AnyView> {
             guard let self else { return }
             let vc = Details(type: type, trackid: trackid)
             self.navigationController?.pushViewController(vc, animated: true)
+        }
+
+        detailView.onCategoryTap = { [weak self] (categoryName: String, itemType: ItemType, cydiaCategoryId: String) in
+            guard let self, let content = self.content else { return }
+
+            // Derive the correct genre/category ID for API.search(genre:):
+            // - For iOS apps, prefer the App.genreId coming from search_index / universal_gateway.
+            // - For Cydia apps, prefer the Cydia category ID already on the model.
+            // - Fall back to resolving by name via /list_genres/ (API.idFromCategory) if needed.
+            let categoryId: String = {
+                switch itemType {
+                case .ios:
+                    if let app = content as? App, app.genreId != 0 {
+                        return app.genreId.description
+                    }
+                    let resolved = API.idFromCategory(name: categoryName, type: itemType)
+                    return resolved.isEmpty ? "0" : resolved
+
+                case .cydia:
+                    if !cydiaCategoryId.isEmpty {
+                        return cydiaCategoryId
+                    }
+                    let resolved = API.idFromCategory(name: categoryName, type: itemType)
+                    return resolved.isEmpty ? "0" : resolved
+
+                default:
+                    return "0"
+                }
+            }()
+
+            // Use .all (clicks_all) so we show the full catalog for this category,
+            // matching the original appdb site’s category browsing behavior.
+            if #available(iOS 15.0, *) {
+                let viewModel = SeeAllViewModel(title: categoryName, type: itemType, category: categoryId, price: .all, order: .all)
+                let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
+                    guard let self else { return }
+                    let vc = Details(content: item)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                })
+                let vc = UIHostingController(rootView: seeAllView)
+                vc.title = categoryName
+                self.navigationController?.pushViewController(vc, animated: true)
+            } else {
+                let vc = SeeAll(title: categoryName, type: itemType, category: categoryId, price: .all, order: .all)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
 
         detailView.onScreenshotTap = { [weak self] (index: Int, allLandscape: Bool, mixedClasses: Bool, magic: CGFloat) in

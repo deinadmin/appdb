@@ -6622,12 +6622,10 @@ components:
           type: string
           description: Minimum version if compatible. If not, null
           nullable: true
-        min_visionos_version:
-          type: string
-          description: Minimum version if compatible. If not, null
-          nullable: true
-        screenshots_uris_by_os_type:
-          $ref: "#/components/schemas/screenshotUrisByOsTypeObject"
+                        min_visionos_version:
+                          type: string
+                          description: Minimum version if compatible. If not, null
+                          nullable: true
         icon_uri:
           type: string
           description: Icon URI

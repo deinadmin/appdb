@@ -12,7 +12,7 @@ import ObjectMapper
 
 extension API {
 
-    static func search <T>(type: T.Type, order: Order = .all, price: Price = .all, genre: String = "0", dev: String = "0", trackid: String = "0", q: String = "", page: Int = 1, success: @escaping (_ items: [T]) -> Void, fail: @escaping (_ error: String) -> Void) where T: Item {
+    static func search <T>(type: T.Type, order: Order = .all, price: Price = .all, genre: String = "0", dev: String = "0", trackid: String = "0", q: String = "", page: Int = 1, pageSize: Int = 25, success: @escaping (_ items: [T]) -> Void, fail: @escaping (_ error: String) -> Void) where T: Item {
 
         // In v1.7, fetching a single item by trackid uses universal_gateway
         if trackid != "0" {
@@ -21,8 +21,8 @@ extension API {
         }
 
         var params: [String: Any] = [
-            "start": 25 * (page - 1),
-            "length": 25,
+            "start": pageSize * (page - 1),
+            "length": pageSize,
             "lang": languageCode
         ]
 

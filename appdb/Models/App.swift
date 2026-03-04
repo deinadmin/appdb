@@ -165,15 +165,47 @@ class App: Item {
 
         // v1.7 screenshots: screenshots_uris_by_os_type (from universal_gateway)
         if let screenshotsByOS = map.JSON["screenshots_uris_by_os_type"] as? [String: Any] {
+            // Primary iOS / iPadOS buckets
             if screenshotsIphone.isEmpty, let iosScreens = screenshotsByOS["ios"] as? [String] {
-                screenshotsIphone = iosScreens.map { Screenshot(src: $0, class_: guessScreenshotOrientation(from: $0), type: "iphone") }
+                screenshotsIphone = iosScreens.map {
+                    Screenshot(src: $0, class_: guessScreenshotOrientation(from: $0), type: "iphone")
+                }
             }
             if screenshotsIpad.isEmpty, let ipadScreens = screenshotsByOS["ipados"] as? [String] {
-                screenshotsIpad = ipadScreens.map { Screenshot(src: $0, class_: guessScreenshotOrientation(from: $0), type: "ipad") }
+                screenshotsIpad = ipadScreens.map {
+                    Screenshot(src: $0, class_: guessScreenshotOrientation(from: $0), type: "ipad")
+                }
             }
-            // Fallback to universal screenshots
-            if screenshotsIphone.isEmpty, let universalScreens = screenshotsByOS["universal"] as? [String] {
-                screenshotsIphone = universalScreens.map { Screenshot(src: $0, class_: guessScreenshotOrientation(from: $0), type: "iphone") }
+            // Fallback to universal bucket (most common for catalog apps)
+            if screenshotsIphone.isEmpty, screenshotsIpad.isEmpty,
+               let universalScreens = screenshotsByOS["universal"] as? [String] {
+                let mapped = universalScreens.map {
+                    Screenshot(src: $0, class_: guessScreenshotOrientation(from: $0), type: "iphone")
+                }
+                screenshotsIphone = mapped
+            }
+            // Final fallbacks for non‑iOS OS types – still show something in the detail view
+            if screenshotsIphone.isEmpty, screenshotsIpad.isEmpty {
+                let osKeysInPreferenceOrder: [(key: String, type: String)] = [
+                    ("ios", "iphone"),
+                    ("ipados", "ipad"),
+                    ("macos", "iphone"),
+                    ("tvos", "iphone"),
+                    ("visionos", "iphone")
+                ]
+                for (key, deviceType) in osKeysInPreferenceOrder {
+                    if let screens = screenshotsByOS[key] as? [String], !screens.isEmpty {
+                        let mapped = screens.map {
+                            Screenshot(src: $0, class_: guessScreenshotOrientation(from: $0), type: deviceType)
+                        }
+                        if deviceType == "ipad" {
+                            screenshotsIpad = mapped
+                        } else {
+                            screenshotsIphone = mapped
+                        }
+                        break
+                    }
+                }
             }
         }
 

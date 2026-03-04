@@ -359,6 +359,7 @@ extension UIViewController {
         if let sheet = hostingController.sheetPresentationController {
             sheet.prefersGrabberVisible = false
             sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.detents = [.custom { _ in 680 }]
         }
 
         hostingController.presentationController?.delegate = InstallationSheetDismissHandler.shared
