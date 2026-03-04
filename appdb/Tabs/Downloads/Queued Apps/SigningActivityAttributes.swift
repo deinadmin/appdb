@@ -32,8 +32,11 @@ struct SigningActivityAttributes: ActivityAttributes {
     /// from the same location.  `nil` if the icon could not be downloaded.
     var appIconFileName: String?
 
-    /// Unique identifier for this queued app (used for deep link routing)
+    /// Identifier for this queued app (used for deep link routing)
     var linkId: String
+
+    /// Unique per itms-services request; empty for push flow. Used for exact install-manifest matching when multiple apps share linkId.
+    var commandUUID: String
 
     // MARK: - Dynamic Content State
 

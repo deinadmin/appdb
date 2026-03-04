@@ -6,6 +6,9 @@
 //
 
 import ActivityKit
+import Alamofire
+import AlamofireImage
+import CryptoKit
 import SwiftUI
 import Combine
 
@@ -27,11 +30,11 @@ final class QueueViewModel: ObservableObject {
 
     private var pollTimer: Timer?
 
-    /// Tracks active Live Activities keyed by the app's linkId.
+    /// Tracks active Live Activities keyed by the app's queueItemId (unique per queue entry).
     private var liveActivities: [String: Activity<SigningActivityAttributes>] = [:]
 
-    /// Tracks which icon files have been cached in the App Group container (keyed by image URL).
-    /// The value is the filename (e.g. "icon_12345.jpg").
+    /// Tracks which icon files have been cached in the App Group container (keyed by queueItemId).
+    /// The value is the filename (e.g. "signing_icon_<queueItemId>.jpg").
     private var cachedIconFileNames: [String: String] = [:]
 
     init() {
@@ -82,7 +85,7 @@ final class QueueViewModel: ObservableObject {
         } else {
             ObserveQueuedApps.shared.removeApp(linkId: app.linkId)
         }
-        endLiveActivity(for: app.linkId)
+        endLiveActivity(for: app.queueItemId)
     }
 
     func removeAll() {
@@ -97,58 +100,103 @@ final class QueueViewModel: ObservableObject {
         FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier)
     }
 
-    /// Generates a deterministic filename for a given image URL.
-    /// Uses the linkId to keep it unique and predictable.
-    private func iconFileName(for linkId: String) -> String {
-        "signing_icon_\(linkId).jpg"
+    /// Generates a short, deterministic filename for a given queue item (unique per queue entry).
+    /// Uses a hash because queueItemId can be 255+ chars (e.g. base64 linkId), which would exceed filesystem NAME_MAX.
+    private func iconFileName(for queueItemId: String) -> String {
+        let hash = SHA256.hash(data: Data(queueItemId.utf8))
+        let hex = hash.prefix(16).map { String(format: "%02x", $0) }.joined()
+        return "signing_icon_\(hex).jpg"
+    }
+
+    /// Returns true if the URL host is an appdb API domain that requires the link-token cookie.
+    /// Excludes s3cdn.dbservices.to which serves public CDN assets without auth.
+    private func urlRequiresAppDBAuth(_ url: URL) -> Bool {
+        guard let host = url.host?.lowercased() else { return false }
+        if host.contains("s3cdn") || host.contains("cdn") { return false }
+        return host.contains("dbservices")
+    }
+
+    /// Resolves relative icon URLs (e.g. "/storage/icons/..." or path-only) to absolute appdb API URLs.
+    private func resolveIconURL(_ imageURL: String) -> URL? {
+        let trimmed = imageURL.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        if let url = URL(string: trimmed), url.host != nil {
+            return url
+        }
+        let path = trimmed.hasPrefix("/") ? String(trimmed.dropFirst()) : trimmed
+        guard let base = URL(string: "https://api.dbservices.to") else { return nil }
+        return URL(string: path, relativeTo: base)?.absoluteURL
     }
 
     /// Downloads the app icon and saves it to the App Group container.
-    /// Returns the filename on success, nil on failure.
-    private func downloadAndCacheIcon(from imageURL: String, linkId: String) async -> String? {
-        guard let url = URL(string: imageURL),
-              let containerURL = appGroupContainerURL() else { return nil }
+    /// Uses AlamofireImage's ImageDownloader (same as af.setImage) with auth headers for appdb URLs.
+    /// May get a cache hit if the icon was already loaded elsewhere in the app.
+    private func downloadAndCacheIcon(from imageURL: String, queueItemId: String) async -> String? {
+        debugLog("Icon download attempt: queueItemId=\(queueItemId) raw icon_uri=\(imageURL)")
+        guard let url = resolveIconURL(imageURL),
+              let containerURL = appGroupContainerURL() else {
+            debugLog("Icon download skipped: invalid URL or no App Group container")
+            return nil
+        }
+        debugLog("Icon download: resolved URL=\(url.absoluteString)")
 
-        let fileName = iconFileName(for: linkId)
+        let fileName = iconFileName(for: queueItemId)
         let fileURL = containerURL.appendingPathComponent(fileName)
 
-        // If already cached on disk, return immediately
         if FileManager.default.fileExists(atPath: fileURL.path) {
             return fileName
         }
 
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-
-            // Downsample to a reasonable size (60×60 pt) and compress as JPEG
-            // The image lives on disk so there's no 4KB payload limit to worry about.
-            guard let original = UIImage(data: data) else { return nil }
-            let maxSize: CGFloat = 60
-            let scale = min(maxSize / original.size.width, maxSize / original.size.height, 1.0)
-            let targetSize = CGSize(width: round(original.size.width * scale),
-                                    height: round(original.size.height * scale))
-            let renderer = UIGraphicsImageRenderer(size: targetSize)
-            let resized = renderer.image { _ in
-                original.draw(in: CGRect(origin: .zero, size: targetSize))
+        var request = URLRequest(url: url)
+        if urlRequiresAppDBAuth(url) {
+            for header in API.headersWithCookie {
+                request.setValue(header.value, forHTTPHeaderField: header.name)
             }
-            guard let jpeg = resized.jpegData(compressionQuality: 0.7) else { return nil }
+        }
 
+        let image: UIImage? = await withCheckedContinuation { continuation in
+            _ = ImageDownloader.default.download(request) { response in
+                switch response.result {
+                case .success(let img): continuation.resume(returning: img)
+                case .failure(let err):
+                    debugLog("Icon download failed for queueItemId \(queueItemId): \(err.localizedDescription) URL=\(url.absoluteString)")
+                    continuation.resume(returning: nil)
+                }
+            }
+        }
+
+        guard let original = image else { return nil }
+
+        let maxSize: CGFloat = 60
+        let scale = min(maxSize / original.size.width, maxSize / original.size.height, 1.0)
+        let targetSize = CGSize(width: round(original.size.width * scale),
+                                height: round(original.size.height * scale))
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        let resized = renderer.image { _ in
+            original.draw(in: CGRect(origin: .zero, size: targetSize))
+        }
+        guard let jpeg = resized.jpegData(compressionQuality: 0.7) else { return nil }
+
+        if FileManager.default.createFile(atPath: fileURL.path, contents: jpeg, attributes: nil) {
+            return fileName
+        }
+        do {
             try jpeg.write(to: fileURL, options: .atomic)
             return fileName
         } catch {
-            debugLog("Failed to download/cache icon for linkId \(linkId): \(error)")
+            let nsErr = error as NSError
+            debugLog("Icon cache write failed for queueItemId \(queueItemId): domain=\(nsErr.domain) code=\(nsErr.code) \(nsErr.localizedDescription) path=\(fileURL.path)")
             return nil
         }
     }
 
     /// Removes the cached icon file from the App Group container.
-    private func removeCachedIcon(for linkId: String) {
+    private func removeCachedIcon(for queueItemId: String) {
         guard let containerURL = appGroupContainerURL() else { return }
-        let fileName = iconFileName(for: linkId)
+        let fileName = iconFileName(for: queueItemId)
         let fileURL = containerURL.appendingPathComponent(fileName)
         try? FileManager.default.removeItem(at: fileURL)
-        // Also clean up our in-memory tracking
-        cachedIconFileNames = cachedIconFileNames.filter { $0.value != fileName }
+        cachedIconFileNames.removeValue(forKey: queueItemId)
     }
 
     // MARK: - Live Activity Management
@@ -158,16 +206,16 @@ final class QueueViewModel: ObservableObject {
     /// - Updates activities whose status or readiness changed
     /// - Ends activities for apps no longer in the queue
     private func syncLiveActivities(with currentApps: [RequestedApp]) {
-        let currentLinkIds = Set(currentApps.map(\.linkId))
+        let currentQueueItemIds = Set(currentApps.map(\.queueItemId))
 
         // End activities for apps that are no longer queued
-        for (linkId, _) in liveActivities where !currentLinkIds.contains(linkId) {
-            endLiveActivity(for: linkId)
+        for (queueItemId, _) in liveActivities where !currentQueueItemIds.contains(queueItemId) {
+            endLiveActivity(for: queueItemId)
         }
 
         // Start or update activities for each queued app
         for app in currentApps {
-            if liveActivities[app.linkId] != nil {
+            if liveActivities[app.queueItemId] != nil {
                 updateLiveActivity(for: app)
             } else {
                 startLiveActivity(for: app)
@@ -178,45 +226,48 @@ final class QueueViewModel: ObservableObject {
     private func startLiveActivity(for app: RequestedApp) {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
 
-        // Mark as "starting" to prevent duplicate starts while the icon downloads
-        let placeholder = SigningActivityAttributes(appName: app.name, appIconFileName: nil, linkId: app.linkId)
-        // We'll use a sentinel: if cachedIconFileNames has an entry, download is done or in progress
-        let imageURLString = app.image
+        let queueItemId = app.queueItemId
 
-        if let cachedFileName = cachedIconFileNames[imageURLString] {
-            // Icon already downloaded
-            createActivity(for: app, iconFileName: cachedFileName)
-        } else {
-            // Mark download in progress
-            cachedIconFileNames[imageURLString] = ""
+        // No icon URL (e.g. local IPA, some library apps) — start activity immediately with nil icon
+        if app.image.isEmpty {
+            createActivity(for: app, iconFileName: nil)
+            return
+        }
 
-            // Download icon asynchronously, then create activity
-            let linkId = app.linkId
-            Task { [weak self] in
-                let fileName = await self?.downloadAndCacheIcon(from: imageURLString, linkId: linkId)
+        if let cached = cachedIconFileNames[queueItemId] {
+            if !cached.isEmpty {
+                createActivity(for: app, iconFileName: cached)
+            }
+            return
+        }
 
-                await MainActor.run {
-                    guard let self else { return }
-                    if let fileName {
-                        self.cachedIconFileNames[imageURLString] = fileName
-                    }
-                    // Only create if we haven't started one yet for this linkId
-                    if self.liveActivities[app.linkId] == nil {
-                        self.createActivity(for: app, iconFileName: fileName)
-                    }
+        // Mark download in progress so we don't start duplicate downloads
+        cachedIconFileNames[queueItemId] = ""
+
+        Task { [weak self] in
+            let fileName = await self?.downloadAndCacheIcon(from: app.image, queueItemId: queueItemId)
+
+            await MainActor.run {
+                guard let self else { return }
+                if let fileName {
+                    self.cachedIconFileNames[queueItemId] = fileName
+                }
+                if self.liveActivities[queueItemId] == nil {
+                    self.createActivity(for: app, iconFileName: fileName)
                 }
             }
         }
     }
 
     private func createActivity(for app: RequestedApp, iconFileName: String?) {
-        // Guard again in case activity was created while icon was downloading
-        guard liveActivities[app.linkId] == nil else { return }
+        let queueItemId = app.queueItemId
+        guard liveActivities[queueItemId] == nil else { return }
 
         let attributes = SigningActivityAttributes(
             appName: app.name,
             appIconFileName: iconFileName,
-            linkId: app.linkId
+            linkId: app.linkId,
+            commandUUID: app.commandUUID
         )
 
         let state = SigningActivityAttributes.ContentState(
@@ -233,7 +284,7 @@ final class QueueViewModel: ObservableObject {
                 content: content,
                 pushType: nil
             )
-            liveActivities[app.linkId] = activity
+            liveActivities[queueItemId] = activity
             debugLog("Live Activity started for \(app.name) (id: \(activity.id))")
         } catch {
             debugLog("Failed to start Live Activity for \(app.name): \(error)")
@@ -241,7 +292,7 @@ final class QueueViewModel: ObservableObject {
     }
 
     private func updateLiveActivity(for app: RequestedApp) {
-        guard let activity = liveActivities[app.linkId] else { return }
+        guard let activity = liveActivities[app.queueItemId] else { return }
 
         let state = SigningActivityAttributes.ContentState(
             status: app.status.isEmpty ? "Queued..." : app.status,
@@ -256,21 +307,20 @@ final class QueueViewModel: ObservableObject {
         }
     }
 
-    private func endLiveActivity(for linkId: String) {
-        guard let activity = liveActivities.removeValue(forKey: linkId) else { return }
+    private func endLiveActivity(for queueItemId: String) {
+        guard let activity = liveActivities.removeValue(forKey: queueItemId) else { return }
 
-        // Clean up the cached icon from the App Group container
-        removeCachedIcon(for: linkId)
+        removeCachedIcon(for: queueItemId)
 
         Task {
             await activity.end(nil, dismissalPolicy: .immediate)
-            debugLog("Live Activity ended for linkId: \(linkId)")
+            debugLog("Live Activity ended for queueItemId: \(queueItemId)")
         }
     }
 
     private func endAllLiveActivities() {
-        for (linkId, _) in liveActivities {
-            endLiveActivity(for: linkId)
+        for (queueItemId, _) in liveActivities {
+            endLiveActivity(for: queueItemId)
         }
     }
 }

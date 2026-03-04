@@ -31,9 +31,30 @@ struct MyLibraryView: SwiftUI.View {
     @State private var installSheetItem: InstallSheetItem?
     @State private var loadingOptionsForAppId: Int?
     @State private var showSpinnerForAppId: Int?
+    @State private var searchText = ""
+
+    private var filteredApps: [MyAppStoreApp] {
+        guard !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return viewModel.apps }
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        return viewModel.apps.filter {
+            $0.name.lowercased().contains(query) || $0.bundleId.lowercased().contains(query)
+        }
+    }
 
     private var contentView: some SwiftUI.View {
         List {
+            Section {
+                HStack(spacing: 8) {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.secondary)
+                    TextField("Search apps".localized(), text: $searchText)
+                        .textFieldStyle(.plain)
+                }
+                .padding(.vertical, 6)
+            }
+            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+            .listRowBackground(SColor(.secondarySystemGroupedBackground))
+
             if viewModel.isUploading {
                 Section {
                     uploadProgressRow
@@ -41,12 +62,13 @@ struct MyLibraryView: SwiftUI.View {
             }
 
             Section {
-                ForEach(viewModel.apps, id: \.id) { app in
+                ForEach(filteredApps, id: \.id) { app in
                     appRow(app)
                 }
             }
         }
         .listStyle(.insetGrouped)
+        .contentMargins(.top, -10, for: .scrollContent)
         .refreshable {
             await withCheckedContinuation { continuation in
                 viewModel.loadApps()
@@ -116,6 +138,7 @@ struct MyLibraryView: SwiftUI.View {
                     Text("v\(app.version)")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
         }

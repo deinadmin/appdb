@@ -60,7 +60,7 @@ struct QueueSheetView: SwiftUI.View {
 
     private var queueList: some SwiftUI.View {
         List {
-            ForEach(viewModel.apps, id: \.linkId) { app in
+            ForEach(viewModel.apps, id: \.queueItemId) { app in
                 QueueRowView(app: app, viewModel: viewModel)
                     .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                     .listRowBackground(SColor.clear)

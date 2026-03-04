@@ -38,10 +38,11 @@ struct SigningLiveActivity: Widget {
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    trailingContent(state: context.state, linkId: context.attributes.linkId)
-                        .frame(maxHeight: .infinity, alignment: .center)
+                    trailingContent(state: context.state, linkId: context.attributes.linkId, commandUUID: context.attributes.commandUUID)
+                        .frame(minWidth: 72, maxHeight: .infinity, alignment: .center)
                 }
             } compactLeading: {
                 appIcon(fileName: context.attributes.appIconFileName, size: 20)
@@ -95,7 +96,7 @@ struct SigningLiveActivity: Widget {
                 Spacer(minLength: 0)
 
                 if context.state.isReadyToInstall {
-                    installLink(linkId: context.attributes.linkId, manifestUri: context.state.manifestUri)
+                    installLink(linkId: context.attributes.linkId, commandUUID: context.attributes.commandUUID, manifestUri: context.state.manifestUri)
                 } else {
                     ProgressView()
                         .progressViewStyle(.circular)
@@ -148,28 +149,47 @@ struct SigningLiveActivity: Widget {
     }
 
     /// Deep link button that triggers installation via the main app.
-    /// Opens `appdb-ios://?action=install-manifest&uri=<encoded>&linkId=<id>`
+    /// Opens `appdb-ios://?action=install-manifest&uri=<encoded>&linkId=<id>&commandUUID=<uuid>` so the app can match the exact queue entry.
     @ViewBuilder
-    private func installLink(linkId: String, manifestUri: String) -> some View {
-        if let encoded = manifestUri.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-           let url = URL(string: "appdb-ios://?action=install-manifest&uri=\(encoded)&linkId=\(linkId)") {
+    private func installLink(linkId: String, commandUUID: String, manifestUri: String) -> some View {
+        let url = installManifestURL(linkId: linkId, commandUUID: commandUUID, manifestUri: manifestUri)
+        if let url {
             Link(destination: url) {
                 Text("Install")
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
+                    .frame(minWidth: 72)
                     .background(Color.accentColor)
                     .foregroundStyle(.white)
                     .clipShape(Capsule())
             }
+        } else {
+            EmptyView()
         }
     }
 
+    private func installManifestURL(linkId: String, commandUUID: String, manifestUri: String) -> URL? {
+        var queryItems: [URLQueryItem] = [
+            URLQueryItem(name: "action", value: "install-manifest"),
+            URLQueryItem(name: "uri", value: manifestUri),
+            URLQueryItem(name: "linkId", value: linkId)
+        ]
+        if !commandUUID.isEmpty {
+            queryItems.append(URLQueryItem(name: "commandUUID", value: commandUUID))
+        }
+        var components = URLComponents()
+        components.scheme = "appdb-ios"
+        components.host = ""
+        components.queryItems = queryItems
+        return components.url
+    }
+
     @ViewBuilder
-    private func trailingContent(state: SigningActivityAttributes.ContentState, linkId: String) -> some View {
+    private func trailingContent(state: SigningActivityAttributes.ContentState, linkId: String, commandUUID: String) -> some View {
         if state.isReadyToInstall {
-            installLink(linkId: linkId, manifestUri: state.manifestUri)
+            installLink(linkId: linkId, commandUUID: commandUUID, manifestUri: state.manifestUri)
         } else {
             ProgressView()
                 .progressViewStyle(.circular)

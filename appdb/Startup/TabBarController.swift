@@ -35,10 +35,6 @@ class TabBarController: UITabBarController {
             UINavigationController(rootViewController: Search())
         })
 
-        let downloadsTab = UITab(title: "Downloads".localized(), image: UIImage(named: "downloads"), identifier: "downloads") { _ in
-            UINavigationController(rootViewController: Downloads())
-        }
-
         let libraryTab = UITab(title: "Library".localized(), image: UIImage(systemName: "books.vertical.fill"), identifier: "library") { _ in
             UINavigationController(rootViewController: MyLibraryHostingController())
         }
@@ -47,7 +43,7 @@ class TabBarController: UITabBarController {
             UINavigationController(rootViewController: Settings())
         }
 
-        tabs = [homeTab, searchTab, downloadsTab, libraryTab, settingsTab]
+        tabs = [homeTab, searchTab, libraryTab, settingsTab]
 
         configureQueueAccessory()
         

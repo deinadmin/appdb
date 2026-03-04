@@ -340,13 +340,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             }
             guard let manifestUri = queryItems[index2].value, !manifestUri.isEmpty else { return false }
 
-            // Find the matching queued app by linkId (if provided) or by manifestUri
+            // Find the matching queued app: commandUUID (exact), then linkId, then manifestUri
             let linkId = queryItems.first(where: { $0.name == "linkId" })?.value
+            let commandUUID = queryItems.first(where: { $0.name == "commandUUID" })?.value
             let matchingApp: RequestedApp? = {
+                if let commandUUID, !commandUUID.isEmpty,
+                   let app = ObserveQueuedApps.shared.requestedApps.first(where: { $0.commandUUID == commandUUID }) {
+                    return app
+                }
                 if let linkId, let app = ObserveQueuedApps.shared.requestedApps.first(where: { $0.linkId == linkId }) {
                     return app
                 }
-                // Fallback: find by manifestUri
                 return ObserveQueuedApps.shared.requestedApps.first(where: { $0.manifestUri == manifestUri })
             }()
 

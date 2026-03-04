@@ -31,6 +31,12 @@ struct RequestedApp: Matchable, Codable, Equatable {
         isItmsServicesInstall && !manifestUri.isEmpty
     }
 
+    /// Unique id for this queue entry. Use this for SwiftUI ForEach and Live Activity keys.
+    /// Repo apps can share the same linkId; commandUUID is unique per itms-services request.
+    var queueItemId: String {
+        commandUUID.isEmpty ? linkId : "\(linkId)_\(commandUUID)"
+    }
+
     init(type: ItemType, linkId: String, name: String, image: String, bundleId: String, status: String = "",
          commandUUID: String = "", installationType: String = "push") {
         self.linkId = linkId
