@@ -11,10 +11,11 @@ private typealias SColor = SwiftUI.Color
 struct EditRepositoriesView: SwiftUI.View {
     @Environment(\.dismiss) private var dismiss
 
-    init(initialRepos: [AltStoreRepo] = [], onPresentLogin: (() -> Void)? = nil) {
+    init(initialRepos: [AltStoreRepo] = [], onPresentLogin: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil) {
         _repos = State(initialValue: initialRepos)
         _isLoading = State(initialValue: initialRepos.isEmpty)
         self.onPresentLogin = onPresentLogin
+        self.onDismiss = onDismiss
     }
 
     @State private var repos: [AltStoreRepo]
@@ -24,6 +25,7 @@ struct EditRepositoriesView: SwiftUI.View {
     @State private var newRepoURL = ""
     @State private var isLoggedIn = Preferences.deviceIsLinked
     var onPresentLogin: (() -> Void)?
+    var onDismiss: (() -> Void)?
 
     var body: some SwiftUI.View {
         NavigationStack {
@@ -57,6 +59,7 @@ struct EditRepositoriesView: SwiftUI.View {
                     EmptyView()
                 }
                 .onAppear { if repos.isEmpty { loadRepos() } }
+                .onDisappear { onDismiss?() }
         }
     }
 

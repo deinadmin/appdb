@@ -241,6 +241,7 @@
 "User Interface" = "Interfaccia";
 "Choose Theme" = "Scegli tema";
 "Theme changed. The app needs to be restarted to apply the new appearance." = "Tema modificato. Riapri l'app per applicare il nuovo aspetto.";
+"To apply this setting, the app must be restarted." = "Per applicare questa impostazione, l'app deve essere riavviata.";
 "Close App" = "Chiudi app";
 "Choose Language" = "Scegli lingua";
 "Language set, please restart the app to apply changes" = "Lingua impostata, chiudi e riapri l'app per applicare i cambiamenti";

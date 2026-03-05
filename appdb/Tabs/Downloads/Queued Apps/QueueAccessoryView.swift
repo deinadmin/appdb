@@ -22,14 +22,11 @@ struct QueueAccessoryView: SwiftUI.View {
     var body: some SwiftUI.View {
         if let app = viewModel.latestApp {
             Button {
-                viewModel.showQueueSheet = true
+                NotificationCenter.default.post(name: NSNotification.Name("PresentQueuedAppsSheet"), object: nil)
             } label: {
                 accessoryContent(for: app)
             }
             .buttonStyle(.plain)
-            .sheet(isPresented: $viewModel.showQueueSheet) {
-                QueueSheetView(viewModel: viewModel)
-            }
         }
     }
 

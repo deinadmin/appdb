@@ -241,6 +241,7 @@ Copyright © 2017 ned. All rights reserved.
 "User Interface" = "واجهة المستخدم";
 "Choose Theme" = "اختيار المظهر";
 "Theme changed. The app needs to be restarted to apply the new appearance." = "تم تغيير المظهر. يجب إعادة تشغيل التطبيق لتطبيق المظهر الجديد.";
+"To apply this setting, the app must be restarted." = "لتطبيق هذا الإعداد، يجب إعادة تشغيل التطبيق.";
 "Close App" = "إغلاق التطبيق";
 "Choose Language" = "اختيار اللغة";
 "Language set, please restart the app to apply changes" = "تم تعيين اللغة ، يرجى إعادة تشغيل التطبيق لتطبيق التغييرات";

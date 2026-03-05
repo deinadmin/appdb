@@ -242,6 +242,7 @@
 "User Interface" = "Benutzeroberfläche";
 "Choose Theme" = "Erscheinungsbild auswählen";
 "Theme changed. The app needs to be restarted to apply the new appearance." = "Erscheinungsbild geändert. Die App muss neu gestartet werden, um die Änderung zu übernehmen.";
+"To apply this setting, the app must be restarted." = "Zum Anwenden der Einstellung muss die App neu gestartet werden.";
 "Close App" = "App schließen";
 "Choose Language" = "Sprache auswählen";
 "Language set, please restart the app to apply changes" = "Sprache eingestellt, bitte starte die App neu, um die Änderungen vorzunehmen.";

@@ -243,6 +243,8 @@
 "User Interface" = "User Interface";
 "Choose Theme" = "Choose Theme";
 "Choose Language" = "Choose Language";
+"To apply this setting, the app must be restarted." = "To apply this setting, the app must be restarted.";
+"Close App" = "Close App";
 "Language set, please restart the app to apply changes" = "Language set, please restart the app to apply changes";
 "Dark" = "Dark";
 "Darker" = "Darker";

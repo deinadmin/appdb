@@ -136,7 +136,7 @@ struct MyLibraryView: SwiftUI.View {
 
             Spacer()
 
-            VStack(spacing: 2) {
+            VStack(spacing: 4) {
                 Button {
                     if let onInstallApp {
                         onInstallApp(app)

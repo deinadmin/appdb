@@ -107,7 +107,7 @@ class AltStoreAppDetails: UIHostingController<AnyView> {
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: showSpinnerWork)
 
-                self.loadInstallationOptionsAndPresentSheet(
+                self.loadInstallOptionsSheetAndPresent(
                     onInstall: { additionalOptions in
                         install(additionalOptions)
                     },

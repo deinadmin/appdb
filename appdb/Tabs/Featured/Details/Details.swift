@@ -96,7 +96,7 @@ class Details: UIHostingController<AnyView> {
     private func setupDetailView() {
         var detailView = AppDetailView(state: detailState)
         detailView.isLoggedIn = Preferences.deviceIsLinked
-        detailView.onPresentLogin = { [weak self] in self?.presentDeviceLinkBulletin() }
+        detailView.onPresentLogin = { [weak self] in self?.presentDeviceLinkSheet() }
 
         detailView.onInstall = { [weak self] in self?.installLatestVersion() }
         detailView.onShare = { [weak self] in self?.shareAction() }
@@ -272,7 +272,7 @@ class Details: UIHostingController<AnyView> {
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: showSpinnerWork)
 
-                self.loadInstallationOptionsAndPresentSheet(
+                self.loadInstallOptionsSheetAndPresent(
                     onInstall: { additionalOptions in
                         install(additionalOptions)
                     },

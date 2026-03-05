@@ -241,6 +241,7 @@
 "User Interface" = "Antarmuka pengguna";
 "Choose Theme" = "Pilih Tema";
 "Theme changed. The app needs to be restarted to apply the new appearance." = "Tema diubah. Mulai ulang aplikasi untuk menerapkan tampilan baru.";
+"To apply this setting, the app must be restarted." = "Untuk menerapkan pengaturan ini, aplikasi harus dimulai ulang.";
 "Close App" = "Tutup Aplikasi";
 "Choose Language" = "Pilih Bahasa";
 "Language set, please restart the app to apply changes" = "Set bahasa, silakan restart aplikasi untuk menerapkan perubahan";

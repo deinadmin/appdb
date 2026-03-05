@@ -109,7 +109,13 @@ extension Item {
         if let app = self as? App { return app.published }
         if let cydiaApp = self as? CydiaApp { return cydiaApp.updated.unixToString }
         if let altStoreApp = self as? AltStoreApp { return altStoreApp.updated }
+        if let book = self as? Book { return book.published }
         return ""
+    }
+
+    /// True when the updated date is a valid timestamp (not epoch / undefined).
+    var itemUpdatedDateIsValid: Bool {
+        itemRawTimestamp > 0
     }
 
     /// Raw unix timestamp as Double for reliable date-based sorting.
@@ -118,6 +124,7 @@ extension Item {
         if let app = self as? App { return app.updatedAtRaw }
         if let cydiaApp = self as? CydiaApp { return Double(cydiaApp.updated) ?? 0 }
         if let altStoreApp = self as? AltStoreApp { return altStoreApp.updatedRaw }
+        if let book = self as? Book { return Double(book.updated) ?? 0 }
         return 0
     }
 

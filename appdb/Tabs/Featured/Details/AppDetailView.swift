@@ -109,29 +109,23 @@ struct AppDetailView: SwiftUI.View {
         }
 
         ToolbarItem(placement: .confirmationAction) {
-            Group {
+            Button {
                 if isLoggedIn {
-                    Button {
-                        if !state.isInstalling { onInstall() }
-                    } label: {
-                        ZStack {
-                            Text("Get".localized())
-                                .opacity(state.isInstalling ? 0 : 1)
-                            ProgressView()
-                                .controlSize(.small)
-                                .opacity(state.isInstalling ? 1 : 0)
-                        }
-                        .animation(.easeInOut(duration: 0.3), value: state.isInstalling)
-                    }
-                    .buttonStyle(.glassProminent)
+                    if !state.isInstalling { onInstall() }
                 } else {
-                    Button("Login to install".localized()) {
-                        onPresentLogin()
-                    }
-                    .buttonStyle(.glassProminent)
-                    .tint(SColor.accentColor)
+                    onPresentLogin()
                 }
+            } label: {
+                ZStack {
+                    Text("Get".localized())
+                        .opacity(state.isInstalling ? 0 : 1)
+                    ProgressView()
+                        .controlSize(.small)
+                        .opacity(state.isInstalling ? 1 : 0)
+                }
+                .animation(.easeInOut(duration: 0.3), value: state.isInstalling)
             }
+            .buttonStyle(.glassProminent)
         }
     }
 
@@ -506,7 +500,7 @@ struct AppDetailView: SwiftUI.View {
                 }
             }
 
-            if !content.itemUpdatedDate.isEmpty {
+            if content.itemUpdatedDateIsValid, !content.itemUpdatedDate.isEmpty {
                 Text(content.itemUpdatedDate)
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -968,7 +962,7 @@ struct AppDetailView: SwiftUI.View {
                 rows.append(("Bundle ID", app.bundleId))
                 rows.append(("Category", content.itemCategoryName))
                 rows.append(("Price", app.price))
-                rows.append(("Updated", app.published))
+                rows.append(("Updated", content.itemUpdatedDateIsValid ? content.itemUpdatedDate : "Unknown".localized()))
                 rows.append(("Version", app.version))
                 rows.append(("Size", validateSize(app.size)))
                 rows.append(("Rating", app.rated))
@@ -981,7 +975,7 @@ struct AppDetailView: SwiftUI.View {
                 rows.append(("Bundle ID", app.bundleId))
                 rows.append(("Category", content.itemCategoryName))
                 rows.append(("Price", app.price))
-                rows.append(("Updated", content.itemUpdatedDate))
+                rows.append(("Updated", content.itemUpdatedDateIsValid ? content.itemUpdatedDate : "Unknown".localized()))
                 rows.append(("Version", app.version))
                 rows.append(("Size", validateSize(app.size)))
                 rows.append(("Compatibility", app.compatibility))
@@ -990,7 +984,7 @@ struct AppDetailView: SwiftUI.View {
             if let book = content as? Book {
                 rows.append(("Author", book.author))
                 rows.append(("Category", content.itemCategoryName))
-                rows.append(("Updated", book.published))
+                rows.append(("Updated", content.itemUpdatedDateIsValid ? content.itemUpdatedDate : "Unknown".localized()))
                 rows.append(("Price", book.price))
                 rows.append(("Print Length", book.printLenght))
                 rows.append(("Language", book.language))
@@ -1001,7 +995,7 @@ struct AppDetailView: SwiftUI.View {
                 rows.append(("Category", "Repositories".localized()))
                 rows.append(("Bundle ID", app.bundleId))
                 rows.append(("Size", validateSize(app.formattedSize)))
-                rows.append(("Updated", app.updated))
+                rows.append(("Updated", content.itemUpdatedDateIsValid ? content.itemUpdatedDate : "Unknown".localized()))
                 rows.append(("Version", app.version))
             }
         default:
@@ -1075,6 +1069,9 @@ struct AppDetailView: SwiftUI.View {
     private func validateSize(_ size: String) -> String {
         let trimmed = size.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.isEmpty { return "Unknown".localized() }
+
+        // "Zero KB" etc. from ByteCountFormatter when bytes are 0
+        if trimmed.lowercased().hasPrefix("zero") { return "Unknown".localized() }
 
         // Check for "0" variants like "0 KB", "0.0 MB", "0 bytes"
         if trimmed.hasPrefix("0") {

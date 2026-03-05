@@ -196,14 +196,21 @@ class HomeHostingController: UIViewController {
         API.getRepos(isPublic: false, success: { [weak self] repos in
             DispatchQueue.main.async {
                 self?.homeViewModel?.isLoadingRepos = false
-                let sheet = UIHostingController(rootView: EditRepositoriesView(initialRepos: repos, onPresentLogin: { [weak self] in self?.presentedViewController?.presentDeviceLinkBulletin() }))
+                let sheet = UIHostingController(rootView: EditRepositoriesView(
+                    initialRepos: repos,
+                    onPresentLogin: { [weak self] in self?.presentedViewController?.presentDeviceLinkSheet() },
+                    onDismiss: { [weak self] in self?.homeViewModel?.loadData(replacingContent: false) }
+                ))
                 sheet.modalPresentationStyle = .formSheet
                 self?.present(sheet, animated: true)
             }
         }, fail: { [weak self] _ in
             DispatchQueue.main.async {
                 self?.homeViewModel?.isLoadingRepos = false
-                let sheet = UIHostingController(rootView: EditRepositoriesView(onPresentLogin: { [weak self] in self?.presentedViewController?.presentDeviceLinkBulletin() }))
+                let sheet = UIHostingController(rootView: EditRepositoriesView(
+                    onPresentLogin: { [weak self] in self?.presentedViewController?.presentDeviceLinkSheet() },
+                    onDismiss: { [weak self] in self?.homeViewModel?.loadData(replacingContent: false) }
+                ))
                 sheet.modalPresentationStyle = .formSheet
                 self?.present(sheet, animated: true)
             }
@@ -264,7 +271,7 @@ class HomeHostingController: UIViewController {
 
     private func handleInstall(item: Item) {
         if !Preferences.deviceIsLinked {
-            Messages.shared.showError(message: "Please authorize app from Settings first".localized(), context: .viewController(self))
+            presentDeviceLinkSheet()
             return
         }
 
@@ -315,7 +322,7 @@ class HomeHostingController: UIViewController {
         }
 
         if Preferences.askForInstallationOptions {
-            self.loadInstallationOptionsAndPresentSheet(
+            self.loadInstallOptionsSheetAndPresent(
                 onInstall: { install($0) }
             )
         } else {
@@ -347,7 +354,7 @@ class HomeHostingController: UIViewController {
         }
 
         if Preferences.askForInstallationOptions {
-            self.loadInstallationOptionsAndPresentSheet(
+            self.loadInstallOptionsSheetAndPresent(
                 onInstall: { install($0) }
             )
         } else {

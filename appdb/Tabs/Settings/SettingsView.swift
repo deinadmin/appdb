@@ -13,6 +13,13 @@ import TelemetryClient
 
 private typealias SColor = SwiftUI.Color
 
+/// App accent color for SwiftUI (matches Color.mainTint from theme).
+private extension SwiftUI.Color {
+    static var appAccent: SwiftUI.Color {
+        SwiftUI.Color(Color.mainTint.value() as? UIColor ?? .systemBlue)
+    }
+}
+
 // MARK: - Settings view model (observable for refresh)
 
 @available(iOS 15.0, *)
@@ -63,6 +70,7 @@ struct SettingsView: SwiftUI.View {
                 logoutSection
             }
         }
+        .tint(.appAccent)
         .refreshable {
             await withCheckedContinuation { (cont: CheckedContinuation<Void, Never>) in
                 guard viewModel.deviceIsLinked else {
@@ -91,9 +99,44 @@ struct SettingsView: SwiftUI.View {
             Button("Buy me a coffee".localized()) { openURL(Global.donateSite) }
             Button("Cancel".localized(), role: .cancel) {}
         }
+        .alert(Text("To apply this setting, the app must be restarted.".localized()), isPresented: $showRestartRequiredForSetting) {
+            Button("Close App".localized()) {
+                AppRestartHelper.closeAppWithHomeAnimation()
+            }
+        }
     }
 
     @State private var showLogoutConfirmation = false
+    @State private var showRestartRequiredForSetting = false
+
+    /// Available languages for the menu picker (same order as LanguageChooser).
+    private static var availableLanguages: [String] {
+        Localize.availableLanguages()
+            .filter { !Localize.displayNameForLanguage($0).isEmpty }
+            .sorted { Localize.displayNameForLanguage($1) > Localize.displayNameForLanguage($0) }
+    }
+
+    /// Emoji flag for language code (matches LanguageChooser logic).
+    private func emojiFlag(for language: String) -> String {
+        let country: String
+        if Locale.availableIdentifiers.contains("\(language)_\(language.uppercased())") {
+            country = language
+        } else {
+            switch language {
+            case "en": country = "gb"
+            case "jv-ID": country = "id"
+            case "ar": country = "AE"
+            default: country = language
+            }
+        }
+        var flag = ""
+        for scalar in country.uppercased().unicodeScalars {
+            if let u = UnicodeScalar(127397 + scalar.value) {
+                flag.unicodeScalars.append(u)
+            }
+        }
+        return flag.isEmpty ? "🌐" : String(flag)
+    }
 
     // MARK: - User Interface
 
@@ -102,8 +145,9 @@ struct SettingsView: SwiftUI.View {
             Picker(selection: Binding(
                 get: { Themes.current.rawValue },
                 set: { new in
-                    if let theme = Themes(rawValue: new) {
+                    if let theme = Themes(rawValue: new), theme != Themes.current {
                         Themes.switchTo(theme: theme)
+                        showRestartRequiredForSetting = true
                     }
                 }
             )) {
@@ -114,9 +158,28 @@ struct SettingsView: SwiftUI.View {
                 Text("Choose Theme".localized())
             }
 
-            settingsRow(title: "Choose Language".localized(), detail: Localize.displayNameForLanguage(Localize.currentLanguage())) {
-                push(LanguageChooser())
+            Picker(selection: Binding(
+                get: { Localize.currentLanguage() },
+                set: { new in
+                    guard new != Localize.currentLanguage() else { return }
+                    if !Preferences.didSpecifyPreferredLanguage {
+                        Preferences.set(.didSpecifyPreferredLanguage, to: true)
+                    }
+                    Localize.setCurrentLanguage(new)
+                    UserDefaults.standard.set([new], forKey: "AppleLanguages")
+                    NotificationCenter.default.post(name: .RefreshSettings, object: nil)
+                    Messages.shared.hideAll()
+                    showRestartRequiredForSetting = true
+                }
+            )) {
+                ForEach(Self.availableLanguages, id: \.self) { code in
+                    Text(emojiFlag(for: code) + "  " + Localize.displayNameForLanguage(code))
+                        .tag(code)
+                }
+            } label: {
+                Text("Choose Language".localized())
             }
+            .pickerStyle(.menu)
 
             if UIApplication.shared.supportsAlternateIcons {
                 settingsRow(title: "Choose Icon".localized(), detail: nil) {

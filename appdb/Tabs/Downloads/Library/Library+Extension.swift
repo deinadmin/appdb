@@ -312,7 +312,7 @@ extension Library {
                 }
             }
 
-            self.presentInstallationOptions(
+            self.presentInstallOptionsSheet(
                 onInstall: { additionalOptions in
                     install(additionalOptions)
                 },

@@ -170,11 +170,11 @@ class Settings: TableViewController {
         self.present(alertController, animated: true)
     }
 
-    // Device Link Bulletin intro
+    // Device Link sheet
     // Also subscribes to notification requests to open Safari
     func pushDeviceLink() {
         NotificationCenter.default.addObserver(self, selector: #selector(openSafari(notification:)), name: .OpenSafari, object: nil)
-        deviceLinkBulletinManager.showBulletin(above: tabBarController ?? self)
+        (tabBarController ?? self).presentDeviceLinkSheet()
     }
 
     // Opens Safari with given URL
@@ -363,13 +363,7 @@ extension Settings: ChangedLanguage {
 
 extension Settings {
     func showlinkCodeFromURLSchemeBulletin(code: String) {
-        let rootItem = DeviceLinkIntroBulletins.makeLinkCodeFromURLSchemePage(code: code)
-        urlSchemeLinkCodeBulletinManager = BLTNItemManager(rootItem: rootItem)
-        urlSchemeLinkCodeBulletinManager?.theme_backgroundColor = Color.easyBulletinBackground
-        if #available(iOS 10, *) {
-            urlSchemeLinkCodeBulletinManager?.backgroundViewStyle = .blurredDark
-        }
-        urlSchemeLinkCodeBulletinManager?.showBulletin(above: tabBarController ?? self)
+        (tabBarController ?? self).presentDeviceLinkSheet(prefillCode: code)
     }
 }
 

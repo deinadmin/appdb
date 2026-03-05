@@ -41,7 +41,7 @@ class MyLibraryHostingController: UIViewController {
 
         let libraryView = MyLibraryView(
             onInstallApp: { [weak self] app in self?.handleMyAppStoreInstall(app: app) },
-            onPresentLogin: { [weak self] in self?.presentDeviceLinkBulletin() }
+            onPresentLogin: { [weak self] in self?.presentDeviceLinkSheet() }
         ).environmentObject(viewModel)
 
         let hosting = UIHostingController(rootView: AnyView(libraryView))
@@ -85,7 +85,7 @@ class MyLibraryHostingController: UIViewController {
         guard let viewModel else { return }
 
         if Preferences.askForInstallationOptions {
-            loadInstallationOptionsAndPresentSheet(
+            loadInstallOptionsSheetAndPresent(
                 onInstall: { [weak self] options in
                     self?.viewModel?.installApp(app, additionalOptions: options)
                 },

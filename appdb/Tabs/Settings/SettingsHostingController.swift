@@ -24,6 +24,8 @@ final class SettingsHostingController: UIViewController, ChangedEnterpriseCertif
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // Use app accent so pushed view controllers (e.g. Device, Icon) match the theme picker.
+        navigationController?.navigationBar.tintColor = Color.mainTint.value() as? UIColor
         reloadConfigurationIfNeeded()
     }
 

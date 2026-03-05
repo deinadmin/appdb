@@ -25,6 +25,7 @@
 		81190B4B216A303C00C81BEB /* MixedScreenshotsSearchCell_P->L+Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81190B4A216A303C00C81BEB /* MixedScreenshotsSearchCell_P->L+Stars.swift */; };
 		811A824D2289D18C00969946 /* AdditionalInstallOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811A824C2289D18C00969946 /* AdditionalInstallOptionsViewController.swift */; };
 		E1B2C3D42A96A0010097B6CC /* InstallationOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2C3D32A96A0010097B6CC /* InstallationOptionsView.swift */; };
+		964561BD7BF8A7ED7C97CA35 /* InstallOptionsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225DA8E49BB4F04F810B799C /* InstallOptionsSheet.swift */; };
 		811B570B227DDBED000B2866 /* LocalIPAUploadUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811B570A227DDBED000B2866 /* LocalIPAUploadUtil.swift */; };
 		811BEE282151538600F1F56A /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811BEE1E2151538500F1F56A /* Items.swift */; };
 		811BEE292151538600F1F56A /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811BEE1F2151538600F1F56A /* Link.swift */; };
@@ -171,12 +172,19 @@
 		8142FCD121987131003CD6DE /* BadgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8142FCD021987131003CD6DE /* BadgeManager.swift */; };
 		81431AA120A0CC1E00C830BE /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81431AA020A0CC1E00C830BE /* UIDeviceExtension.swift */; };
 		81485A77216617980004184F /* Search+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81485A76216617980004184F /* Search+Extension.swift */; };
+		0AEAFE824CDC44D7A884FC7B /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC713C9769540DFB981FF15 /* SearchViewModel.swift */; };
+		0017AE0EF4FE4EAF96468ADE /* SearchAppRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190B1C9ACD854CA18942D07C /* SearchAppRow.swift */; };
+		91B155F54D9746158E76B5F9 /* SearchCategoryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01BF3851F874CA7B3339BAA /* SearchCategoryListViewModel.swift */; };
+		705CD7FF4F614A09A1659572 /* SearchCategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5E31BC448546D09E57F199 /* SearchCategoryListView.swift */; };
+		68794848802A417E9A7E1DF2 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA64B8A708164A2989890959 /* SearchView.swift */; };
+		2B65824617B7402E8AEE7561 /* SearchHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948138A6729C4FD7BC7CEBC1 /* SearchHostingController.swift */; };
 		81485A79216777230004184F /* NoScreenshotsSearchCell~Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81485A78216777230004184F /* NoScreenshotsSearchCell~Book.swift */; };
 		8148D858226DD219006AD9E0 /* Downloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8148D857226DD219006AD9E0 /* Downloads.swift */; };
 		8148D85A226DD230006AD9E0 /* QueuedApps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8148D859226DD230006AD9E0 /* QueuedApps.swift */; };
 		C10A00012E670001000A0001 /* QueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000A0004 /* QueueViewModel.swift */; };
 		C10A00012E670001000A0002 /* QueueAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000A0005 /* QueueAccessoryView.swift */; };
 		C10A00012E670001000A0003 /* QueueSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000A0006 /* QueueSheetView.swift */; };
+		40201D4A4C6BD2D0301D0821 /* QueuedAppsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93D31C77E45CFB67BB01655 /* QueuedAppsSheet.swift */; };
 		C10A00012E670001000B0001 /* SigningActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000B0004 /* SigningActivityAttributes.swift */; };
 		C10A00012E670001000B0002 /* SigningActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000B0004 /* SigningActivityAttributes.swift */; };
 		C10A00012E670001000B0003 /* SigningLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A00012E670001000B0005 /* SigningLiveActivity.swift */; };
@@ -219,6 +227,7 @@
 		816D1F231F9165C700172094 /* SearchCells~iPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816D1F221F9165C700172094 /* SearchCells~iPad.swift */; };
 		816D1F251F91679000172094 /* SearchCells~iPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816D1F241F91679000172094 /* SearchCells~iPhone.swift */; };
 		8173FBED207BC90200EF779F /* BulletinDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8173FBEC207BC90200EF779F /* BulletinDataSource.swift */; };
+		1FB552BC24D17AC935707DD5 /* DeviceLinkSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3329BAE6F684F02C11D61E8E /* DeviceLinkSheet.swift */; };
 		8173FBF0207BCAE200EF779F /* SelectorBulletinPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8173FBEF207BCAE200EF779F /* SelectorBulletinPage.swift */; };
 		817418A52165368A00BB70EB /* LoadingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817418A42165368A00BB70EB /* LoadingCollectionView.swift */; };
 		817610EF21515A3200602FF2 /* API+SystemStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817610E521515A3100602FF2 /* API+SystemStatus.swift */; };
@@ -280,6 +289,7 @@
 		818DE03627EB94C800B044F3 /* APIResponseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818DE03527EB94C800B044F3 /* APIResponseError.swift */; };
 		818DE6361E87F4E700E41B51 /* Details+FullScreenshotsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818DE6351E87F4E700E41B51 /* Details+FullScreenshotsCell.swift */; };
 		81939B471E3BA98D00179615 /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81939B461E3BA98D00179615 /* Themes.swift */; };
+		A1B2C4D62B97B0020098C7DD /* AppRestartHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C4D52B97B0020098C7DD /* AppRestartHelper.swift */; };
 		819AE78C1E63135A009D6AF3 /* Details+Changelog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819AE78B1E63135A009D6AF3 /* Details+Changelog.swift */; };
 		819AE78F1E637361009D6AF3 /* Details+TweakedNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819AE78E1E637361009D6AF3 /* Details+TweakedNotice.swift */; };
 		819AF4EA1E82CB8700B4D2EF /* Details+Related.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819AF4E91E82CB8700B4D2EF /* Details+Related.swift */; };
@@ -424,6 +434,7 @@
 		81190B4A216A303C00C81BEB /* MixedScreenshotsSearchCell_P->L+Stars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MixedScreenshotsSearchCell_P->L+Stars.swift"; sourceTree = "<group>"; };
 		811A824C2289D18C00969946 /* AdditionalInstallOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalInstallOptionsViewController.swift; sourceTree = "<group>"; };
 		E1B2C3D32A96A0010097B6CC /* InstallationOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationOptionsView.swift; sourceTree = "<group>"; };
+		225DA8E49BB4F04F810B799C /* InstallOptionsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallOptionsSheet.swift; sourceTree = "<group>"; };
 		811B570A227DDBED000B2866 /* LocalIPAUploadUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalIPAUploadUtil.swift; sourceTree = "<group>"; };
 		811BEE1E2151538500F1F56A /* Items.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Items.swift; sourceTree = "<group>"; };
 		811BEE1F2151538600F1F56A /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
@@ -554,12 +565,19 @@
 		8142FCD021987131003CD6DE /* BadgeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeManager.swift; sourceTree = "<group>"; };
 		81431AA020A0CC1E00C830BE /* UIDeviceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		81485A76216617980004184F /* Search+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Search+Extension.swift"; sourceTree = "<group>"; };
+		4FC713C9769540DFB981FF15 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		190B1C9ACD854CA18942D07C /* SearchAppRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAppRow.swift; sourceTree = "<group>"; };
+		D01BF3851F874CA7B3339BAA /* SearchCategoryListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCategoryListViewModel.swift; sourceTree = "<group>"; };
+		3D5E31BC448546D09E57F199 /* SearchCategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCategoryListView.swift; sourceTree = "<group>"; };
+		BA64B8A708164A2989890959 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		948138A6729C4FD7BC7CEBC1 /* SearchHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHostingController.swift; sourceTree = "<group>"; };
 		81485A78216777230004184F /* NoScreenshotsSearchCell~Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoScreenshotsSearchCell~Book.swift"; sourceTree = "<group>"; };
 		8148D857226DD219006AD9E0 /* Downloads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloads.swift; sourceTree = "<group>"; };
 		8148D859226DD230006AD9E0 /* QueuedApps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueuedApps.swift; sourceTree = "<group>"; };
 		C10A00012E670001000A0004 /* QueueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueViewModel.swift; sourceTree = "<group>"; };
 		C10A00012E670001000A0005 /* QueueAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueAccessoryView.swift; sourceTree = "<group>"; };
 		C10A00012E670001000A0006 /* QueueSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueSheetView.swift; sourceTree = "<group>"; };
+		D93D31C77E45CFB67BB01655 /* QueuedAppsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueuedAppsSheet.swift; sourceTree = "<group>"; };
 		C10A00012E670001000B0004 /* SigningActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningActivityAttributes.swift; sourceTree = "<group>"; };
 		C10A00012E670001000B0005 /* SigningLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningLiveActivity.swift; sourceTree = "<group>"; };
 		8148D85B226DE68E006AD9E0 /* Downloading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloading.swift; sourceTree = "<group>"; };
@@ -608,6 +626,7 @@
 		816D1F221F9165C700172094 /* SearchCells~iPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchCells~iPad.swift"; sourceTree = "<group>"; };
 		816D1F241F91679000172094 /* SearchCells~iPhone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchCells~iPhone.swift"; sourceTree = "<group>"; };
 		8173FBEC207BC90200EF779F /* BulletinDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulletinDataSource.swift; sourceTree = "<group>"; };
+		3329BAE6F684F02C11D61E8E /* DeviceLinkSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLinkSheet.swift; sourceTree = "<group>"; };
 		8173FBEF207BCAE200EF779F /* SelectorBulletinPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorBulletinPage.swift; sourceTree = "<group>"; };
 		817418A42165368A00BB70EB /* LoadingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCollectionView.swift; sourceTree = "<group>"; };
 		817610E521515A3100602FF2 /* API+SystemStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "API+SystemStatus.swift"; sourceTree = "<group>"; };
@@ -671,6 +690,7 @@
 		818DE03527EB94C800B044F3 /* APIResponseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponseError.swift; sourceTree = "<group>"; };
 		818DE6351E87F4E700E41B51 /* Details+FullScreenshotsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Details+FullScreenshotsCell.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		81939B461E3BA98D00179615 /* Themes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Themes.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		A1B2C4D52B97B0020098C7DD /* AppRestartHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppRestartHelper.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		819AE78B1E63135A009D6AF3 /* Details+Changelog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Details+Changelog.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		819AE78E1E637361009D6AF3 /* Details+TweakedNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Details+TweakedNotice.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		819AF4E91E82CB8700B4D2EF /* Details+Related.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Details+Related.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -849,6 +869,7 @@
 				811A824C2289D18C00969946 /* AdditionalInstallOptionsViewController.swift */,
 				813F01962A7C0375008DCA2E /* InstallOptionsDylibSelectViewController.swift */,
 				E1B2C3D32A96A0010097B6CC /* InstallationOptionsView.swift */,
+				225DA8E49BB4F04F810B799C /* InstallOptionsSheet.swift */,
 			);
 			path = "• AdditionalInstallOptionsView";
 			sourceTree = "<group>";
@@ -916,6 +937,12 @@
 				815C4A9F1F954FDA0002AB08 /* Search.swift */,
 				81485A76216617980004184F /* Search+Extension.swift */,
 				815C4AA11F9550340002AB08 /* SuggestionsWhileTyping.swift */,
+				4FC713C9769540DFB981FF15 /* SearchViewModel.swift */,
+				BA64B8A708164A2989890959 /* SearchView.swift */,
+				948138A6729C4FD7BC7CEBC1 /* SearchHostingController.swift */,
+				190B1C9ACD854CA18942D07C /* SearchAppRow.swift */,
+				D01BF3851F874CA7B3339BAA /* SearchCategoryListViewModel.swift */,
+				3D5E31BC448546D09E57F199 /* SearchCategoryListView.swift */,
 				81A060241F8A24E9004EEEE1 /* Search Cells */,
 				81603A69216E638E00F18E34 /* Trending View */,
 			);
@@ -1151,6 +1178,7 @@
 			children = (
 				8173FBEE207BC9F600EF779F /* Bulletins */,
 				8173FBEC207BC90200EF779F /* BulletinDataSource.swift */,
+				3329BAE6F684F02C11D61E8E /* DeviceLinkSheet.swift */,
 			);
 			path = "Device Link";
 			sourceTree = "<group>";
@@ -1892,6 +1920,7 @@
 			isa = PBXGroup;
 			children = (
 				8167A6121DAC246000F96AC2 /* AppDelegate.swift */,
+				A1B2C4D52B97B0020098C7DD /* AppRestartHelper.swift */,
 				8142FCD021987131003CD6DE /* BadgeManager.swift */,
 				81EC00691DAD7704009EEFFA /* Colors.swift */,
 				81EC00671DAD76EC009EEFFA /* Extensions.swift */,
@@ -2067,6 +2096,7 @@
 				C10A00012E670001000A0004 /* QueueViewModel.swift */,
 				C10A00012E670001000A0005 /* QueueAccessoryView.swift */,
 				C10A00012E670001000A0006 /* QueueSheetView.swift */,
+				D93D31C77E45CFB67BB01655 /* QueuedAppsSheet.swift */,
 				C10A00012E670001000B0004 /* SigningActivityAttributes.swift */,
 				8148D859226DD230006AD9E0 /* QueuedApps.swift */,
 			);
@@ -2329,6 +2359,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40201D4A4C6BD2D0301D0821 /* QueuedAppsSheet.swift in Sources */,
+				964561BD7BF8A7ED7C97CA35 /* InstallOptionsSheet.swift in Sources */,
+				1FB552BC24D17AC935707DD5 /* DeviceLinkSheet.swift in Sources */,
 				813F00E72A7BFE52008DCA2E /* View.swift in Sources */,
 				813F00D62A7BFE52008DCA2E /* LayoutGuide.swift in Sources */,
 				81190B43216A2FC800C81BEB /* TwoPortraitScreenshotsSearchCell+Stars.swift in Sources */,
@@ -2437,6 +2470,7 @@
 				8148D85E226DE9A5006AD9E0 /* Library.swift in Sources */,
 				819E698D1F8E9DA500C4608F /* NoScreenshotsSearchCell.swift in Sources */,
 				81939B471E3BA98D00179615 /* Themes.swift in Sources */,
+				A1B2C4D62B97B0020098C7DD /* AppRestartHelper.swift in Sources */,
 				8173FBED207BC90200EF779F /* BulletinDataSource.swift in Sources */,
 				8117DDAA1F3B05BD00E817C5 /* String+Truncation.swift in Sources */,
 				81EC007B1DAD92A2009EEFFA /* Featured+Extension.swift in Sources */,
@@ -2458,6 +2492,12 @@
 				81190B47216A301900C81BEB /* LandscapeScreenshotSearchCell+Stars.swift in Sources */,
 				81E170302170D09000A38380 /* TagButton.swift in Sources */,
 				81485A77216617980004184F /* Search+Extension.swift in Sources */,
+				0AEAFE824CDC44D7A884FC7B /* SearchViewModel.swift in Sources */,
+				0017AE0EF4FE4EAF96468ADE /* SearchAppRow.swift in Sources */,
+				91B155F54D9746158E76B5F9 /* SearchCategoryListViewModel.swift in Sources */,
+				705CD7FF4F614A09A1659572 /* SearchCategoryListView.swift in Sources */,
+				68794848802A417E9A7E1DF2 /* SearchView.swift in Sources */,
+				2B65824617B7402E8AEE7561 /* SearchHostingController.swift in Sources */,
 				8126201C215444A400B06F88 /* Style.swift in Sources */,
 				813F00D52A7BFE52008DCA2E /* Expression.swift in Sources */,
 				81F00E2B2785B8DF0071B16E /* SigningTypeChooser.swift in Sources */,

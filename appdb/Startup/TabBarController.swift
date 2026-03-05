@@ -32,7 +32,11 @@ class TabBarController: UITabBarController {
         }
 
         let searchTab = UISearchTab(viewControllerProvider: { _ in
-            UINavigationController(rootViewController: Search())
+            if #available(iOS 15.0, *) {
+                return UINavigationController(rootViewController: SearchHostingController())
+            } else {
+                return UINavigationController(rootViewController: Search())
+            }
         })
 
         let libraryTab = UITab(title: "My Apps".localized(), image: UIImage(systemName: "square.grid.2x2.fill"), identifier: "library") { _ in
@@ -54,8 +58,16 @@ class TabBarController: UITabBarController {
         // Listen for notifications to show the queue sheet (from Live Activity deep links)
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(showQueueSheetFromNotification),
+            selector: #selector(presentQueuedAppsSheet),
             name: NSNotification.Name("ShowQueueSheet"),
+            object: nil
+        )
+
+        // Listen for tap on the bottom accessory
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(presentQueuedAppsSheet),
+            name: NSNotification.Name("PresentQueuedAppsSheet"),
             object: nil
         )
     }
@@ -94,8 +106,15 @@ class TabBarController: UITabBarController {
 
     // MARK: - Queue Sheet Presentation
 
-    @objc private func showQueueSheetFromNotification() {
-        // Trigger the sheet display by updating the view model
-        queueViewModel.showQueueSheet = true
+    @objc private func presentQueuedAppsSheet() {
+        guard presentedViewController == nil else { return }
+        let sheet = QueuedAppsSheet(viewModel: queueViewModel, onDismiss: { [weak self] in
+            self?.dismiss(animated: false)
+        })
+        let hosting = UIHostingController(rootView: sheet)
+        hosting.view.backgroundColor = .clear
+        hosting.modalPresentationStyle = .overFullScreen
+        hosting.modalTransitionStyle = .crossDissolve
+        present(hosting, animated: true)
     }
 }

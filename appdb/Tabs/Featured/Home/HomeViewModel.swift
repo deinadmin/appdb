@@ -52,8 +52,8 @@ final class HomeViewModel: ObservableObject {
     /// Dynamic sections sourced from the user's AltStore repos
     @Published var repoSections: [HomeSection] = []
 
-    /// Genres data
-    @Published var genres: [Genre] = Preferences.genres
+    /// Genres data ("All Categories" id "0" first, then the rest)
+    @Published var genres: [Genre] = HomeViewModel.genresWithAllCategoriesFirst(Preferences.genres)
 
     /// Banner image names (local assets)
     let bannerImages: [String] = {
@@ -94,7 +94,7 @@ final class HomeViewModel: ObservableObject {
         // Load genres (enables Categories button in the future)
         API.listGenres(completion: { [weak self] in
             DispatchQueue.main.async {
-                self?.genres = Preferences.genres
+                self?.genres = HomeViewModel.genresWithAllCategoriesFirst(Preferences.genres)
             }
         })
 
@@ -195,6 +195,13 @@ final class HomeViewModel: ObservableObject {
     }
 
     // MARK: - Helpers
+
+    /// Returns genres with "All Categories" (id "0") first, then the rest in their original order.
+    private static func genresWithAllCategoriesFirst(_ prefs: [Genre]) -> [Genre] {
+        let allCategories = prefs.first(where: { $0.id == "0" })
+        let rest = prefs.filter { $0.id != "0" }
+        return (allCategories.map { [$0] } ?? []) + rest
+    }
 
     private func markRequestComplete(completion: (() -> Void)? = nil) {
         completedRequests += 1

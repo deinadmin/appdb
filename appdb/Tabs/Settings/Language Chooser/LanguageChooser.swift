@@ -74,7 +74,19 @@ class LanguageChooser: UITableViewController {
         title = "Choose Language".localized()
         if Global.isIpad { navigationItem.rightBarButtonItem?.title = "Dismiss".localized() }
         Messages.shared.hideAll()
-        Messages.shared.showSuccess(message: "Language set, please restart the app to apply changes".localized(), context: .viewController(self))
+        showRestartRequiredAlert()
+    }
+
+    private func showRestartRequiredAlert() {
+        let alert = UIAlertController(
+            title: nil,
+            message: "To apply this setting, the app must be restarted.".localized(),
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Close App".localized(), style: .default) { _ in
+            AppRestartHelper.closeAppWithHomeAnimation()
+        })
+        present(alert, animated: true)
     }
 
     // MARK: - UITableViewDelegate

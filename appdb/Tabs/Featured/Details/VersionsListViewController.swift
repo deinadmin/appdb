@@ -183,7 +183,7 @@ class VersionsListViewController: LoadingTableView {
             }
 
             if Preferences.askForInstallationOptions {
-                self.presentInstallationOptions(
+                self.presentInstallOptionsSheet(
                     onInstall: { additionalOptions in
                         install(additionalOptions)
                     },
