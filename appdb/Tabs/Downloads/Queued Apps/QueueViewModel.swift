@@ -52,6 +52,13 @@ final class QueueViewModel: ObservableObject {
             }
         }
 
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(refreshAccentInLiveActivities),
+            name: Notification.Name(rawValue: ThemeUpdateNotification),
+            object: nil
+        )
+
         // Also poll periodically in case onUpdate isn't firing
         // (e.g. timer not yet started, or queue was populated before we subscribed)
         pollTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
@@ -71,6 +78,7 @@ final class QueueViewModel: ObservableObject {
 
     deinit {
         pollTimer?.invalidate()
+        NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: - Actions
@@ -91,6 +99,32 @@ final class QueueViewModel: ObservableObject {
     func removeAll() {
         ObserveQueuedApps.shared.removeAllApps()
         endAllLiveActivities()
+    }
+
+    // MARK: - Accent Color Helpers
+
+    /// Returns the light/dark hex pair matching the currently selected app icon accent.
+    private func accentHexPair() -> (light: String, dark: String) {
+        switch Preferences.accentIcon {
+        case "Green":  return ("#43B302", "#6FD43A")
+        case "Purple": return ("#8101C1", "#B44FE8")
+        case "Yellow": return ("#CCC104", "#E8DC40")
+        case "Pink":   return ("#B60DC3", "#D94FE3")
+        case "Red":    return ("#C11800", "#FF4D38")
+        case "Aqua":   return ("#2CBBC6", "#5CD8E1")
+        default:       return ("#446CB3", "#6FACFA")
+        }
+    }
+
+    /// Re-pushes the current accent colors into every active Live Activity
+    /// when the user changes the app icon / accent from Settings.
+    @objc private func refreshAccentInLiveActivities() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            for app in self.apps {
+                self.updateLiveActivity(for: app)
+            }
+        }
     }
 
     // MARK: - App Group Icon Helpers
@@ -286,10 +320,13 @@ final class QueueViewModel: ObservableObject {
             commandUUID: app.commandUUID
         )
 
+        let hexPair = accentHexPair()
         let state = SigningActivityAttributes.ContentState(
             status: app.status.isEmpty ? "Queued..." : app.status,
             isReadyToInstall: app.isReadyToInstall,
-            manifestUri: app.manifestUri
+            manifestUri: app.manifestUri,
+            accentColorHex: hexPair.light,
+            accentColorHexDark: hexPair.dark
         )
 
         let content = ActivityContent(state: state, staleDate: nil)
@@ -310,10 +347,13 @@ final class QueueViewModel: ObservableObject {
     private func updateLiveActivity(for app: RequestedApp) {
         guard let activity = liveActivities[app.queueItemId] else { return }
 
+        let hexPair = accentHexPair()
         let state = SigningActivityAttributes.ContentState(
             status: app.status.isEmpty ? "Queued..." : app.status,
             isReadyToInstall: app.isReadyToInstall,
-            manifestUri: app.manifestUri
+            manifestUri: app.manifestUri,
+            accentColorHex: hexPair.light,
+            accentColorHexDark: hexPair.dark
         )
 
         let content = ActivityContent(state: state, staleDate: nil)

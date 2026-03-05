@@ -18,7 +18,7 @@ private typealias SColor = SwiftUI.Color
 struct AppSectionView: SwiftUI.View {
     let section: HomeSection
     var onSelectItem: ((Item) -> Void)?
-    var onInstallItem: ((Item) -> Void)?
+    var onInstallItem: ((Item, @escaping () -> Void) -> Void)?
     var onSeeAll: ((String, ItemType, String, Price, Order) -> Void)?
     var onSeeAllRepo: ((AltStoreRepo) -> Void)?
 
@@ -52,8 +52,8 @@ struct AppSectionView: SwiftUI.View {
                     ForEach(Array(pages.enumerated()), id: \.offset) { _, pageItems in
                         VStack(alignment: .leading, spacing: 12) {
                             ForEach(Array(pageItems.enumerated()), id: \.offset) { index, item in
-                                AppListRow(item: item, onInstall: {
-                                    onInstallItem?(item)
+                                AppListRow(item: item, onInstall: { done in
+                                    onInstallItem?(item, done)
                                 })
                                 .onTapGesture {
                                     onSelectItem?(item)
@@ -97,9 +97,21 @@ struct AppSectionView: SwiftUI.View {
 @available(iOS 15.0, *)
 struct AppListRow: SwiftUI.View {
     let item: Item
-    var onInstall: (() -> Void)?
+    /// Called when Get is tapped. Receives a `done` closure to call when the
+    /// install options sheet is dismissed (or the flow ends), resetting the spinner.
+    var onInstall: ((_ done: @escaping () -> Void) -> Void)?
+
+    @State private var isLoading = false
 
     private let iconSize: CGFloat = 60
+
+    /// Developer name for subtitle; when unknown (empty, "?", or whitespace) show bundle id, else "?".
+    private var developerSubtitle: String {
+        let s = item.itemSeller.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !s.isEmpty && s != "?" { return item.itemSeller }
+        let bid = item.itemBundleId
+        return bid.isEmpty ? "?" : bid
+    }
 
     var body: some SwiftUI.View {
         HStack(alignment: .center, spacing: 12) {
@@ -109,14 +121,14 @@ struct AppListRow: SwiftUI.View {
                 size: iconSize
             )
 
-            // Name and Author
+            // Name and developer (subtitle); when unknown use bundle id instead of "?"
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.itemName)
                     .font(.headline)
                     .foregroundStyle(.primary)
                     .lineLimit(1)
 
-                Text(item.itemSeller.isEmpty ? item.itemBundleId : item.itemSeller)
+                Text(developerSubtitle)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
@@ -125,17 +137,28 @@ struct AppListRow: SwiftUI.View {
             Spacer()
 
             VStack {
-                // Install button pill (Accent color with white/black text)
                 Button {
-                    onInstall?()
+                    guard !isLoading else { return }
+                    isLoading = true
+                    onInstall? {
+                        DispatchQueue.main.async { isLoading = false }
+                    }
                 } label: {
-                    Text("Get".localized())
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundStyle(.white) // Standard for most accent colors
-                        .padding(.horizontal, 22)
-                        .padding(.vertical, 6)
-                        .background(SColor.accentColor)
-                        .clipShape(Capsule())
+                    ZStack {
+                        Text("Get".localized())
+                            .opacity(isLoading ? 0 : 1)
+                        ProgressView()
+                            .controlSize(.small)
+                            .tint(.white)
+                            .opacity(isLoading ? 1 : 0)
+                    }
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 22)
+                    .padding(.vertical, 6)
+                    .background(SColor.accentColor)
+                    .clipShape(Capsule())
+                    .animation(.easeInOut(duration: 0.2), value: isLoading)
                 }
                 .buttonStyle(.plain)
                 Text(item.itemVersion.isEmpty ? "Latest" : "v\(item.itemVersion)")

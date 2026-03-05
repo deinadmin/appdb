@@ -44,8 +44,13 @@ final class SettingsHostingController: UIViewController, ChangedEnterpriseCertif
         settingsView.onPresentMail = { [weak self] subject, recipient in
             self?.presentMail(subject: subject, recipient: recipient)
         }
-        settingsView.onOpenURL = { [weak self] urlString in
-            self?.openURL(urlString)
+        settingsView.onPushDeviceLink = { [weak self] in
+            guard let self = self else { return }
+            NotificationCenter.default.addObserver(
+                self, selector: #selector(self.openSafariFromNotification(_:)),
+                name: .OpenSafari, object: nil
+            )
+            (self.tabBarController ?? self).presentDeviceLinkSheet()
         }
 
         let hosting = UIHostingController(rootView: AnyView(settingsView))
@@ -88,10 +93,10 @@ final class SettingsHostingController: UIViewController, ChangedEnterpriseCertif
         })
     }
 
-    private func openURL(_ urlString: String) {
-        guard let url = URL(string: urlString) else { return }
-        let svc = SFSafariViewController(url: url)
-        present(svc, animated: true)
+    @objc private func openSafariFromNotification(_ notification: Notification) {
+        guard let urlString = notification.userInfo?["URLString"] as? String,
+              let url = URL(string: urlString) else { return }
+        UIApplication.shared.open(url)
     }
 
     private func presentMail(subject: String, recipient: String) {

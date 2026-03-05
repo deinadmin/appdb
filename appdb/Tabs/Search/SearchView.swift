@@ -31,12 +31,12 @@ struct SearchView: SwiftUI.View {
     /// Tap on a catalog or repo row — navigate to app details.
     var onSelectItem: ((Item) -> Void)?
     /// Get button on a catalog or repo row — trigger install flow.
-    var onInstallItem: ((Item) -> Void)?
+    var onInstallItem: ((Item, @escaping () -> Void) -> Void)?
 
     /// Tap on a My AppStore row — e.g. switch to the Library tab.
     var onSelectMyAppStoreApp: ((MyAppStoreApp) -> Void)?
     /// Get button on a My AppStore row — trigger install from library.
-    var onInstallMyAppStoreApp: ((MyAppStoreApp) -> Void)?
+    var onInstallMyAppStoreApp: ((MyAppStoreApp, @escaping () -> Void) -> Void)?
 
     /// Tap the category genre card in the idle grid.
     var onSelectGenre: ((Genre) -> Void)?
@@ -140,7 +140,7 @@ struct SearchView: SwiftUI.View {
                 SearchAppRow(
                     content: .myAppStore(app),
                     onTap:    { onSelectMyAppStoreApp?(app) },
-                    onInstall: { onInstallMyAppStoreApp?(app) }
+                    onInstall: { done in onInstallMyAppStoreApp?(app, done) }
                 )
                 .background(glassBackground)
                 .padding(.horizontal, 16)
@@ -163,7 +163,7 @@ struct SearchView: SwiftUI.View {
                 SearchAppRow(
                     content: .item(item),
                     onTap:    { onSelectItem?(item) },
-                    onInstall: { onInstallItem?(item) }
+                    onInstall: { done in onInstallItem?(item, done) }
                 )
                 .background(glassBackground)
                 .padding(.horizontal, 16)
@@ -193,7 +193,7 @@ struct SearchView: SwiftUI.View {
                 SearchAppRow(
                     content: .item(app),
                     onTap:    { onSelectItem?(app) },
-                    onInstall: { onInstallItem?(app) }
+                    onInstall: { done in onInstallItem?(app, done) }
                 )
                 .background(glassBackground)
                 .padding(.horizontal, 16)

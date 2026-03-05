@@ -96,7 +96,7 @@ struct SigningLiveActivity: Widget {
                 Spacer(minLength: 0)
 
                 if context.state.isReadyToInstall {
-                    installLink(linkId: context.attributes.linkId, commandUUID: context.attributes.commandUUID, manifestUri: context.state.manifestUri)
+                    installLink(linkId: context.attributes.linkId, commandUUID: context.attributes.commandUUID, manifestUri: context.state.manifestUri, accentHex: context.state.accentColorHex, accentHexDark: context.state.accentColorHexDark)
                 } else {
                     ProgressView()
                         .progressViewStyle(.circular)
@@ -151,22 +151,9 @@ struct SigningLiveActivity: Widget {
     /// Deep link button that triggers installation via the main app.
     /// Opens `appdb-ios://?action=install-manifest&uri=<encoded>&linkId=<id>&commandUUID=<uuid>` so the app can match the exact queue entry.
     @ViewBuilder
-    private func installLink(linkId: String, commandUUID: String, manifestUri: String) -> some View {
-        let url = installManifestURL(linkId: linkId, commandUUID: commandUUID, manifestUri: manifestUri)
-        if let url {
-            Link(destination: url) {
-                Text("Install")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .frame(minWidth: 72)
-                    .background(Color.accentColor)
-                    .foregroundStyle(.white)
-                    .clipShape(Capsule())
-            }
-        } else {
-            EmptyView()
+    private func installLink(linkId: String, commandUUID: String, manifestUri: String, accentHex: String, accentHexDark: String) -> some View {
+        if let url = installManifestURL(linkId: linkId, commandUUID: commandUUID, manifestUri: manifestUri) {
+            AccentInstallButton(url: url, lightHex: accentHex, darkHex: accentHexDark)
         }
     }
 
@@ -189,11 +176,38 @@ struct SigningLiveActivity: Widget {
     @ViewBuilder
     private func trailingContent(state: SigningActivityAttributes.ContentState, linkId: String, commandUUID: String) -> some View {
         if state.isReadyToInstall {
-            installLink(linkId: linkId, commandUUID: commandUUID, manifestUri: state.manifestUri)
+            installLink(linkId: linkId, commandUUID: commandUUID, manifestUri: state.manifestUri, accentHex: state.accentColorHex, accentHexDark: state.accentColorHexDark)
         } else {
             ProgressView()
                 .progressViewStyle(.circular)
                 .frame(width: 22, height: 22)
+        }
+    }
+}
+
+// MARK: - AccentInstallButton
+
+/// Install pill button whose background colour comes from the Live Activity state,
+/// so it matches the user's chosen app-icon accent and updates dynamically.
+@available(iOS 16.1, *)
+private struct AccentInstallButton: View {
+    let url: URL
+    let lightHex: String
+    let darkHex: String
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        Link(destination: url) {
+            Text("Install")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .frame(minWidth: 72)
+                .background(colorScheme == .dark ? Color(hex: darkHex) : Color(hex: lightHex))
+                .foregroundStyle(.white)
+                .clipShape(Capsule())
         }
     }
 }

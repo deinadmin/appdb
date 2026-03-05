@@ -26,11 +26,11 @@ struct SearchCategoryListView: SwiftUI.View {
     /// Called when a catalog or repo row is tapped (navigate to Details).
     var onSelectItem: ((Item) -> Void)?
     /// Called when a catalog or repo Get button is tapped.
-    var onInstallItem: ((Item) -> Void)?
+    var onInstallItem: ((Item, @escaping () -> Void) -> Void)?
     /// Called when a My AppStore row is tapped (e.g. switch to Library tab).
     var onSelectMyAppStoreApp: ((MyAppStoreApp) -> Void)?
     /// Called when a My AppStore Get button is tapped.
-    var onInstallMyAppStoreApp: ((MyAppStoreApp) -> Void)?
+    var onInstallMyAppStoreApp: ((MyAppStoreApp, @escaping () -> Void) -> Void)?
 
     var body: some SwiftUI.View {
         Group {
@@ -62,7 +62,7 @@ struct SearchCategoryListView: SwiftUI.View {
                         SearchAppRow(
                             content: .myAppStore(app),
                             onTap: { onSelectMyAppStoreApp?(app) },
-                            onInstall: { onInstallMyAppStoreApp?(app) }
+                            onInstall: { done in onInstallMyAppStoreApp?(app, done) }
                         )
                         .background(glassBackground)
                         .padding(.horizontal, 16)
@@ -74,7 +74,7 @@ struct SearchCategoryListView: SwiftUI.View {
                         SearchAppRow(
                             content: .item(item),
                             onTap: { onSelectItem?(item) },
-                            onInstall: { onInstallItem?(item) }
+                            onInstall: { done in onInstallItem?(item, done) }
                         )
                         .background(glassBackground)
                         .padding(.horizontal, 16)

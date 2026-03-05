@@ -40,7 +40,7 @@ class MyLibraryHostingController: UIViewController {
         self.viewModel = viewModel
 
         let libraryView = MyLibraryView(
-            onInstallApp: { [weak self] app in self?.handleMyAppStoreInstall(app: app) },
+            onInstallApp: { [weak self] app, done in self?.handleMyAppStoreInstall(app: app, done: done) },
             onPresentLogin: { [weak self] in self?.presentDeviceLinkSheet() }
         ).environmentObject(viewModel)
 
@@ -67,8 +67,9 @@ class MyLibraryHostingController: UIViewController {
 
     // MARK: - Install (same flow as home: askForInstallationOptions + UIKit sheet)
 
-    private func handleMyAppStoreInstall(app: MyAppStoreApp) {
+    private func handleMyAppStoreInstall(app: MyAppStoreApp, done: @escaping () -> Void) {
         guard !app.installationTicket.isEmpty else {
+            done()
             if !app.noInstallationTicketReason.isEmpty {
                 Messages.shared.showError(message: app.noInstallationTicketReason.prettified, context: .viewController(self))
             } else {
@@ -78,21 +79,23 @@ class MyLibraryHostingController: UIViewController {
         }
 
         guard Preferences.deviceIsLinked else {
+            done()
             Messages.shared.showError(message: "Please authorize app from Settings first".localized(), context: .viewController(self))
             return
         }
 
-        guard let viewModel else { return }
+        guard let viewModel else { done(); return }
 
         if Preferences.askForInstallationOptions {
             loadInstallOptionsSheetAndPresent(
                 onInstall: { [weak self] options in
                     self?.viewModel?.installApp(app, additionalOptions: options)
                 },
-                onCancel: nil
+                onCancel: done
             )
         } else {
             viewModel.installApp(app, additionalOptions: [:])
+            done()
         }
     }
 }

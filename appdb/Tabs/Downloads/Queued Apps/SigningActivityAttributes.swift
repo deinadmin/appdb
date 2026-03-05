@@ -49,5 +49,11 @@ struct SigningActivityAttributes: ActivityAttributes {
 
         /// The manifest URI for itms-services installation (empty until ready)
         var manifestUri: String
+
+        /// Hex color for the Install button background in light appearance (e.g. "#446CB3")
+        var accentColorHex: String = "#446CB3"
+
+        /// Hex color for the Install button background in dark appearance (e.g. "#6FACFA")
+        var accentColorHexDark: String = "#6FACFA"
     }
 }

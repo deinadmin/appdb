@@ -37,7 +37,11 @@ enum SearchRowContent {
 struct SearchAppRow: SwiftUI.View {
     let content: SearchRowContent
     var onTap: (() -> Void)?
-    var onInstall: (() -> Void)?
+    /// Called when Get is tapped. Receives a `done` closure to call when the
+    /// install options sheet is dismissed (or the flow ends), resetting the spinner.
+    var onInstall: ((_ done: @escaping () -> Void) -> Void)?
+
+    @State private var isLoading = false
 
     private var iconSize: CGFloat { Global.isIpad ? 64 : 56 }
 
@@ -115,15 +119,27 @@ struct SearchAppRow: SwiftUI.View {
     private var installColumn: some SwiftUI.View {
         VStack(spacing: 4) {
             Button {
-                onInstall?()
+                guard !isLoading else { return }
+                isLoading = true
+                onInstall? {
+                    DispatchQueue.main.async { isLoading = false }
+                }
             } label: {
-                Text("Get".localized())
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 18)
-                    .padding(.vertical, 6)
-                    .background(SColor.accentColor)
-                    .clipShape(Capsule())
+                ZStack {
+                    Text("Get".localized())
+                        .opacity(isLoading ? 0 : 1)
+                    ProgressView()
+                        .controlSize(.small)
+                        .tint(.white)
+                        .opacity(isLoading ? 1 : 0)
+                }
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 6)
+                .background(SColor.accentColor)
+                .clipShape(Capsule())
+                .animation(.easeInOut(duration: 0.2), value: isLoading)
             }
             .buttonStyle(.plain)
 

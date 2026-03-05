@@ -9,6 +9,19 @@
 import SwiftUI
 import Localize_Swift
 
+extension Color {
+    /// Initialise from a 6-digit hex string, e.g. "#446CB3" or "446CB3".
+    init(hex: String) {
+        let cleaned = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var value: UInt64 = 0
+        Scanner(string: cleaned).scanHexInt64(&value)
+        let r = Double((value >> 16) & 0xFF) / 255
+        let g = Double((value >> 8) & 0xFF) / 255
+        let b = Double(value & 0xFF) / 255
+        self.init(.sRGB, red: r, green: g, blue: b)
+    }
+}
+
 extension String {
     var rfc2822decoded: String {
         let formatter = DateFormatter()

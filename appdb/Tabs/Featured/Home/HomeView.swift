@@ -19,7 +19,7 @@ struct HomeView: SwiftUI.View {
 
     /// Navigation callbacks — bridge into the UIKit navigation stack
     var onSelectItem: ((Item) -> Void)?
-    var onInstallItem: ((Item) -> Void)?
+    var onInstallItem: ((Item, @escaping () -> Void) -> Void)?
     var onSeeAll: ((String, ItemType, String, Price, Order) -> Void)?
     var onSeeAllRepo: ((AltStoreRepo) -> Void)?
     var onBannerTap: ((String) -> Void)?

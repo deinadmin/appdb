@@ -65,8 +65,8 @@ class HomeHostingController: UIViewController {
         homeView.onSelectItem = { [weak self] item in
             self?.pushDetails(for: item)
         }
-        homeView.onInstallItem = { [weak self] item in
-            self?.handleInstall(item: item)
+        homeView.onInstallItem = { [weak self] item, done in
+            self?.handleInstall(item: item, done: done)
         }
         homeView.onSeeAll = { [weak self] title, itemType, category, price, order in
             self?.pushSeeAll(title: title, type: itemType, category: category, price: price, order: order)
@@ -269,32 +269,35 @@ class HomeHostingController: UIViewController {
 
     // MARK: - Installation Flow
 
-    private func handleInstall(item: Item) {
+    private func handleInstall(item: Item, done: @escaping () -> Void) {
         if !Preferences.deviceIsLinked {
+            done()
             presentDeviceLinkSheet()
             return
         }
 
         if let altStoreApp = item as? AltStoreApp {
-            actualAltStoreInstall(app: altStoreApp)
+            actualAltStoreInstall(app: altStoreApp, done: done)
         } else {
             // Fetch links first via gateway
             API.getLinks(universalObjectIdentifier: item.itemUniversalObjectIdentifier, success: { [weak self] versions in
-                guard let self = self else { return }
+                guard let self = self else { done(); return }
                 if let firstLink = versions.first?.links.first, !firstLink.id.isEmpty {
-                    self.actualCatalogInstall(item: item, linkId: firstLink.id)
+                    self.actualCatalogInstall(item: item, linkId: firstLink.id, done: done)
                 } else {
+                    done()
                     let reason = versions.first?.links.first?.compatibility ?? "No installable links found".localized()
                     Messages.shared.showError(message: reason, context: .viewController(self))
                 }
             }, fail: { [weak self] error in
+                done()
                 guard let self = self else { return }
                 Messages.shared.showError(message: error, context: .viewController(self))
             })
         }
     }
 
-    private func actualCatalogInstall(item: Item, linkId: String) {
+    private func actualCatalogInstall(item: Item, linkId: String, done: @escaping () -> Void) {
         let type: ItemType = (item is CydiaApp) ? .cydia : (item is Book ? .books : .ios)
 
         func install(_ additionalOptions: [String: Any] = [:]) {
@@ -323,14 +326,16 @@ class HomeHostingController: UIViewController {
 
         if Preferences.askForInstallationOptions {
             self.loadInstallOptionsSheetAndPresent(
-                onInstall: { install($0) }
+                onInstall: { install($0) },
+                onCancel: done
             )
         } else {
             install()
+            done()
         }
     }
 
-    private func actualAltStoreInstall(app: AltStoreApp) {
+    private func actualAltStoreInstall(app: AltStoreApp, done: @escaping () -> Void) {
         func install(_ additionalOptions: [String: Any] = [:]) {
             API.customInstall(ipaUrl: app.downloadURL, iconUrl: app.image, name: app.name, type: "repo", additionalOptions: additionalOptions) { [weak self] result in
                 guard let self = self else { return }
@@ -355,10 +360,12 @@ class HomeHostingController: UIViewController {
 
         if Preferences.askForInstallationOptions {
             self.loadInstallOptionsSheetAndPresent(
-                onInstall: { install($0) }
+                onInstall: { install($0) },
+                onCancel: done
             )
         } else {
             install()
+            done()
         }
     }
 }

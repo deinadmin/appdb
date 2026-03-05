@@ -53,10 +53,10 @@ class SearchHostingController: UIViewController {
         var searchView = SearchView(viewModel: viewModel)
 
         searchView.onSelectItem              = { [weak self] item in self?.pushDetails(for: item) }
-        searchView.onInstallItem             = { [weak self] item in self?.handleInstall(item: item) }
+        searchView.onInstallItem             = { [weak self] item, done in self?.handleInstall(item: item, done: done) }
 
         searchView.onSelectMyAppStoreApp     = { [weak self] _ in self?.tabBarController?.selectedIndex = 2 }
-        searchView.onInstallMyAppStoreApp    = { [weak self] app in self?.handleMyAppStoreInstall(app: app) }
+        searchView.onInstallMyAppStoreApp    = { [weak self] app, done in self?.handleMyAppStoreInstall(app: app, done: done) }
 
         searchView.onSelectGenre             = { [weak self] genre in self?.pushCategoryBrowse(for: genre) }
 
@@ -136,9 +136,9 @@ class SearchHostingController: UIViewController {
         var listView = SearchCategoryListView(viewModel: listViewModel)
 
         listView.onSelectItem              = { [weak self] item in self?.pushDetails(for: item) }
-        listView.onInstallItem             = { [weak self] item in self?.handleInstall(item: item) }
+        listView.onInstallItem             = { [weak self] item, done in self?.handleInstall(item: item, done: done) }
         listView.onSelectMyAppStoreApp     = { [weak self] _ in self?.tabBarController?.selectedIndex = 2 }
-        listView.onInstallMyAppStoreApp    = { [weak self] app in self?.handleMyAppStoreInstall(app: app) }
+        listView.onInstallMyAppStoreApp    = { [weak self] app, done in self?.handleMyAppStoreInstall(app: app, done: done) }
 
         let vc = UIHostingController(rootView: AnyView(listView))
         vc.title = title
@@ -154,28 +154,31 @@ class SearchHostingController: UIViewController {
 
     // MARK: - Install: Catalog / Repo
 
-    private func handleInstall(item: Item) {
+    private func handleInstall(item: Item, done: @escaping () -> Void) {
         guard Preferences.deviceIsLinked else {
+            done()
             presentDeviceLinkSheet()
             return
         }
 
         if let altStoreApp = item as? AltStoreApp {
-            actualAltStoreInstall(app: altStoreApp)
+            actualAltStoreInstall(app: altStoreApp, done: done)
         } else {
             API.getLinks(
                 universalObjectIdentifier: item.itemUniversalObjectIdentifier,
                 success: { [weak self] versions in
-                    guard let self = self else { return }
+                    guard let self = self else { done(); return }
                     if let firstLink = versions.first?.links.first, !firstLink.id.isEmpty {
-                        self.actualCatalogInstall(item: item, linkId: firstLink.id)
+                        self.actualCatalogInstall(item: item, linkId: firstLink.id, done: done)
                     } else {
+                        done()
                         let reason = versions.first?.links.first?.compatibility
                             ?? "No installable links found".localized()
                         Messages.shared.showError(message: reason, context: .viewController(self))
                     }
                 },
                 fail: { [weak self] error in
+                    done()
                     guard let self = self else { return }
                     Messages.shared.showError(message: error, context: .viewController(self))
                 }
@@ -183,7 +186,7 @@ class SearchHostingController: UIViewController {
         }
     }
 
-    private func actualCatalogInstall(item: Item, linkId: String) {
+    private func actualCatalogInstall(item: Item, linkId: String, done: @escaping () -> Void) {
         let type: ItemType = (item is CydiaApp) ? .cydia : (item is Book ? .books : .ios)
 
         func install(_ additionalOptions: [String: Any] = [:]) {
@@ -214,13 +217,14 @@ class SearchHostingController: UIViewController {
         }
 
         if Preferences.askForInstallationOptions {
-            loadInstallOptionsSheetAndPresent(onInstall: { install($0) })
+            loadInstallOptionsSheetAndPresent(onInstall: { install($0) }, onCancel: done)
         } else {
             install()
+            done()
         }
     }
 
-    private func actualAltStoreInstall(app: AltStoreApp) {
+    private func actualAltStoreInstall(app: AltStoreApp, done: @escaping () -> Void) {
         func install(_ additionalOptions: [String: Any] = [:]) {
             API.customInstall(
                 ipaUrl: app.downloadURL, iconUrl: app.image, name: app.name,
@@ -250,21 +254,24 @@ class SearchHostingController: UIViewController {
         }
 
         if Preferences.askForInstallationOptions {
-            loadInstallOptionsSheetAndPresent(onInstall: { install($0) })
+            loadInstallOptionsSheetAndPresent(onInstall: { install($0) }, onCancel: done)
         } else {
             install()
+            done()
         }
     }
 
     // MARK: - Install: My AppStore
 
-    private func handleMyAppStoreInstall(app: MyAppStoreApp) {
+    private func handleMyAppStoreInstall(app: MyAppStoreApp, done: @escaping () -> Void) {
         guard Preferences.deviceIsLinked else {
+            done()
             presentDeviceLinkSheet()
             return
         }
 
         guard !app.installationTicket.isEmpty else {
+            done()
             let reason = app.noInstallationTicketReason.isEmpty
                 ? "No installation ticket available".localized()
                 : app.noInstallationTicketReason
@@ -302,9 +309,10 @@ class SearchHostingController: UIViewController {
         }
 
         if Preferences.askForInstallationOptions {
-            loadInstallOptionsSheetAndPresent(onInstall: { install($0) })
+            loadInstallOptionsSheetAndPresent(onInstall: { install($0) }, onCancel: done)
         } else {
             install()
+            done()
         }
     }
 }

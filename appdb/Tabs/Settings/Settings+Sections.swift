@@ -138,6 +138,17 @@ extension Settings {
                     }
                     }, cellClass: SimpleStaticPLUSStatusCell.self, context: ["active": Preferences.isPlus, "expire": Preferences.plusUntil]),
 
+                StaticRow(text: "Sign in to Browser".localized(), selection: { [unowned self] _ in
+                    API.getLinkCode(success: {
+                        let code = Preferences.linkCode
+                        guard !code.isEmpty else { return }
+
+                        let encodedCode = code.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? code
+                        let urlString = "https://dbservices.to/redirect/?toappdb=%2Flink%2Fconfirm%2F%3Ftype%3Dcontrol%26code%3D\(encodedCode)"
+                        self.openInSafari(urlString)
+                    }, fail: { _ in })
+                }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self),
+
                 StaticRow(text: "Link Code".localized(), detailText: Preferences.linkCode, selection: { [unowned self] _ in
                         API.getLinkCode(success: { self.refreshSources() }, fail: { _ in })
                     }, cellClass: SimpleStaticCell.self, context: ["disableSelection": true], copyAction: { row in

@@ -13,7 +13,7 @@ struct MyLibraryView: SwiftUI.View {
     @EnvironmentObject var viewModel: MyLibraryViewModel
 
     /// When set, Get button uses the same install flow as home (UIKit sheet + askForInstallationOptions). Otherwise uses the legacy SwiftUI sheet.
-    var onInstallApp: ((MyAppStoreApp) -> Void)? = nil
+    var onInstallApp: ((MyAppStoreApp, @escaping () -> Void) -> Void)? = nil
     /// Called when user taps "Login with AppDB" on the sign-in screen (opens device-link bulletin).
     var onPresentLogin: (() -> Void)? = nil
 
@@ -98,7 +98,7 @@ struct MyLibraryView: SwiftUI.View {
                 }
             }
         }
-        .sheet(item: $installSheetItem, onDismiss: { installSheetItem = nil }) { item in
+        .sheet(item: $installSheetItem, onDismiss: { installSheetItem = nil; showSpinnerForAppId = nil }) { item in
             InstallationOptionsSheetHost(
                 app: item.app,
                 preloadedOptions: item.preloadedOptions,
@@ -138,8 +138,12 @@ struct MyLibraryView: SwiftUI.View {
 
             VStack(spacing: 4) {
                 Button {
+                    guard showSpinnerForAppId != app.id else { return }
+                    showSpinnerForAppId = app.id
                     if let onInstallApp {
-                        onInstallApp(app)
+                        onInstallApp(app) {
+                            DispatchQueue.main.async { showSpinnerForAppId = nil }
+                        }
                     } else {
                         startLoadingOptionsThenPresentSheet(for: app)
                     }
@@ -158,6 +162,7 @@ struct MyLibraryView: SwiftUI.View {
                     .padding(.vertical, 6)
                     .background(SColor.accentColor)
                     .clipShape(Capsule())
+                    .animation(.easeInOut(duration: 0.2), value: showSpinnerForAppId == app.id)
                 }
                 .buttonStyle(.plain)
                 .disabled(app.installationTicket.isEmpty)
@@ -177,20 +182,14 @@ struct MyLibraryView: SwiftUI.View {
         guard loadingOptionsForAppId != app.id else { return }
 
         loadingOptionsForAppId = app.id
-        let showSpinnerWork = DispatchWorkItem {
-            showSpinnerForAppId = app.id
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: showSpinnerWork)
 
         API.getInstallationOptions { options in
-            showSpinnerWork.cancel()
             DispatchQueue.main.async {
-                showSpinnerForAppId = nil
                 loadingOptionsForAppId = nil
+                // Spinner stays set — it clears in the sheet's onDismiss handler
                 installSheetItem = InstallSheetItem(app: app, preloadedOptions: options)
             }
         } fail: { error in
-            showSpinnerWork.cancel()
             DispatchQueue.main.async {
                 showSpinnerForAppId = nil
                 loadingOptionsForAppId = nil
