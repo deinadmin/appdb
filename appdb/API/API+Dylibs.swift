@@ -23,7 +23,7 @@ extension API {
                    method: .post,
                    parameters: params,
                    encoding: URLEncoding.httpBody,
-                   headers: headers)
+                   headers: headersWithCookie)
             .responseJSON { response in
                 debugLog("[getEnhancements] HTTP status: \(response.response?.statusCode ?? -1)")
                 if let data = response.data, let raw = String(data: data, encoding: .utf8) {
@@ -56,7 +56,7 @@ extension API {
             for (key, value) in params {
                 if let data = value.data(using: .utf8) { form.append(data, withName: key) }
             }
-        }, to: endpoint + Actions.addEnhancement.rawValue, method: .post, headers: headers)
+        }, to: endpoint + Actions.addEnhancement.rawValue, method: .post, headers: headersWithCookie)
             .responseJSON { response in
                 debugLog("[addEnhancement] HTTP status: \(response.response?.statusCode ?? -1)")
                 if let data = response.data, let raw = String(data: data, encoding: .utf8) {
@@ -91,7 +91,7 @@ extension API {
             for (key, value) in meta {
                 if let data = value.data(using: .utf8) { form.append(data, withName: key) }
             }
-        }, to: endpoint + Actions.addEnhancement.rawValue, method: .post, headers: headers).responseJSON { response in
+        }, to: endpoint + Actions.addEnhancement.rawValue, method: .post, headers: headersWithCookie).responseJSON { response in
             debugLog("[uploadEnhancement] HTTP status: \(response.response?.statusCode ?? -1)")
             if let data = response.data, let raw = String(data: data, encoding: .utf8) {
                 debugLog("[uploadEnhancement] raw response: \(raw)")
@@ -118,7 +118,7 @@ extension API {
                    method: .post,
                    parameters: params,
                    encoding: URLEncoding.httpBody,
-                   headers: headers)
+                   headers: headersWithCookie)
             .responseJSON { response in
                 debugLog("[deleteEnhancement] HTTP status: \(response.response?.statusCode ?? -1)")
                 if let data = response.data, let raw = String(data: data, encoding: .utf8) {

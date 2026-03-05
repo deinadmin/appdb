@@ -146,6 +146,11 @@ struct HomeView: SwiftUI.View {
                     }
                 }
             }
+            .onChange(of: viewModel.scrollToTopToken) { _ in
+                withAnimation {
+                    proxy.scrollTo(scrollAnchorId, anchor: .top)
+                }
+            }
         }
     }
 

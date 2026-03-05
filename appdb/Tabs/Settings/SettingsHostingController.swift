@@ -52,6 +52,12 @@ final class SettingsHostingController: UIViewController, ChangedEnterpriseCertif
             )
             (self.tabBarController ?? self).presentDeviceLinkSheet()
         }
+        settingsView.onPopTopViewController = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
+        settingsView.onPresentFromTopViewController = { [weak self] in
+            self?.navigationController?.topViewController?.presentDeviceLinkSheet()
+        }
 
         let hosting = UIHostingController(rootView: AnyView(settingsView))
 

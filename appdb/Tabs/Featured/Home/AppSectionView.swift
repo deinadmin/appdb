@@ -105,12 +105,12 @@ struct AppListRow: SwiftUI.View {
 
     private let iconSize: CGFloat = 60
 
-    /// Developer name for subtitle; when unknown (empty, "?", or whitespace) show bundle id, else "?".
+    /// Developer name for subtitle; when unknown show bundle id if available, else "Unknown Author".
     private var developerSubtitle: String {
         let s = item.itemSeller.trimmingCharacters(in: .whitespacesAndNewlines)
         if !s.isEmpty && s != "?" { return item.itemSeller }
         let bid = item.itemBundleId
-        return bid.isEmpty ? "?" : bid
+        return bid.isEmpty ? "Unknown Author".localized() : bid
     }
 
     var body: some SwiftUI.View {

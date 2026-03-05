@@ -11,10 +11,12 @@ private typealias SColor = SwiftUI.Color
 struct EditRepositoriesView: SwiftUI.View {
     @Environment(\.dismiss) private var dismiss
 
-    init(initialRepos: [AltStoreRepo] = [], onPresentLogin: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil) {
+    init(initialRepos: [AltStoreRepo] = [], embeddedInNavigation: Bool = false, onPresentLogin: (() -> Void)? = nil, onRequestDismiss: (() -> Void)? = nil, onDismiss: ((Bool) -> Void)? = nil) {
         _repos = State(initialValue: initialRepos)
         _isLoading = State(initialValue: initialRepos.isEmpty)
+        self.embeddedInNavigation = embeddedInNavigation
         self.onPresentLogin = onPresentLogin
+        self.onRequestDismiss = onRequestDismiss
         self.onDismiss = onDismiss
     }
 
@@ -24,8 +26,11 @@ struct EditRepositoriesView: SwiftUI.View {
     @State private var showingAddAlert = false
     @State private var newRepoURL = ""
     @State private var isLoggedIn = Preferences.deviceIsLinked
+    @State private var hasChanges = false
+    var embeddedInNavigation: Bool = false
     var onPresentLogin: (() -> Void)?
-    var onDismiss: (() -> Void)?
+    var onRequestDismiss: (() -> Void)?
+    var onDismiss: ((Bool) -> Void)?
 
     var body: some SwiftUI.View {
         NavigationStack {
@@ -38,8 +43,14 @@ struct EditRepositoriesView: SwiftUI.View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button { dismiss() } label: {
-                            Image(systemName: "xmark")
+                        if embeddedInNavigation {
+                            Button { onRequestDismiss?() } label: {
+                                Image(systemName: "chevron.left")
+                            }
+                        } else {
+                            Button { dismiss() } label: {
+                                Image(systemName: "xmark")
+                            }
                         }
                     }
                     ToolbarItem(placement: .primaryAction) {
@@ -59,7 +70,7 @@ struct EditRepositoriesView: SwiftUI.View {
                     EmptyView()
                 }
                 .onAppear { if repos.isEmpty { loadRepos() } }
-                .onDisappear { onDismiss?() }
+                .onDisappear { onDismiss?(hasChanges) }
         }
     }
 
@@ -159,6 +170,7 @@ struct EditRepositoriesView: SwiftUI.View {
         guard !url.isEmpty else { return }
         API.addRepo(url: url) { _ in
             Messages.shared.showSuccess(message: "Repository was added successfully".localized())
+            hasChanges = true
             loadRepos()
         } fail: { _ in
             Messages.shared.showError(message: "An error occurred while adding the new repository.".localized())
@@ -170,6 +182,7 @@ struct EditRepositoriesView: SwiftUI.View {
             let repo = repos[index]
             API.deleteRepo(id: String(repo.id), success: {
                 Messages.shared.showSuccess(message: "The repository was deleted successfully".localized())
+                hasChanges = true
             }, fail: { error in
                 Messages.shared.showError(message: error)
                 loadRepos()

@@ -2,7 +2,7 @@
 //  SettingsView.swift
 //  appdb
 //
-//  Redesigned Settings: profile hub + subpages (Account, Appearance, Signing, Support, About).
+//  Redesigned Settings: profile hub + subpages (Account, Appearance, Signing, Support) + inline About.
 //
 
 import SwiftUI
@@ -49,11 +49,14 @@ final class SettingsViewModel: ObservableObject {
 @available(iOS 15.0, *)
 struct SettingsView: SwiftUI.View {
     @ObservedObject var viewModel: SettingsViewModel
+    @State private var aboutCacheSize = Settings.cacheFolderReadableSize()
 
     var onPush: ((UIViewController) -> Void)?
     var onPresentMail: ((String, String) -> Void)?
     var onPushEnterpriseCertChooser: ((EnterpriseCertChooser) -> Void)?
     var onPushDeviceLink: (() -> Void)?
+    var onPopTopViewController: (() -> Void)?
+    var onPresentFromTopViewController: (() -> Void)?
 
     var body: some SwiftUI.View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -63,6 +66,12 @@ struct SettingsView: SwiftUI.View {
                     .padding(.top, 8)
 
                 VStack(spacing: 10) {
+                    categoryRow(
+                        icon: "globe",
+                        colors: [SColor(red: 0.35, green: 0.34, blue: 0.84), SColor(red: 0.5, green: 0.45, blue: 0.9)],
+                        title: "Language".localized()
+                    ) { pushPage(LanguageSettingsPage(), title: "Choose Language".localized()) }
+
                     categoryRow(
                         icon: "paintbrush.fill",
                         colors: [.purple, .pink],
@@ -74,7 +83,7 @@ struct SettingsView: SwiftUI.View {
                             icon: "pencil.and.list.clipboard",
                             colors: [.blue, .cyan],
                             title: "Signing".localized()
-                        ) { pushPage(SigningSettingsPage(onPush: onPush), title: "Signing".localized()) }
+                        ) { pushPage(SigningSettingsPage(onPush: onPush, onPopTopViewController: onPopTopViewController, onPresentFromTopViewController: onPresentFromTopViewController), title: "Signing".localized()) }
                     }
 
                     categoryRow(
@@ -84,10 +93,18 @@ struct SettingsView: SwiftUI.View {
                     ) { pushPage(SupportSettingsPage(onPush: onPush, onPresentMail: onPresentMail), title: "Support".localized()) }
 
                     categoryRow(
-                        icon: "info.circle.fill",
-                        colors: [SColor(.systemGray), SColor(.systemGray2)],
-                        title: "About".localized()
-                    ) { pushPage(AboutSettingsPage(onPush: onPush), title: "About".localized()) }
+                        icon: "person.2.fill",
+                        colors: [SColor(red: 0.2, green: 0.6, blue: 0.86), SColor(red: 0.3, green: 0.5, blue: 0.9)],
+                        title: "Credits".localized()
+                    ) { push(Credits()) }
+
+                    categoryRow(
+                        icon: "doc.text.fill",
+                        colors: [SColor(.systemTeal), SColor(red: 0.2, green: 0.7, blue: 0.7)],
+                        title: "Acknowledgements".localized()
+                    ) { push(Acknowledgements()) }
+
+                    aboutSection
                 }
                 .padding(.horizontal, 16)
 
@@ -233,6 +250,93 @@ struct SettingsView: SwiftUI.View {
             )
         }
         .buttonStyle(.plain)
+    }
+
+    // MARK: - About Section (Clear Cache + Version only)
+
+    private var aboutSection: some SwiftUI.View {
+        VStack(spacing: 0) {
+            Button {
+                clearCache()
+            } label: {
+                aboutRowContent(
+                    icon: "trash.fill",
+                    title: "Clear Cache".localized(),
+                    trailing: { Text(aboutCacheSize).font(.subheadline).foregroundStyle(.secondary) }
+                )
+            }
+            .buttonStyle(.plain)
+            aboutDivider
+            aboutRowContent(
+                icon: "info.circle.fill",
+                title: "Version".localized(),
+                trailing: { Text(Global.appVersion).font(.subheadline).foregroundStyle(.secondary) }
+            )
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 4)
+        .background(
+            SColor.clear
+                .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 18, style: .continuous))
+        )
+    }
+
+    private func aboutRowContent(
+        icon: String,
+        title: String,
+        trailing: () -> some SwiftUI.View
+    ) -> some SwiftUI.View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 15, weight: .medium))
+                .foregroundStyle(SColor(.systemGray))
+                .frame(width: 24, alignment: .center)
+            Text(title)
+                .font(.body)
+                .foregroundStyle(.primary)
+            Spacer(minLength: 8)
+            trailing()
+        }
+        .padding(.vertical, 12)
+        .contentShape(Rectangle())
+    }
+
+    private var aboutDivider: some SwiftUI.View {
+        Rectangle()
+            .fill(SColor(.separator).opacity(0.5))
+            .frame(height: 1)
+            .padding(.leading, 36)
+    }
+
+    private func push(_ vc: UIViewController) {
+        onPush?(vc)
+    }
+
+    private func clearCache() {
+        let alert = UIAlertController(
+            title: "Are you sure you want to clear the cache?".localized(),
+            message: nil,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
+        alert.addAction(UIAlertAction(title: "Clear Cache".localized(), style: .destructive) { _ in
+            do {
+                let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+                let contents = try FileManager.default.contentsOfDirectory(atPath: cacheDir.path)
+                for item in contents {
+                    try? FileManager.default.removeItem(atPath: cacheDir.appendingPathComponent(item).path)
+                }
+                aboutCacheSize = Settings.cacheFolderReadableSize()
+                Messages.shared.showSuccess(message: "Cache cleared successfully!".localized())
+                TelemetryManager.send(Global.Telemetry.clearedCache.rawValue)
+            } catch {
+                Messages.shared.showError(message: "Failed to clear cache: %@.".localizedFormat(error.localizedDescription))
+            }
+        })
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let root = windowScene.windows.first?.rootViewController {
+            root.present(alert, animated: true)
+        }
     }
 
     // MARK: - Helpers
@@ -499,29 +603,6 @@ struct AppearanceSettingsPage: SwiftUI.View {
                     Text("Choose Theme".localized())
                 }
                 .pickerStyle(.menu)
-
-                Picker(selection: Binding(
-                    get: { Localize.currentLanguage() },
-                    set: { new in
-                        guard new != Localize.currentLanguage() else { return }
-                        if !Preferences.didSpecifyPreferredLanguage {
-                            Preferences.set(.didSpecifyPreferredLanguage, to: true)
-                        }
-                        Localize.setCurrentLanguage(new)
-                        UserDefaults.standard.set([new], forKey: "AppleLanguages")
-                        NotificationCenter.default.post(name: .RefreshSettings, object: nil)
-                        Messages.shared.hideAll()
-                        showRestartRequired = true
-                    }
-                )) {
-                    ForEach(availableLanguages, id: \.self) { code in
-                        Text(emojiFlag(for: code) + "  " + Localize.displayNameForLanguage(code))
-                            .tag(code)
-                    }
-                } label: {
-                    Text("Choose Language".localized())
-                }
-                .pickerStyle(.menu)
             }
 
             if UIApplication.shared.supportsAlternateIcons {
@@ -536,11 +617,50 @@ struct AppearanceSettingsPage: SwiftUI.View {
             }
         }
     }
+}
+
+// MARK: - Language Settings Page (Form-style picker)
+
+@available(iOS 15.0, *)
+struct LanguageSettingsPage: SwiftUI.View {
+    @State private var selectedLanguage = Localize.currentLanguage()
+    @State private var showRestartRequired = false
 
     private var availableLanguages: [String] {
         Localize.availableLanguages()
             .filter { !Localize.displayNameForLanguage($0).isEmpty }
             .sorted { Localize.displayNameForLanguage($1) > Localize.displayNameForLanguage($0) }
+    }
+
+    var body: some SwiftUI.View {
+        Form {
+            Section(header: Text("Available Languages".localized())) {
+                Picker(selection: $selectedLanguage, label: EmptyView()) {
+                    ForEach(availableLanguages, id: \.self) { code in
+                        Text(emojiFlag(for: code) + "  " + Localize.displayNameForLanguage(code))
+                            .tag(code)
+                    }
+                }
+                .pickerStyle(.inline)
+                .labelsHidden()
+            }
+        }
+        .tint(.appAccent)
+        .onChange(of: selectedLanguage) { new in
+            if !Preferences.didSpecifyPreferredLanguage {
+                Preferences.set(.didSpecifyPreferredLanguage, to: true)
+            }
+            Localize.setCurrentLanguage(new)
+            UserDefaults.standard.set([new], forKey: "AppleLanguages")
+            NotificationCenter.default.post(name: .RefreshSettings, object: nil)
+            Messages.shared.hideAll()
+            showRestartRequired = true
+        }
+        .alert(Text("To apply this setting, the app must be restarted.".localized()), isPresented: $showRestartRequired) {
+            Button("Close App".localized()) {
+                AppRestartHelper.closeAppWithHomeAnimation()
+            }
+        }
     }
 
     private func emojiFlag(for language: String) -> String {
@@ -666,6 +786,8 @@ private struct IconPickerSectionView: SwiftUI.View {
 @available(iOS 15.0, *)
 struct SigningSettingsPage: SwiftUI.View {
     var onPush: ((UIViewController) -> Void)?
+    var onPopTopViewController: (() -> Void)?
+    var onPresentFromTopViewController: (() -> Void)?
 
     var body: some SwiftUI.View {
         Form {
@@ -691,11 +813,22 @@ struct SigningSettingsPage: SwiftUI.View {
             }
 
             Section {
-                settingsRow(title: "My Dylibs, Frameworks and Debs".localized()) { push(MyDylibs()) }
+                settingsRow(title: "My Dylibs, Frameworks and Debs".localized()) {
+                    if let url = URL(string: "https://appdb.to/my/dylibs") { UIApplication.shared.open(url) }
+                }
             }
 
             Section {
-                settingsRow(title: "AltStore Repos".localized()) { push(AltStoreRepos()) }
+                settingsRow(title: "Manage Repositories".localized()) {
+                    let rootView = EditRepositoriesView(
+                        initialRepos: [],
+                        embeddedInNavigation: true,
+                        onPresentLogin: onPresentFromTopViewController,
+                        onRequestDismiss: onPopTopViewController,
+                        onDismiss: nil
+                    )
+                    push(ManageRepositoriesHostingController(rootView: rootView))
+                }
             }
         }
         .tint(.appAccent)
@@ -813,85 +946,6 @@ struct SupportSettingsPage: SwiftUI.View {
             if let url = URL(string: "ms-outlook://compose?subject=\(subject)&to=\(recipient)") {
                 UIApplication.shared.open(url)
             }
-        }
-    }
-}
-
-// MARK: - About Settings Page
-
-@available(iOS 15.0, *)
-struct AboutSettingsPage: SwiftUI.View {
-    var onPush: ((UIViewController) -> Void)?
-
-    @State private var cacheSize = Settings.cacheFolderReadableSize()
-
-    var body: some SwiftUI.View {
-        Form {
-            Section(header: Text("About".localized())) {
-                settingsRow(title: "Credits".localized()) { push(Credits()) }
-                settingsRow(title: "Acknowledgements".localized()) { push(Acknowledgements()) }
-
-                Button {
-                    clearCache()
-                } label: {
-                    HStack {
-                        Text("Clear Cache".localized())
-                            .foregroundStyle(SColor.primary)
-                        Spacer()
-                        Text(cacheSize)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                HStack {
-                    Text("Version".localized())
-                    Spacer()
-                    Text(Global.appVersion)
-                        .foregroundStyle(.secondary)
-                }
-            }
-        }
-        .tint(.appAccent)
-    }
-
-    private func push(_ vc: UIViewController) { onPush?(vc) }
-
-    private func settingsRow(title: String, action: @escaping () -> Void) -> some SwiftUI.View {
-        Button(action: action) {
-            HStack {
-                Text(title).foregroundStyle(SColor.primary)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.tertiary)
-            }
-        }
-    }
-
-    private func clearCache() {
-        let alert = UIAlertController(
-            title: "Are you sure you want to clear the cache?".localized(),
-            message: nil,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
-        alert.addAction(UIAlertAction(title: "Clear Cache".localized(), style: .destructive) { _ in
-            do {
-                let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
-                let contents = try FileManager.default.contentsOfDirectory(atPath: cacheDir.path)
-                for item in contents {
-                    try? FileManager.default.removeItem(atPath: cacheDir.appendingPathComponent(item).path)
-                }
-                cacheSize = Settings.cacheFolderReadableSize()
-                Messages.shared.showSuccess(message: "Cache cleared successfully!".localized())
-                TelemetryManager.send(Global.Telemetry.clearedCache.rawValue)
-            } catch {
-                Messages.shared.showError(message: "Failed to clear cache: %@.".localizedFormat(error.localizedDescription))
-            }
-        })
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let root = windowScene.windows.first?.rootViewController {
-            root.present(alert, animated: true)
         }
     }
 }

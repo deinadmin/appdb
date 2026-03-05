@@ -199,7 +199,10 @@ class HomeHostingController: UIViewController {
                 let sheet = UIHostingController(rootView: EditRepositoriesView(
                     initialRepos: repos,
                     onPresentLogin: { [weak self] in self?.presentedViewController?.presentDeviceLinkSheet() },
-                    onDismiss: { [weak self] in self?.homeViewModel?.loadData(replacingContent: false) }
+                    onDismiss: { [weak self] reposChanged in
+                        guard let self = self, reposChanged else { return }
+                        self.homeViewModel?.reloadAfterReposChanged()
+                    }
                 ))
                 sheet.modalPresentationStyle = .formSheet
                 self?.present(sheet, animated: true)
@@ -209,7 +212,10 @@ class HomeHostingController: UIViewController {
                 self?.homeViewModel?.isLoadingRepos = false
                 let sheet = UIHostingController(rootView: EditRepositoriesView(
                     onPresentLogin: { [weak self] in self?.presentedViewController?.presentDeviceLinkSheet() },
-                    onDismiss: { [weak self] in self?.homeViewModel?.loadData(replacingContent: false) }
+                    onDismiss: { [weak self] reposChanged in
+                        guard let self = self, reposChanged else { return }
+                        self.homeViewModel?.reloadAfterReposChanged()
+                    }
                 ))
                 sheet.modalPresentationStyle = .formSheet
                 self?.present(sheet, animated: true)

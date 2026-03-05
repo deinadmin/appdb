@@ -39,7 +39,7 @@ enum Global {
     static let signingCertsUdidApi: String = "https://api.signingcerts.com/v1/appdb-udid/"
     static let signingCertsBlogArticle: String = "https://signingcerts.com/blog/apple-signing-certificates-what-they-are-and-how-use-them"
 //    static let email: String = "appdb.ned@gmail.com"
-    static let email: String = "stev3fvcks@gmail.com"
+    static let email: String = "me@designedbycarl.de"
     static let telegram: String = "https://t.me/stev3fvcks"
     static let telemetryAppId: String = "4AA0955D-55BD-43DB-AF8A-746A74CEBE60"
 

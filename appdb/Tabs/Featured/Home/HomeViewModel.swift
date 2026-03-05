@@ -45,6 +45,8 @@ final class HomeViewModel: ObservableObject {
     @Published var hasError = false
     @Published var errorMessage = ""
     @Published var isLoadingRepos = false
+    /// Token used by the SwiftUI HomeView to scroll back to the top when needed.
+    @Published var scrollToTopToken: Int = 0
 
     /// The built-in sections: Apps, New and Noteworthy, Popular This Week
     @Published var sections: [HomeSection] = []
@@ -71,6 +73,13 @@ final class HomeViewModel: ObservableObject {
 
     init() {
         loadData()
+    }
+
+    /// Scrolls the Home view back to the top and then reloads content
+    /// without showing the full-screen loading state. Used when repos change.
+    func reloadAfterReposChanged() {
+        scrollToTopToken &+= 1
+        loadData(replacingContent: false)
     }
 
     // MARK: - Data Loading

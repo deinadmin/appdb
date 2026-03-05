@@ -23,6 +23,7 @@
 		810F01D821728EA100937CDF /* KnownLandscapeScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810F01D721728EA100937CDF /* KnownLandscapeScreenshots.swift */; };
 		811228472354DDC600C75CC6 /* ListAppsManagedByAppdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811228462354DDC500C75CC6 /* ListAppsManagedByAppdb.swift */; };
 		8115465A20826AA50031C9DA /* Settings+Sections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8115465920826AA50031C9DA /* Settings+Sections.swift */; };
+		81A1B0022A7D0001008DCA2E /* ManageRepositoriesHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1B0012A7D0001008DCA2E /* ManageRepositoriesHostingController.swift */; };
 		8117DDAA1F3B05BD00E817C5 /* String+Truncation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8117DDA91F3B05BD00E817C5 /* String+Truncation.swift */; };
 		81190B3D21696F8800C81BEB /* PortraitScreenshotSearchCell+Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81190B3C21696F8800C81BEB /* PortraitScreenshotSearchCell+Stars.swift */; };
 		81190B43216A2FC800C81BEB /* TwoPortraitScreenshotsSearchCell+Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81190B42216A2FC800C81BEB /* TwoPortraitScreenshotsSearchCell+Stars.swift */; };
@@ -747,6 +748,7 @@
 		81F0C0AA2353BF5400604A10 /* API+Voucher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+Voucher.swift"; sourceTree = "<group>"; };
 		81F100012A7C02C2008DCA2E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		81F100022A7C02C2008DCA2E /* SettingsHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHostingController.swift; sourceTree = "<group>"; };
+		81A1B0012A7D0001008DCA2E /* ManageRepositoriesHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageRepositoriesHostingController.swift; sourceTree = "<group>"; };
 		81F1FE7E1E5AF12400C1CD44 /* DismissableModalNavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DismissableModalNavController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		81F1FE821E5B123A00C1CD44 /* Details+Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Details+Header.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		81F1FE941E5B73C700C1CD44 /* AlamofireObjectMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireObjectMapper.swift; sourceTree = "<group>"; };
@@ -1515,6 +1517,7 @@
 				81F100012A7C02C2008DCA2E /* SettingsView.swift */,
 				81F100022A7C02C2008DCA2E /* SettingsHostingController.swift */,
 				8115465920826AA50031C9DA /* Settings+Sections.swift */,
+				81A1B0012A7D0001008DCA2E /* ManageRepositoriesHostingController.swift */,
 				81324067205BD86000945CE9 /* Settings+StaticCells.swift */,
 				819EC27420A7249F007138CF /* Acknowledgements */,
 				818763BD2676299800049F58 /* Device Chooser */,
@@ -2478,6 +2481,7 @@
 				8167A6131DAC246000F96AC2 /* AppDelegate.swift in Sources */,
 				81AB37AE1DAC30BD003A586F /* TabBarController.swift in Sources */,
 				8115465A20826AA50031C9DA /* Settings+Sections.swift in Sources */,
+				81A1B0022A7D0001008DCA2E /* ManageRepositoriesHostingController.swift in Sources */,
 				81F1FE7F1E5AF12400C1CD44 /* DismissableModalNavController.swift in Sources */,
 				81876E2F227B192B00E27CB8 /* Library+Extension.swift in Sources */,
 				81324068205BD86000945CE9 /* Settings+StaticCells.swift in Sources */,

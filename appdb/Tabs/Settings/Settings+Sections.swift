@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 import Localize_Swift
 
 extension Settings {
@@ -163,13 +164,25 @@ extension Settings {
                 }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self)
             ]),
             StaticSection(rows: [
-                StaticRow(text: "My Dylibs, Frameworks and Debs".localized(), selection: { [unowned self] _ in
-                    self.push(MyDylibs())
+                StaticRow(text: "My Dylibs, Frameworks and Debs".localized(), selection: { _ in
+                    if let url = URL(string: "https://appdb.to/my/dylibs") { UIApplication.shared.open(url) }
                 }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self)
             ]),
             StaticSection(rows: [
-                StaticRow(text: "AltStore Repos".localized(), selection: { [unowned self] _ in
-                    self.push(AltStoreRepos())
+                StaticRow(text: "Manage Repositories".localized(), selection: { [unowned self] _ in
+                    let rootView = EditRepositoriesView(
+                        initialRepos: [],
+                        embeddedInNavigation: true,
+                        onPresentLogin: { [weak self] in
+                            self?.navigationController?.topViewController?.presentDeviceLinkSheet()
+                        },
+                        onRequestDismiss: { [weak self] in
+                            self?.navigationController?.popViewController(animated: true)
+                        },
+                        onDismiss: nil
+                    )
+                    let hosting = ManageRepositoriesHostingController(rootView: rootView)
+                    self.push(hosting)
                 }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self)
             ])
         ] + commonSections + [
