@@ -160,6 +160,7 @@ struct SettingsView: SwiftUI.View {
             } label: {
                 Text("Choose Theme".localized())
             }
+            .pickerStyle(.menu)
 
             Picker(selection: Binding(
                 get: { Localize.currentLanguage() },

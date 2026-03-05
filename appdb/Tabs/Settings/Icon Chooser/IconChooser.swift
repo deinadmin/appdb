@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class IconChooser: UITableViewController {
 
@@ -91,7 +92,8 @@ class IconChooser: UITableViewController {
             case .success(_):
                 Preferences.set(.accentIcon, to: icon.filename)
                 self.applyAccentColor()
-                Messages.shared.showSuccess(message: "App icon was set to '%@'".localizedFormat(icon.label.localized()))
+                let accent = SwiftUI.Color(Color.mainTint.value() as? UIColor ?? .systemBlue).opacity(0.8)
+                Messages.shared.showSuccess(message: "App icon was set to '%@'".localizedFormat(icon.label.localized()), tint: accent)
             case .failure(let error):
                 Messages.shared.showError(message: error.localizedDescription)
             }

@@ -162,12 +162,12 @@ struct Messages {
     }
 
     @discardableResult
-    mutating func showSuccess(title: String = "", message: String, duration: Double = 2.5, context: SwiftMessages.PresentationContext? = nil) -> GlassToastHandle {
+    mutating func showSuccess(title: String = "", message: String, duration: Double = 2.5, tint: SwiftUI.Color? = nil, context: SwiftMessages.PresentationContext? = nil) -> GlassToastHandle {
         let handle = GlassToastHandle()
         ToastWindowManager.shared.show(
             message: message,
             icon: "checkmark.circle.fill",
-            tint: .green.opacity(0.8),
+            tint: tint ?? .green.opacity(0.8),
             duration: duration,
             onTap: { [handle] in
                 handle.tapAction?()
