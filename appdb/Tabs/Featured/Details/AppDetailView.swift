@@ -262,7 +262,7 @@ struct AppDetailView: SwiftUI.View {
                 if !content.itemSeller.isEmpty {
                     if let app = content as? App {
                         Button {
-                            onDeveloperTap(app.seller, state.contentType, app.artistId.description)
+                            onDeveloperTap(app.seller, state.contentType, app.pname.isEmpty ? app.seller : app.pname)
                         } label: {
                             Text(app.seller)
                                 .font(.subheadline)
@@ -271,7 +271,7 @@ struct AppDetailView: SwiftUI.View {
                         .buttonStyle(.plain)
                     } else if let cydiaApp = content as? CydiaApp, !cydiaApp.developer.isEmpty {
                         Button {
-                            onDeveloperTap(cydiaApp.developer, state.contentType, cydiaApp.developerId.description)
+                            onDeveloperTap(cydiaApp.developer, state.contentType, cydiaApp.developer)
                         } label: {
                             Text(cydiaApp.developer)
                                 .font(.subheadline)
@@ -767,7 +767,7 @@ struct AppDetailView: SwiftUI.View {
             if let app = content as? App {
                 sectionDivider
                 externalLinkRow(title: "Developer Apps".localized()) {
-                    onDeveloperTap(app.seller, state.contentType, app.artistId.description)
+                    onDeveloperTap(app.seller, state.contentType, app.pname.isEmpty ? app.seller : app.pname)
                 }
                 if !app.website.isEmpty {
                     sectionDivider
@@ -786,7 +786,7 @@ struct AppDetailView: SwiftUI.View {
             if let book = content as? Book {
                 sectionDivider
                 externalLinkRow(title: "More by this author".localized()) {
-                    onDeveloperTap(book.author, state.contentType, book.artistId.description)
+                    onDeveloperTap(book.author, state.contentType, book.author)
                 }
             }
         }

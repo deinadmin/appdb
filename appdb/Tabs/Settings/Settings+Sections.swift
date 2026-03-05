@@ -21,10 +21,6 @@ extension Settings {
         }
     }
 
-    var forumSite: String {
-        "https://forum." + Global.mainSite.components(separatedBy: "https://")[1]
-    }
-
     var proSite: String {
         Global.mainSite + "my/buy?ref=" + Global.refCode + "&lt=" + Preferences.linkToken
     }
@@ -65,10 +61,11 @@ extension Settings {
                 StaticRow(text: "System Status".localized(), selection: { [unowned self] _ in
                     self.push(SystemStatus())
                 }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self),
-                StaticRow(text: "Contact Developer".localized(), selection: { _ in }, accessory: .disclosureIndicator, cellClass: ContactDevStaticCell.self),
-                StaticRow(text: "Visit appdb forum".localized(), detailText: forumSite, selection: { [unowned self] _ in
-                    self.openInSafari(self.forumSite)
-                }, accessory: .disclosureIndicator, cellClass: SimpleSubtitleCell.self)
+                StaticRow(text: "Contact Developer".localized(), selection: { _ in
+                    if let url = URL(string: "mailto:me@designedbycarl.de") {
+                        UIApplication.shared.open(url)
+                    }
+                }, accessory: .disclosureIndicator, cellClass: SimpleStaticCell.self)
             ]),
 
             StaticSection(header: .title("About".localized()), rows: [

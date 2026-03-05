@@ -24,8 +24,7 @@ class IconChooser: UITableViewController {
         .init(filename: "Yellow", previewImageName: "icon-yellow", label: "Yellow".localized()),
         .init(filename: "Pink", previewImageName: "icon-pink", label: "Pink".localized()),
         .init(filename: "Red", previewImageName: "icon-red", label: "Red".localized()),
-        .init(filename: "Aqua", previewImageName: "icon-aqua", label: "Aqua".localized()),
-            .init(filename: "Black", previewImageName: "icon-black", label: "Black".localized())
+        .init(filename: "Aqua", previewImageName: "icon-aqua", label: "Aqua".localized())
     ]
 
     convenience init() {
@@ -86,15 +85,29 @@ class IconChooser: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        changeIcon(iconName: indexPath.row == 0 ? nil : icons[indexPath.row].filename) { result in
+        let icon = icons[indexPath.row]
+        changeIcon(iconName: indexPath.row == 0 ? nil : icon.filename) { result in
             switch result {
             case .success(_):
-                Messages.shared.showSuccess(message: "App icon was set to '%@'".localizedFormat(self.icons[indexPath.row].label.localized()))
+                Preferences.set(.accentIcon, to: icon.filename)
+                self.applyAccentColor()
+                Messages.shared.showSuccess(message: "App icon was set to '%@'".localizedFormat(icon.label.localized()))
             case .failure(let error):
                 Messages.shared.showError(message: error.localizedDescription)
             }
             tableView.reloadData()
         }
+    }
+
+    private func applyAccentColor() {
+        ThemeManager.setTheme(index: ThemeManager.currentThemeIndex)
+
+        if let window = UIApplication.shared.windows.first {
+            window.tintColor = Color.mainTint.value() as? UIColor
+        }
+
+        UISwitch.appearance().onTintColor = Color.mainTint.value() as? UIColor
+        UINavigationBar.appearance().tintColor = Color.mainTint.value() as? UIColor
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

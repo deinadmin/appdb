@@ -34,6 +34,7 @@ extension Defaults.Keys {
     static let removePlugins = Key<Bool>("removePlugins", default: false)
     static let enablePushNotifications = Key<Bool>("enablePush", default: false)
     static let duplicateApp = Key<Bool>("duplicateApp", default: true)
+    static let accentIcon = Key<String>("accentIcon", default: "icon")
     static let plusStatus = Key<String>("plus_account_status", default: "")
     static let plusStatusTranslated = Key<String>("plus_account_status_translated", default: "")
 }
@@ -226,6 +227,10 @@ enum Preferences {
 
     static var duplicateApp: Bool {
         defaults[.duplicateApp]
+    }
+
+    static var accentIcon: String {
+        defaults[.accentIcon]
     }
 }
 

@@ -25,6 +25,8 @@ private extension SwiftUI.Color {
 @available(iOS 15.0, *)
 final class SettingsViewModel: ObservableObject {
     @Published var deviceIsLinked: Bool = Preferences.deviceIsLinked
+    /// Incremented when theme/accent changes so the Form re-renders and .tint(.appAccent) updates.
+    @Published var accentRefreshTrigger: Int = 0
 
     init() {
         NotificationCenter.default.addObserver(
@@ -33,10 +35,17 @@ final class SettingsViewModel: ObservableObject {
             name: .RefreshSettings,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(refresh),
+            name: Notification.Name(rawValue: ThemeUpdateNotification),
+            object: nil
+        )
     }
 
     @objc private func refresh() {
         deviceIsLinked = Preferences.deviceIsLinked
+        accentRefreshTrigger += 1
     }
 
     deinit {
@@ -92,12 +101,6 @@ struct SettingsView: SwiftUI.View {
             }
         } message: {
             Text("Are you sure you want to log out?".localized())
-        }
-        .confirmationDialog("Choose an option".localized(), isPresented: $showContactOptions, titleVisibility: .visible) {
-            Button("Email".localized()) { contactDeveloperChosenEmail() }
-            Button("Telegram") { openURL(Global.telegram) }
-            Button("Buy me a coffee".localized()) { openURL(Global.donateSite) }
-            Button("Cancel".localized(), role: .cancel) {}
         }
         .alert(Text("To apply this setting, the app must be restarted.".localized()), isPresented: $showRestartRequiredForSetting) {
             Button("Close App".localized()) {
@@ -343,10 +346,6 @@ struct SettingsView: SwiftUI.View {
 
     // MARK: - Support
 
-    private var forumSite: String {
-        "https://forum." + Global.mainSite.components(separatedBy: "https://")[1]
-    }
-
     private var supportSection: some SwiftUI.View {
         Section(header: Text("Support".localized())) {
             settingsRow(title: "News".localized(), detail: nil) {
@@ -355,20 +354,8 @@ struct SettingsView: SwiftUI.View {
                 push(news)
             }
             settingsRow(title: "System Status".localized(), detail: nil) { push(SystemStatus()) }
-            Button("Contact Developer".localized()) { contactDeveloper() }
+            Button("Contact Developer".localized()) { openMailto("mailto:me@designedbycarl.de") }
                 .foregroundStyle(SColor.primary)
-            Button {
-                openURL(forumSite)
-            } label: {
-                HStack {
-                    Text("Visit appdb forum".localized())
-                        .foregroundStyle(SColor.primary)
-                    Spacer()
-                    Text(forumSite)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-            }
         }
     }
 
@@ -423,28 +410,9 @@ struct SettingsView: SwiftUI.View {
         viewModel.deviceIsLinked = false
     }
 
-    private func contactDeveloper() {
-        showContactOptions = true
-    }
-
-    @State private var showContactOptions = false
-
-    private func contactDeveloperChosenEmail() {
-        let recipient = Global.email
-        let subject = "appdb \(Global.appVersion) — Support"
-        guard let subjectEncoded = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
-        if MFMailComposeViewController.canSendMail() {
-            onPresentMail?(subjectEncoded, recipient)
-        } else {
-            let services = listMailServices()
-            if services.isEmpty {
-                Messages.shared.showError(message: "Could not find email service.".localized())
-            } else if services.count == 1, let service = services.first {
-                compose(service: service, subject: subjectEncoded, recipient: recipient)
-            } else {
-                selectEmail(subject: subjectEncoded, recipient: recipient)
-            }
-        }
+    private func openMailto(_ urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        UIApplication.shared.open(url)
     }
 
     private enum MailService: String {

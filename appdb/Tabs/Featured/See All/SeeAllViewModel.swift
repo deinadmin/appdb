@@ -164,7 +164,7 @@ final class SeeAllViewModel: ObservableObject {
     private func fetchPage() {
         if let repo = repo {
             fetchRepoApps()
-        } else if categoryId == "0" && type == .ios {
+        } else if categoryId == "0" && devId == "0" && type == .ios {
             // "All Categories" or "Popular This Week" selected: merge paged catalog with buffered repo apps
             fetchUnifiedItems()
         } else if categoryId != "0" || devId != "0" {
@@ -412,6 +412,21 @@ final class SeeAllViewModel: ObservableObject {
             let filtered = items.filter { $0.itemName.localizedCaseInsensitiveContains(query) }
             searchResults = filtered
             isSearching = false
+            return
+        }
+
+        // Publisher view: search across all content types scoped to this developer
+        if devId != "0" {
+            API.searchMixed(dev: devId, q: query, success: { [weak self] results in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.searchResults = results
+                    self.isSearching = false
+                }
+            }, fail: { [weak self] _ in
+                guard let self = self else { return }
+                DispatchQueue.main.async { self.isSearching = false }
+            })
             return
         }
 

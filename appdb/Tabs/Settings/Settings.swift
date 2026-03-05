@@ -149,27 +149,6 @@ class Settings: TableViewController {
         }
     }
 
-    // Show contact developer options
-    func contactDeveloper(indexPath: IndexPath) {
-        let alertController = UIAlertController(title: nil, message: "Choose an option".localized(), preferredStyle: .actionSheet, adaptive: true)
-        alertController.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
-        alertController.addAction(UIAlertAction(title: "Email".localized(), style: .default) { _ in
-            self.selectEmail(indexPath: indexPath)
-        })
-        alertController.addAction(UIAlertAction(title: "Telegram", style: .default) { _ in
-            self.openInSafari(Global.telegram)
-        })
-        alertController.addAction(UIAlertAction(title: "Buy me a coffee".localized(), style: .default) { _ in
-            self.openInSafari(Global.donateSite)
-        })
-        if let popover = alertController.popoverPresentationController {
-            popover.sourceView = tableView
-            popover.sourceRect = tableView.rectForRow(at: indexPath)
-            popover.theme_backgroundColor = Color.popoverArrowColor
-        }
-        self.present(alertController, animated: true)
-    }
-
     // Device Link sheet
     // Also subscribes to notification requests to open Safari
     func pushDeviceLink() {
@@ -285,11 +264,8 @@ extension Settings {
 
 extension Settings: UITableViewDelegate {
 
-    // Call contactDeveloper() on cell tap, I do this here because I need the indexPath
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.cellForRow(at: indexPath) is ContactDevStaticCell {
-            contactDeveloper(indexPath: indexPath)
-        } else if tableView.cellForRow(at: indexPath) is ClearCacheStaticCell {
+        if tableView.cellForRow(at: indexPath) is ClearCacheStaticCell {
             clearCache(indexPath: indexPath)
         }
     }
