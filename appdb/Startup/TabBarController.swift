@@ -72,6 +72,14 @@ class TabBarController: UITabBarController {
         )
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Delay slightly so the tab bar finishes its entrance animation.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+            self?.presentWhatsNewSheetIfNeeded()
+        }
+    }
+
     // MARK: - Queue Bottom Accessory
 
     private func configureQueueAccessory() {

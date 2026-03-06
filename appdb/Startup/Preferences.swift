@@ -37,6 +37,7 @@ extension Defaults.Keys {
     static let accentIcon = Key<String>("accentIcon", default: "icon")
     static let plusStatus = Key<String>("plus_account_status", default: "")
     static let plusStatusTranslated = Key<String>("plus_account_status_translated", default: "")
+    static let whatsNewSeenVersion = Key<String>("whatsNewSeenVersion", default: "")
 }
 
 // Sensitive data is stored in Keychain
@@ -231,6 +232,10 @@ enum Preferences {
 
     static var accentIcon: String {
         defaults[.accentIcon]
+    }
+
+    static var whatsNewSeenVersion: String {
+        defaults[.whatsNewSeenVersion]
     }
 }
 
