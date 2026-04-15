@@ -138,6 +138,8 @@ struct SeeAllView: SwiftUI.View {
 
     private func categoryIcon(for category: String) -> String {
         let cat = category.lowercased()
+        if cat == "jailed tools" { return "lock.fill" }
+        if cat == "jailbreak tools" { return "lock.open.fill" }
         if cat.contains("game") { return "gamecontroller" }
         if cat.contains("book") { return "book" }
         if cat.contains("tool") || cat.contains("util") { return "wrench.and.screwdriver" }

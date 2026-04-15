@@ -304,7 +304,9 @@ struct GenreCardView: SwiftUI.View {
             return ("dpad.fill", [.purple, .blue])
         case "file sharing":
             return ("square.and.arrow.up.fill", [.blue, .indigo])
-        case "jailbreak tools", "jailed tools":
+        case "jailed tools":
+            return ("lock.fill", [.red, .orange])
+        case "jailbreak tools":
             return ("lock.open.fill", [.red, .orange])
         case "desktop":
             return ("desktopcomputer", [.blue, .gray])
@@ -327,25 +329,11 @@ struct GenreCardView: SwiftUI.View {
 
     var body: some SwiftUI.View {
         let style = getStyle(for: genre)
-        let gradient = LinearGradient(colors: style.colors, startPoint: .topLeading, endPoint: .bottomTrailing)
-
-        VStack(spacing: 8) {
-            Image(systemName: style.icon)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .foregroundStyle(.white)
-                .frame(width: 32, height: 32)
-            
-            Text(genre.name)
-                .font(.caption)
-                .fontWeight(.bold)
-                .foregroundStyle(.white)
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-        }
-        .padding(.horizontal, 8)
-        .frame(width: 135, height: 90)
-        .background(gradient)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        CategoryGenreCardChrome(
+            title: genre.name,
+            systemImage: style.icon,
+            colors: style.colors,
+            sizing: .fixed(width: 172, height: 96)
+        )
     }
 }

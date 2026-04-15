@@ -57,6 +57,7 @@ struct SettingsView: SwiftUI.View {
     var onPushDeviceLink: (() -> Void)?
     var onPopTopViewController: (() -> Void)?
     var onPresentFromTopViewController: (() -> Void)?
+    var onPopToSettingsRoot: (() -> Void)?
 
     var body: some SwiftUI.View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -135,7 +136,8 @@ struct SettingsView: SwiftUI.View {
                 let page = AccountSettingsPage(
                     viewModel: viewModel,
                     onPush: onPush,
-                    onPushEnterpriseCertChooser: onPushEnterpriseCertChooser
+                    onPushEnterpriseCertChooser: onPushEnterpriseCertChooser,
+                    onPopToSettingsRoot: onPopToSettingsRoot
                 )
                 let vc = UIHostingController(rootView: AnyView(page.tint(.appAccent)))
                 vc.title = "Account".localized()
@@ -430,6 +432,7 @@ struct AccountSettingsPage: SwiftUI.View {
 
     var onPush: ((UIViewController) -> Void)?
     var onPushEnterpriseCertChooser: ((EnterpriseCertChooser) -> Void)?
+    var onPopToSettingsRoot: (() -> Void)?
 
     @State private var showLogoutConfirmation = false
 
@@ -572,6 +575,7 @@ struct AccountSettingsPage: SwiftUI.View {
         NotificationCenter.default.post(name: .Deauthorized, object: nil)
         TelemetryManager.send(Global.Telemetry.deauthorized.rawValue)
         viewModel.deviceIsLinked = false
+        onPopToSettingsRoot?()
     }
 }
 

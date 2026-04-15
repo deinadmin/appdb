@@ -6,136 +6,248 @@
 //
 
 import SwiftUI
+import UIKit
 
 // Disambiguation: Cartography defines `typealias View = UIView`
 // which shadows SwiftUI.View in the app module.
 
+// MARK: - UIKit infinite paging (no mid-gesture TabView snap)
+
+/// `UIScrollView` paging with sentinel pages; **recenters only after scrolling settles**
+/// (`didEndDecelerating` / `didEndDragging` when not decelerating), so wrap-around never
+/// interrupts an in-progress drag the way `TabView` + `onChange(selection:)` can.
+@available(iOS 15.0, *)
+private struct InfiniteBannerPagingScrollView: UIViewRepresentable {
+    let bannerImages: [String]
+    let pageWidth: CGFloat
+    let pageHeight: CGFloat
+    var onBannerTap: ((String) -> Void)?
+
+    /// `[ clonedLast | …real… | clonedFirst ]` (or three copies for a single banner).
+    var wrappedNames: [String] {
+        guard !bannerImages.isEmpty else { return [] }
+        if bannerImages.count == 1 {
+            return [bannerImages[0], bannerImages[0], bannerImages[0]]
+        }
+        return [bannerImages[bannerImages.count - 1]] + bannerImages + [bannerImages[0]]
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    func makeUIView(context: UIViewRepresentableContext<Self>) -> UIScrollView {
+        let scrollView = UIScrollView()
+        scrollView.isPagingEnabled = true
+        scrollView.delegate = context.coordinator
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.bounces = true
+        scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.clipsToBounds = true
+        context.coordinator.scrollView = scrollView
+
+        let tap = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handleTap(_:)))
+        scrollView.addGestureRecognizer(tap)
+
+        return scrollView
+    }
+
+    func updateUIView(_ scrollView: UIScrollView, context: UIViewRepresentableContext<Self>) {
+        context.coordinator.parent = self
+
+        let w = max(scrollView.bounds.width, pageWidth)
+        let h = max(scrollView.bounds.height, pageHeight)
+        guard w > 1, h > 1, !bannerImages.isEmpty else { return }
+
+        let names = wrappedNames
+        let buildKey = "\(names.joined(separator: "\u{1f}"))|\(Int(w * 100))|\(Int(h * 100))"
+        if buildKey != context.coordinator.lastBuildKey {
+            context.coordinator.stopTimer()
+            context.coordinator.timerStarted = false
+            context.coordinator.lastBuildKey = buildKey
+            context.coordinator.rebuildContent(in: scrollView, names: names, width: w, height: h)
+            scrollView.setContentOffset(CGPoint(x: w, y: 0), animated: false)
+            context.coordinator.hasAppliedInitialOffset = true
+        }
+
+        if context.coordinator.hasAppliedInitialOffset, !context.coordinator.timerStarted {
+            context.coordinator.timerStarted = true
+            context.coordinator.startTimer()
+        }
+    }
+
+    static func dismantleUIView(_ uiView: UIScrollView, coordinator: Coordinator) {
+        coordinator.stopTimer()
+        coordinator.timerStarted = false
+        coordinator.hasAppliedInitialOffset = false
+        coordinator.lastBuildKey = ""
+    }
+
+    final class Coordinator: NSObject, UIScrollViewDelegate {
+        var parent: InfiniteBannerPagingScrollView
+        weak var scrollView: UIScrollView?
+
+        fileprivate var lastBuildKey: String = ""
+        fileprivate var hasAppliedInitialOffset = false
+        fileprivate var timerStarted = false
+        private var timer: Timer?
+
+        init(_ parent: InfiniteBannerPagingScrollView) {
+            self.parent = parent
+        }
+
+        func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+            stopTimer()
+        }
+
+        func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+            recenterIfNeeded(scrollView)
+            startTimer()
+        }
+
+        func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+            if !decelerate {
+                recenterIfNeeded(scrollView)
+                startTimer()
+            }
+        }
+
+        /// Snap only after the user (or system) has finished moving to a page.
+        private func recenterIfNeeded(_ scrollView: UIScrollView) {
+            let w = scrollView.bounds.width
+            guard w > 0, !parent.bannerImages.isEmpty else { return }
+
+            let names = parent.wrappedNames
+            let page = Int(round(scrollView.contentOffset.x / w))
+            let wrappedCount = names.count
+            let n = parent.bannerImages.count
+
+            if page == 0 {
+                scrollView.setContentOffset(CGPoint(x: CGFloat(n) * w, y: 0), animated: false)
+            } else if page == wrappedCount - 1 {
+                scrollView.setContentOffset(CGPoint(x: w, y: 0), animated: false)
+            }
+        }
+
+        @objc func handleTap(_ gesture: UITapGestureRecognizer) {
+            guard gesture.state == .ended,
+                  let scrollView = scrollView ?? gesture.view as? UIScrollView,
+                  let container = scrollView.viewWithTag(9_001)
+            else { return }
+
+            let w = scrollView.bounds.width
+            guard w > 0 else { return }
+
+            let pointInContainer = gesture.location(in: container)
+            let tappedPage = max(0, min(parent.wrappedNames.count - 1, Int(floor(pointInContainer.x / w))))
+            let names = parent.wrappedNames
+            let wrappedCount = names.count
+            let n = parent.bannerImages.count
+            guard wrappedCount >= 3 else { return }
+
+            let realIndex: Int
+            if tappedPage <= 0 {
+                realIndex = n - 1
+            } else if tappedPage >= wrappedCount - 1 {
+                realIndex = 0
+            } else {
+                realIndex = tappedPage - 1
+            }
+            let clamped = max(0, min(n - 1, realIndex))
+            parent.onBannerTap?(parent.bannerImages[clamped])
+        }
+
+        func rebuildContent(in scrollView: UIScrollView, names: [String], width w: CGFloat, height h: CGFloat) {
+            scrollView.subviews.filter { $0.tag == 9_001 }.forEach { $0.removeFromSuperview() }
+
+            let container = UIView(frame: CGRect(x: 0, y: 0, width: CGFloat(names.count) * w, height: h))
+            container.tag = 9_001
+
+            for (index, name) in names.enumerated() {
+                let imageView = UIImageView(image: UIImage(named: name))
+                imageView.contentMode = .scaleAspectFill
+                imageView.clipsToBounds = true
+                imageView.frame = CGRect(x: CGFloat(index) * w, y: 0, width: w, height: h)
+                container.addSubview(imageView)
+            }
+
+            scrollView.addSubview(container)
+            scrollView.contentSize = CGSize(width: container.bounds.width, height: h)
+        }
+
+        func startTimer() {
+            stopTimer()
+            guard parent.bannerImages.count > 0 else { return }
+            timer = Timer.scheduledTimer(withTimeInterval: 4.5, repeats: true) { [weak self] _ in
+                self?.advancePage()
+            }
+            if let timer {
+                RunLoop.main.add(timer, forMode: .common)
+            }
+        }
+
+        func stopTimer() {
+            timer?.invalidate()
+            timer = nil
+        }
+
+        private func advancePage() {
+            guard let scrollView = scrollView else { return }
+            let w = scrollView.bounds.width
+            guard w > 0 else { return }
+
+            let page = Int(round(scrollView.contentOffset.x / w))
+            let next = page + 1
+
+            UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseInOut, .allowUserInteraction]) {
+                scrollView.contentOffset = CGPoint(x: CGFloat(next) * w, y: 0)
+            } completion: { [weak self] _ in
+                guard let self, let sv = self.scrollView else { return }
+                self.recenterIfNeeded(sv)
+            }
+        }
+    }
+}
+
+// MARK: - SwiftUI shell
+
 /// Auto-scrolling endless banner carousel with rounded corners and horizontal padding.
 ///
-/// Endless behaviour is achieved by wrapping the real image array with a clone of the
-/// last item prepended and a clone of the first item appended:
-///
-///   [ clonedLast | img0 | img1 | img2 | clonedFirst ]
-///         0          1      2      3         4
-///
-/// The TabView always starts at index 1 (the real first image).  When the user swipes
-/// past either sentinel clone the view silently snaps — without animation — to the
-/// corresponding real item on the opposite end, producing a seamless loop.
+/// Uses a paging `UIScrollView` so the wrap from the trailing sentinel back to the real
+/// first slide happens **only after** scrolling settles, avoiding the `TabView` snap
+/// while the finger is still down.
 @available(iOS 15.0, *)
 struct BannerSliderView: SwiftUI.View {
     let bannerImages: [String]
     var onBannerTap: ((String) -> Void)?
 
-    // Current page in the *wrapped* array (starts at 1 = real first image)
-    @State private var currentIndex: Int = 1
-    // Prevents the onChange loop that fires after the silent snap
-    @State private var isSnapping: Bool = false
-    @State private var timer: Timer?
-
     /// Aspect ratio of the banner images (width:height ~= 2.517:1)
     private let aspectRatio: CGFloat = 2.517
 
-    // MARK: - Wrapped array helpers
-
-    /// The padded array: [clonedLast, ...real, clonedFirst]
-    private var wrappedImages: [String] {
-        guard !bannerImages.isEmpty else { return [] }
-        return [bannerImages[bannerImages.count - 1]] + bannerImages + [bannerImages[0]]
-    }
-
-    /// Total number of items in the wrapped array
-    private var wrappedCount: Int { wrappedImages.count }
-
-    // MARK: - Body
-
     var body: some SwiftUI.View {
         GeometryReader { geometry in
-            TabView(selection: $currentIndex) {
-                ForEach(Array(wrappedImages.enumerated()), id: \.offset) { index, imageName in
-                    Image(imageName)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .tag(index)
-                        .onTapGesture {
-                            // Map wrapped index back to real image name
-                            let realIndex = (index - 1 + bannerImages.count) % max(bannerImages.count, 1)
-                            onBannerTap?(bannerImages[realIndex])
-                        }
+            let width = geometry.size.width
+            let height = width / aspectRatio
+
+            Group {
+                if bannerImages.isEmpty {
+                    SwiftUI.Color.clear
+                        .frame(width: width, height: height)
+                } else {
+                    InfiniteBannerPagingScrollView(
+                        bannerImages: bannerImages,
+                        pageWidth: width,
+                        pageHeight: height,
+                        onBannerTap: onBannerTap
+                    )
+                    .frame(width: width, height: height)
                 }
             }
-            #if os(iOS)
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            #endif
-            .frame(width: geometry.size.width, height: geometry.size.width / aspectRatio)
         }
         .aspectRatio(aspectRatio, contentMode: .fit)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .padding(.horizontal, 16)
         .padding(.top, 8)
-        .onAppear {
-            // Ensure we always start on the real first image
-            currentIndex = 1
-            startTimer()
-        }
-        .onDisappear { stopTimer() }
-        .onChange(of: currentIndex) { newIndex in
-            guard !bannerImages.isEmpty else { return }
-            guard !isSnapping else {
-                // The onChange fired because of the silent snap itself — ignore it
-                isSnapping = false
-                return
-            }
-
-            // Reset auto-scroll timer on every page change (user or automatic)
-            stopTimer()
-            startTimer()
-
-            // Detect landing on a sentinel clone and snap silently to the real twin
-            if newIndex == 0 {
-                // Swiped right past the beginning — jump to real last item
-                isSnapping = true
-                var transaction = Transaction()
-                transaction.disablesAnimations = true
-                withTransaction(transaction) {
-                    currentIndex = bannerImages.count   // last real index in wrapped array
-                }
-            } else if newIndex == wrappedCount - 1 {
-                // Swiped left past the end — jump to real first item
-                isSnapping = true
-                var transaction = Transaction()
-                transaction.disablesAnimations = true
-                withTransaction(transaction) {
-                    currentIndex = 1
-                }
-            }
-        }
-    }
-
-    // MARK: - Auto-scroll Timer
-
-    private func startTimer() {
-        guard !bannerImages.isEmpty else { return }
-        timer = Timer.scheduledTimer(withTimeInterval: 4.5, repeats: true) { _ in
-            let nextIndex = currentIndex + 1
-            withAnimation(.easeInOut(duration: 0.5)) {
-                currentIndex = nextIndex
-            }
-            // If we just auto-scrolled onto the cloned-first sentinel, snap silently
-            if nextIndex == wrappedCount - 1 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) {
-                    isSnapping = true
-                    var transaction = Transaction()
-                    transaction.disablesAnimations = true
-                    withTransaction(transaction) {
-                        currentIndex = 1
-                    }
-                }
-            }
-        }
-    }
-
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
     }
 }

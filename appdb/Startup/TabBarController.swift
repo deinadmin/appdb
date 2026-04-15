@@ -76,7 +76,8 @@ class TabBarController: UITabBarController {
         super.viewDidAppear(animated)
         // Delay slightly so the tab bar finishes its entrance animation.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
-            self?.presentWhatsNewSheetIfNeeded()
+            guard let self else { return }
+            self.presentWhatsNewSheetIfNeeded()
         }
     }
 

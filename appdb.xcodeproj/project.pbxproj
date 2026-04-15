@@ -297,6 +297,7 @@
 		81A9DBB7214D36AB00AB1A8C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 818A55A42058439B00162E51 /* Images.xcassets */; };
 		81A9DBB8214D36BD00AB1A8C /* Acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 819EC27220A72472007138CF /* Acknowledgements.plist */; };
 		81AB37AE1DAC30BD003A586F /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AB37AD1DAC30BD003A586F /* TabBarController.swift */; };
+		C0FFEE000000000000000002 /* WhatsNewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FFEE000000000000000001 /* WhatsNewSheet.swift */; };
 		81AF3532215115B200A798D7 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AF3531215115B200A798D7 /* RoundedButton.swift */; };
 		81B63EDD25F8013800108E71 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B63EDC25F8013800108E71 /* Extensions.swift */; };
 		81B63EE125F802B600108E71 /* RoundedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B63EE025F802B600108E71 /* RoundedBadge.swift */; };
@@ -311,6 +312,7 @@
 		81D4AC212E6789AB00CCFF27 /* VersionsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC202E6789AB00CCFF26 /* VersionsListViewController.swift */; };
 		81D4AC272E6789AB00CCFF2D /* HomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC222E6789AB00CCFF28 /* HomeHostingController.swift */; };
 		81D4AC282E6789AB00CCFF2E /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC232E6789AB00CCFF29 /* HomeView.swift */; };
+		81D4AC372E6789AB00CCFF37 /* CategoryGenreCardChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC362E6789AB00CCFF36 /* CategoryGenreCardChrome.swift */; };
 		81D4AC292E6789AB00CCFF2F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC242E6789AB00CCFF2A /* HomeViewModel.swift */; };
 		81D4AC2A2E6789AB00CCFF30 /* BannerSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC252E6789AB00CCFF2B /* BannerSliderView.swift */; };
 		81D4AC2B2E6789AB00CCFF31 /* AppSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC262E6789AB00CCFF2C /* AppSectionView.swift */; };
@@ -694,6 +696,7 @@
 		819EC2D31E41016D00BA7A50 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; usesTabs = 1; };
 		81A474FE25F67F0C00DC4642 /* AppsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsWidget.swift; sourceTree = "<group>"; };
 		81AB37AD1DAC30BD003A586F /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TabBarController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C0FFEE000000000000000001 /* WhatsNewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewSheet.swift; sourceTree = "<group>"; };
 		81AF3531215115B200A798D7 /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		81B601AD23675C950070555D /* jv-ID */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "jv-ID"; path = "jv-ID.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		81B63EDC25F8013800108E71 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -712,6 +715,7 @@
 		81D4AC242E6789AB00CCFF2A /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		81D4AC252E6789AB00CCFF2B /* BannerSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerSliderView.swift; sourceTree = "<group>"; };
 		81D4AC262E6789AB00CCFF2C /* AppSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSectionView.swift; sourceTree = "<group>"; };
+		81D4AC362E6789AB00CCFF36 /* CategoryGenreCardChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryGenreCardChrome.swift; sourceTree = "<group>"; };
 		81D661751E5A0B6C00BB6461 /* Details+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Details+Extension.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		81D873332365BAD800F7240E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		81DAB7DE2298895C00729424 /* IgnoredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IgnoredApp.swift; sourceTree = "<group>"; };
@@ -1746,6 +1750,7 @@
 			children = (
 				81D4AC222E6789AB00CCFF28 /* HomeHostingController.swift */,
 				81D4AC232E6789AB00CCFF29 /* HomeView.swift */,
+				81D4AC362E6789AB00CCFF36 /* CategoryGenreCardChrome.swift */,
 				81D4AC242E6789AB00CCFF2A /* HomeViewModel.swift */,
 				81D4AC252E6789AB00CCFF2B /* BannerSliderView.swift */,
 				81D4AC262E6789AB00CCFF2C /* AppSectionView.swift */,
@@ -1931,6 +1936,7 @@
 				810F01D721728EA100937CDF /* KnownLandscapeScreenshots.swift */,
 				811BEE212151538600F1F56A /* Preferences.swift */,
 				81AB37AD1DAC30BD003A586F /* TabBarController.swift */,
+				C0FFEE000000000000000001 /* WhatsNewSheet.swift */,
 				81939B461E3BA98D00179615 /* Themes.swift */,
 			);
 			path = Startup;
@@ -2480,6 +2486,7 @@
 				813F012A2A7BFE9E008DCA2E /* ThemeStatePicker.swift in Sources */,
 				8167A6131DAC246000F96AC2 /* AppDelegate.swift in Sources */,
 				81AB37AE1DAC30BD003A586F /* TabBarController.swift in Sources */,
+				C0FFEE000000000000000002 /* WhatsNewSheet.swift in Sources */,
 				8115465A20826AA50031C9DA /* Settings+Sections.swift in Sources */,
 				81A1B0022A7D0001008DCA2E /* ManageRepositoriesHostingController.swift in Sources */,
 				81F1FE7F1E5AF12400C1CD44 /* DismissableModalNavController.swift in Sources */,
@@ -2672,6 +2679,7 @@
 				81D4AC212E6789AB00CCFF27 /* VersionsListViewController.swift in Sources */,
 				81D4AC272E6789AB00CCFF2D /* HomeHostingController.swift in Sources */,
 				81D4AC282E6789AB00CCFF2E /* HomeView.swift in Sources */,
+				81D4AC372E6789AB00CCFF37 /* CategoryGenreCardChrome.swift in Sources */,
 				81D4AC292E6789AB00CCFF2F /* HomeViewModel.swift in Sources */,
 				81D4AC2A2E6789AB00CCFF30 /* BannerSliderView.swift in Sources */,
 				81D4AC2B2E6789AB00CCFF31 /* AppSectionView.swift in Sources */,

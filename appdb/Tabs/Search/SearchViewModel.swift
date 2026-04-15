@@ -20,7 +20,7 @@ final class SearchViewModel: ObservableObject {
 
     // MARK: - Published: Idle State
 
-    /// Genres for the idle category grid (excludes the "All" dummy entry with id = "0").
+    /// Genres for the idle category grid — **"All Categories" (id `"0"`) first**, then the rest (same order as Home).
     @Published var genres: [Genre] = []
 
     // MARK: - Published: Search Query
@@ -83,9 +83,8 @@ final class SearchViewModel: ObservableObject {
     // MARK: - Setup
 
     private func loadGenres() {
-        // Preferences.genres is populated by the Home tab's load; filter out
-        // the synthetic "All Categories" entry (id = "0").
-        genres = Preferences.genres.filter { $0.id != "0" }
+        // `Preferences.genres` is populated by `API.listGenres` (Home tab or elsewhere).
+        genres = Self.genresWithAllCategoriesFirst(Preferences.genres)
     }
 
     private func prefetchLocalCaches() {
@@ -231,9 +230,16 @@ final class SearchViewModel: ObservableObject {
     /// Re-reads `Preferences.genres` — call this when the Home tab has finished loading
     /// so the genre grid in Search is up to date.
     func refreshGenres() {
-        let updated = Preferences.genres.filter { $0.id != "0" }
+        let updated = Self.genresWithAllCategoriesFirst(Preferences.genres)
         if genres != updated {
             genres = updated
         }
+    }
+
+    /// Same ordering as `HomeViewModel`: "All Categories" (id `"0"`) first, then remaining genres.
+    private static func genresWithAllCategoriesFirst(_ prefs: [Genre]) -> [Genre] {
+        let allCategories = prefs.first(where: { $0.id == "0" })
+        let rest = prefs.filter { $0.id != "0" }
+        return (allCategories.map { [$0] } ?? []) + rest
     }
 }

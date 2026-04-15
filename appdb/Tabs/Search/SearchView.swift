@@ -324,8 +324,10 @@ private struct SearchCategoryCard: SwiftUI.View {
                                          return ("doc.richtext",                      [.gray,   .blue])
         case "emulators":                return ("dpad.fill",                         [.purple, .blue])
         case "file sharing":             return ("square.and.arrow.up.fill",          [.blue,   .indigo])
-        case "jailbreak tools", "jailed tools":
-                                         return ("lock.open.fill",                    [.red,    .orange])
+        case "jailed tools":
+                                         return ("lock.fill",                           [.red,    .orange])
+        case "jailbreak tools":
+                                         return ("lock.open.fill",                      [.red,    .orange])
         case "desktop":                  return ("desktopcomputer",                   [.blue,   .gray])
         case "enhanced apps", "enhanced games":
                                          return ("star.fill",                         [.yellow, .orange])
@@ -342,27 +344,11 @@ private struct SearchCategoryCard: SwiftUI.View {
 
     var body: some SwiftUI.View {
         let s = style(for: genre)
-        let gradient = LinearGradient(colors: s.colors, startPoint: .topLeading, endPoint: .bottomTrailing)
-
-        VStack(spacing: 8) {
-            Image(systemName: s.icon)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .foregroundStyle(.white)
-                .frame(width: 30, height: 30)
-
-            Text(genre.name)
-                .font(.caption)
-                .fontWeight(.bold)
-                .foregroundStyle(.white)
-                .lineLimit(2)
-                .multilineTextAlignment(.center)
-                .minimumScaleFactor(0.75)
-        }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 16)
-        .frame(maxWidth: .infinity, minHeight: 88)
-        .background(gradient)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        CategoryGenreCardChrome(
+            title: genre.name,
+            systemImage: s.icon,
+            colors: s.colors,
+            sizing: .flexibleMinHeight(96)
+        )
     }
 }

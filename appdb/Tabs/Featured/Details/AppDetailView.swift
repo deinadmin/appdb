@@ -1061,6 +1061,10 @@ struct AppDetailView: SwiftUI.View {
             return "paintpalette.fill"
         case "magazines & newspapers", "magazines", "newspapers":
             return "doc.richtext"
+        case "jailed tools":
+            return "lock.fill"
+        case "jailbreak tools":
+            return "lock.open.fill"
         default:
             return "square.grid.2x2"
         }
