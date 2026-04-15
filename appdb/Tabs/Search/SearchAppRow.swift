@@ -133,15 +133,14 @@ struct SearchAppRow: SwiftUI.View {
                         .tint(.white)
                         .opacity(isLoading ? 1 : 0)
                 }
-                .font(.system(size: 14, weight: .bold))
+                .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.white)
-                .padding(.horizontal, 18)
-                .padding(.vertical, 6)
-                .background(SColor.accentColor)
-                .clipShape(Capsule())
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
                 .animation(.easeInOut(duration: 0.2), value: isLoading)
             }
             .buttonStyle(.plain)
+            .glassEffect(.regular.tint(SColor.accentColor.opacity(0.9)).interactive(), in: Capsule())
 
             if !version.isEmpty {
                 Text(version)

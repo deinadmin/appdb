@@ -57,6 +57,9 @@ final class HomeViewModel: ObservableObject {
     /// Genres data ("All Categories" id "0" first, then the rest)
     @Published var genres: [Genre] = HomeViewModel.genresWithAllCategoriesFirst(Preferences.genres)
 
+    /// Latest News items (for Home News carousel)
+    @Published var news: [SingleNews] = []
+
     /// Banner image names (local assets)
     let bannerImages: [String] = {
         var banners = ["update_banner", "main_banner", "tweaked_apps_banner", "delta_banner"]
@@ -110,6 +113,7 @@ final class HomeViewModel: ObservableObject {
         fetchCydiaApps(completion: completion)
         fetchPopularThisWeek(completion: completion)
         fetchAltStoreRepos()
+        fetchNews()
     }
 
     // MARK: - Fetch Built-in Sections
@@ -171,6 +175,36 @@ final class HomeViewModel: ObservableObject {
             }
         }, fail: { _ in
             // Silently skip failed repos
+        })
+    }
+
+    // MARK: - Fetch News (supplementary)
+
+    private func fetchNews() {
+        API.getNews(limit: 5, success: { [weak self] items in
+            guard let self = self else { return }
+
+            // `/get_pages/` list responses don't include `text` unless filtering by id,
+            // so we fetch details for the preview cards.
+            var enriched: [SingleNews] = items
+            let group = DispatchGroup()
+
+            for (idx, item) in items.enumerated() {
+                guard item.id != 0 else { continue }
+                group.enter()
+                API.getNewsDetail(id: String(item.id), success: { detail in
+                    enriched[idx] = detail
+                    group.leave()
+                }, fail: { _ in
+                    group.leave()
+                })
+            }
+
+            group.notify(queue: .main) { [weak self] in
+                self?.news = enriched
+            }
+        }, fail: { _ in
+            // News is supplementary; do not fail the whole Home screen.
         })
     }
 

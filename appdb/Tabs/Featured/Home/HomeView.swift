@@ -25,6 +25,8 @@ struct HomeView: SwiftUI.View {
     var onBannerTap: ((String) -> Void)?
     var onCategoryTap: ((String, ItemType, String) -> Void)?
     var onShowAllCategories: (([Genre]) -> Void)?
+    var onShowAllNews: (([SingleNews]) -> Void)?
+    var onReadNews: ((SingleNews) -> Void)?
     var onEditRepos: (() -> Void)?
 
     // Delayed spinner — only visible if loading takes > 2 seconds
@@ -65,6 +67,14 @@ struct HomeView: SwiftUI.View {
                         genres: viewModel.genres,
                         onCategoryTap: onCategoryTap,
                         onShowAll: { onShowAllCategories?(viewModel.genres) }
+                    )
+                }
+
+                if !viewModel.news.isEmpty {
+                    HomeNewsSectionView(
+                        items: Array(viewModel.news.prefix(5)),
+                        onSeeAll: { onShowAllNews?(viewModel.news) },
+                        onReadMore: { onReadNews?($0) }
                     )
                 }
 
@@ -112,11 +122,10 @@ struct HomeView: SwiftUI.View {
                     .padding(.horizontal, 24)
                     .padding(.vertical, 14)
                     .frame(maxWidth: .infinity)
-                    .background(SColor.accentColor.opacity(showReposSpinner ? 0.6 : 1))
                     .foregroundStyle(.white)
-                    .clipShape(Capsule())
                 }
                 .buttonStyle(.plain)
+                .glassEffect(.regular.tint(SColor.accentColor.opacity(0.9)).interactive(), in: Capsule())
                 .animation(.easeInOut, value: showReposSpinner)
                 .padding(.horizontal, 20)
                 .padding(.top, 8)
@@ -199,6 +208,285 @@ struct HomeView: SwiftUI.View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+// MARK: - Home News Section
+
+@available(iOS 15.0, *)
+private struct HomeNewsSectionView: SwiftUI.View {
+    let items: [SingleNews]
+    var onSeeAll: (() -> Void)?
+    var onReadMore: ((SingleNews) -> Void)?
+    
+    private var cardHeight: CGFloat { Global.isIpad ? 240 : 180 }
+
+    var body: some SwiftUI.View {
+        VStack(alignment: .leading, spacing: 12) {
+            if let onSeeAll {
+                Button(action: onSeeAll) {
+                    HStack(alignment: .center, spacing: 4) {
+                        Text("News".localized())
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.primary)
+
+                        Image(systemName: "chevron.right")
+                            .font(.title2.weight(.bold))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 20)
+            } else {
+                HStack(alignment: .center, spacing: 4) {
+                    Text("News".localized())
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+                }
+                .padding(.horizontal, 20)
+            }
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 10) {
+                    ForEach(items, id: \.id) { item in
+                        NewsPreviewGlassCard(
+                            item: item,
+                            onReadMore: { onReadMore?(item) }
+                        )
+                        .frame(height: cardHeight)
+                        .containerRelativeFrame(.horizontal) { length, _ in
+                            length - 44 // matches AppSectionView's "peek" spacing
+                        }
+                    }
+                }
+                .scrollTargetLayout()
+                .padding(.horizontal, 20)
+            }
+            .scrollTargetBehavior(.viewAligned)
+            .scrollBounceBehavior(.basedOnSize)
+        }
+        .padding(.top, 8)
+        .padding(.bottom, 8)
+    }
+}
+
+/// Shared Liquid Glass news card: title, date, preview text (fades), material + “Read more” overlay.
+@available(iOS 15.0, *)
+struct NewsPreviewGlassCard: SwiftUI.View {
+    let item: SingleNews
+    var onReadMore: (() -> Void)?
+
+    private var previewText: String {
+        let plain = item.text.decoded
+        let lines = plain
+            .components(separatedBy: .newlines)
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+        return lines.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var body: some SwiftUI.View {
+        let preview = previewText
+
+        VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(item.title)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                    .lineLimit(2)
+
+                Text(item.added)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            if !preview.isEmpty {
+                Text(preview)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.leading)
+                    .mask(
+                        LinearGradient(
+                            colors: [.black, .black, .black.opacity(0.05)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+            }
+        }
+        .padding(.top, 16)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .clipped()
+        .overlay(alignment: .bottomLeading) {
+            ZStack(alignment: .bottomLeading) {
+                Rectangle()
+                    .fill(.ultraThinMaterial)
+                    .mask(
+                        LinearGradient(
+                            colors: [.clear, .black],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .frame(height: 108)
+
+                if let onReadMore {
+                    Button(action: onReadMore) {
+                        Text("Read more".localized())
+                            .font(.caption.weight(.semibold))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .foregroundStyle(.white)
+                    }
+                    .buttonStyle(.plain)
+                    .glassEffect(.regular.tint(.accentColor.opacity(0.9)).interactive(), in: Capsule())
+                    .padding(.leading, 14)
+                    .padding(.bottom, 12)
+                }
+            }
+            .allowsHitTesting(onReadMore != nil)
+        }
+        .background(
+            SColor.clear
+                .glassEffect(.regular, in: .rect(cornerRadius: 24, style: .continuous))
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .contentShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .accessibilityElement(children: .combine)
+    }
+}
+
+// MARK: - All News list (same card chrome as Home carousel)
+
+@available(iOS 15.0, *)
+struct AllNewsListView: SwiftUI.View {
+    var onSelect: ((SingleNews) -> Void)?
+
+    @StateObject private var viewModel = AllNewsPagedViewModel()
+
+    private var rowHeight: CGFloat { Global.isIpad ? 220 : 200 }
+
+    var body: some SwiftUI.View {
+        ScrollView {
+            LazyVStack(spacing: 12) {
+                ForEach(viewModel.items, id: \.id) { item in
+                    NewsPreviewGlassCard(item: item) {
+                        onSelect?(item)
+                    }
+                    .frame(height: rowHeight)
+                    .padding(.horizontal, 16)
+                    .onAppear {
+                        viewModel.loadMoreIfNeeded(currentItem: item)
+                        viewModel.enrichTextIfNeeded(item: item)
+                    }
+                }
+
+                if viewModel.isLoadingMore {
+                    HStack {
+                        Spacer()
+                        ProgressView().padding(.vertical, 16)
+                        Spacer()
+                    }
+                }
+            }
+            .padding(.vertical, 10)
+        }
+        .navigationTitle("News".localized())
+        .navigationBarTitleDisplayMode(.large)
+        .background(SColor(.systemBackground))
+        .onAppear {
+            viewModel.loadInitialIfNeeded()
+        }
+    }
+}
+
+@available(iOS 15.0, *)
+final class AllNewsPagedViewModel: ObservableObject {
+    @Published var items: [SingleNews] = []
+    @Published var isLoadingMore: Bool = false
+    @Published var allLoaded: Bool = false
+
+    private var start: Int = 0
+    private let pageSize: Int = 25
+    private var isLoadingInitial: Bool = false
+    private var inFlightDetails: Set<Int> = []
+
+    func loadInitialIfNeeded() {
+        guard items.isEmpty, !isLoadingInitial else { return }
+        isLoadingInitial = true
+        start = 0
+        allLoaded = false
+
+        API.getNews(start: start, length: pageSize, success: { [weak self] page in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.items = page
+                self.start = page.count
+                self.allLoaded = page.count < self.pageSize
+                self.isLoadingInitial = false
+            }
+        }, fail: { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.isLoadingInitial = false
+                self?.allLoaded = true
+            }
+        })
+    }
+
+    func loadMoreIfNeeded(currentItem: SingleNews) {
+        guard !allLoaded, !isLoadingMore else { return }
+        guard let idx = items.firstIndex(where: { $0.id == currentItem.id }) else { return }
+        // Prefetch when user reaches within 6 items of the end.
+        let thresholdIndex = items.index(items.endIndex, offsetBy: -6, limitedBy: items.startIndex) ?? items.startIndex
+        guard idx >= thresholdIndex else { return }
+
+        isLoadingMore = true
+        API.getNews(start: start, length: pageSize, success: { [weak self] page in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if page.isEmpty {
+                    self.allLoaded = true
+                } else {
+                    self.items.append(contentsOf: page)
+                    self.start += page.count
+                    if page.count < self.pageSize { self.allLoaded = true }
+                }
+                self.isLoadingMore = false
+            }
+        }, fail: { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.isLoadingMore = false
+                self?.allLoaded = true
+            }
+        })
+    }
+
+    /// List responses omit `text` unless filtered by id; fetch details lazily for visible cells.
+    func enrichTextIfNeeded(item: SingleNews) {
+        guard item.id != 0 else { return }
+        let raw = item.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard raw.isEmpty else { return }
+        guard !inFlightDetails.contains(item.id) else { return }
+        inFlightDetails.insert(item.id)
+
+        let newsId = item.id
+        API.getNewsDetail(id: String(newsId), success: { [weak self] detail in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.inFlightDetails.remove(newsId)
+                if let i = self.items.firstIndex(where: { $0.id == newsId }) {
+                    self.items[i] = detail
+                }
+            }
+        }, fail: { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.inFlightDetails.remove(newsId)
+            }
+        })
     }
 }
 

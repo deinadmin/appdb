@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import Localize_Swift
 import TelemetryClient
 import SwiftMessages
 
@@ -34,7 +35,7 @@ class HomeHostingController: UIViewController {
             // Fallback for iOS 14 — shouldn't happen in practice since the
             // SwiftUI Home uses AsyncImage (iOS 15+). Show a simple message.
             let label = UILabel()
-            label.text = "Please update to iOS 15 or later."
+            label.text = "Please update to iOS 15 or later.".localized()
             label.textAlignment = .center
             label.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(label)
@@ -129,6 +130,20 @@ class HomeHostingController: UIViewController {
         }
         homeView.onEditRepos = { [weak self] in
             self?.presentReposSheet()
+        }
+        homeView.onReadNews = { [weak self] item in
+            guard item.id != 0 else { return }
+            let vc = NewsDetail(with: String(item.id))
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+        homeView.onShowAllNews = { [weak self] items in
+            let view = AllNewsListView(onSelect: { [weak self] item in
+                guard item.id != 0 else { return }
+                let vc = NewsDetail(with: String(item.id))
+                self?.navigationController?.pushViewController(vc, animated: true)
+            })
+            let vc = UIHostingController(rootView: view)
+            self?.navigationController?.pushViewController(vc, animated: true)
         }
 
         // Inject the shared view model into the SwiftUI environment
@@ -231,7 +246,11 @@ class HomeHostingController: UIViewController {
                         self.homeViewModel?.reloadAfterReposChanged()
                     }
                 ))
-                sheet.modalPresentationStyle = .formSheet
+                sheet.view.backgroundColor = .clear
+                sheet.modalPresentationStyle = .pageSheet
+                if let spc = sheet.sheetPresentationController {
+                    spc.detents = [.medium()]
+                }
                 self?.present(sheet, animated: true)
             }
         }, fail: { [weak self] _ in
@@ -244,7 +263,11 @@ class HomeHostingController: UIViewController {
                         self.homeViewModel?.reloadAfterReposChanged()
                     }
                 ))
-                sheet.modalPresentationStyle = .formSheet
+                sheet.view.backgroundColor = .clear
+                sheet.modalPresentationStyle = .pageSheet
+                if let spc = sheet.sheetPresentationController {
+                    spc.detents = [.medium()]
+                }
                 self?.present(sheet, animated: true)
             }
         })

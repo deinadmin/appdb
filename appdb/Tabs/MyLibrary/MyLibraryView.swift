@@ -37,11 +37,27 @@ struct MyLibraryView: SwiftUI.View {
         .onReceive(NotificationCenter.default.publisher(for: .RefreshSettings)) { _ in
             isLoggedIn = Preferences.deviceIsLinked
         }
+        .alert("Delete".localized(), isPresented: Binding(
+            get: { appToConfirmDelete != nil },
+            set: { presented in if !presented { appToConfirmDelete = nil } }
+        )) {
+            Button("Cancel".localized(), role: .cancel) {}
+            Button("Delete".localized(), role: .destructive) {
+                if let app = appToConfirmDelete {
+                    viewModel.deleteApp(app)
+                }
+                appToConfirmDelete = nil
+            }
+        } message: {
+            if let app = appToConfirmDelete {
+                Text("Are you sure you want to delete \"%@\"?".localizedFormat(app.name))
+            }
+        }
         .background(SColor(.systemGroupedBackground))
         .searchable(
             text: $searchText,
             placement: .navigationBarDrawer(displayMode: .always),
-            prompt: "Search apps".localized()
+            prompt: "Search Apps".localized()
         )
     }
 
@@ -51,6 +67,7 @@ struct MyLibraryView: SwiftUI.View {
     @State private var loadingOptionsForAppId: Int?
     @State private var showSpinnerForAppId: Int?
     @State private var searchText = ""
+    @State private var appToConfirmDelete: MyAppStoreApp?
 
     private var filteredApps: [MyAppStoreApp] {
         guard !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return viewModel.apps }
@@ -81,7 +98,7 @@ struct MyLibraryView: SwiftUI.View {
                         .padding(.horizontal, 16)
                         .contextMenu {
                             Button(role: .destructive) {
-                                viewModel.deleteApp(app)
+                                appToConfirmDelete = app
                             } label: {
                                 Label("Delete".localized(), systemImage: "trash")
                             }
@@ -150,21 +167,20 @@ struct MyLibraryView: SwiftUI.View {
                 } label: {
                     ZStack {
                         Text("Get".localized())
-                            .font(.system(size: 15, weight: .bold))
-                            .foregroundStyle(.white)
                             .opacity(showSpinnerForAppId == app.id ? 0 : 1)
                         ProgressView()
                             .controlSize(.small)
                             .tint(.white)
                             .opacity(showSpinnerForAppId == app.id ? 1 : 0)
                     }
-                    .padding(.horizontal, 22)
-                    .padding(.vertical, 6)
-                    .background(SColor.accentColor)
-                    .clipShape(Capsule())
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
                     .animation(.easeInOut(duration: 0.2), value: showSpinnerForAppId == app.id)
                 }
                 .buttonStyle(.plain)
+                .glassEffect(.regular.tint(SColor.accentColor.opacity(0.9)).interactive(), in: Capsule())
                 .disabled(app.installationTicket.isEmpty)
                 .opacity(app.installationTicket.isEmpty ? 0.6 : 1)
 

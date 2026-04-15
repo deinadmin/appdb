@@ -5,6 +5,7 @@
 
 import SwiftUI
 import UIKit
+import Localize_Swift
 
 private typealias SColor = SwiftUI.Color
 
@@ -102,12 +103,12 @@ struct WhatsNewSheet: SwiftUI.View {
                     .symbolEffect(.pulse)
                     .padding(.bottom, 4)
 
-                Text("Welcome to AppDB 2.0")
+                Text("Welcome to AppDB 2.0".localized())
                     .font(.title2.bold())
                     .multilineTextAlignment(.center)
 
                 // Markdown link renders @deinadmin as a tappable blue link.
-                Text("This update was developed by [@deinadmin](https://github.com/deinadmin) to support Apple's new Liquid Glass design language and AppDB API v1.7")
+                Text("This update was developed by [@deinadmin](https://github.com/deinadmin) to support Apple's new Liquid Glass design language and AppDB API v1.7".localized())
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -119,7 +120,7 @@ struct WhatsNewSheet: SwiftUI.View {
             Button {
                 dismissSheet()
             } label: {
-                Text("Start using the app")
+                Text("Start using the app".localized())
                     .font(.headline)
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)

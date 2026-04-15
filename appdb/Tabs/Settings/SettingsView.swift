@@ -153,7 +153,7 @@ struct SettingsView: SwiftUI.View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     if viewModel.deviceIsLinked {
-                        Text(Preferences.email.isEmpty ? "appdb User" : Preferences.email)
+                        Text(Preferences.email.isEmpty ? "appdb User".localized() : Preferences.email)
                             .font(.headline)
                             .foregroundStyle(.primary)
                             .lineLimit(1)
@@ -368,7 +368,7 @@ private struct PlusBadgeView: SwiftUI.View {
                 ? CGFloat(t / Self.shimmerMoveDuration)
                 : 1
 
-            Text("PLUS")
+            Text("PLUS".localized())
                 .font(.system(size: 10, weight: .bold))
                 .foregroundStyle(Self.gold)
                 .padding(.horizontal, 6)
@@ -412,7 +412,7 @@ private struct PlusBadgeView: SwiftUI.View {
 private struct SignsRemainingBadgeView: SwiftUI.View {
     var body: some SwiftUI.View {
         let count = Preferences.freeSignsLeft
-        Text("\(count) SIGNS")
+        Text("%@ SIGNS".localizedFormat("\(count)"))
             .font(.system(size: 10, weight: .bold))
             .foregroundStyle(SColor(.secondaryLabel))
             .padding(.horizontal, 6)
@@ -864,9 +864,13 @@ struct SupportSettingsPage: SwiftUI.View {
         Form {
             Section(header: Text("Support".localized())) {
                 settingsRow(title: "News".localized()) {
-                    let news = News()
-                    news.isPeeking = true
-                    push(news)
+                    let view = AllNewsListView(onSelect: { item in
+                        guard item.id != 0 else { return }
+                        push(NewsDetail(with: String(item.id)))
+                    })
+                    let vc = UIHostingController(rootView: AnyView(view.tint(.appAccent)))
+                    vc.title = "News".localized()
+                    push(vc)
                 }
                 settingsRow(title: "System Status".localized()) { push(SystemStatus()) }
                 Button("Contact Developer".localized()) {

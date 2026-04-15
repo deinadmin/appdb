@@ -90,7 +90,7 @@ class AdditionalInstallOptionsViewController: TableViewController {
 
     var sections: [StaticSection] = [
         StaticSection(header: .title("Loading...".localized()), rows: [
-            StaticRow(text: "Loading...")
+            StaticRow(text: "Loading...".localized())
         ], footer: .none, indexTitle: "", uuid: "loading")
     ]
 
@@ -99,7 +99,7 @@ class AdditionalInstallOptionsViewController: TableViewController {
         if installationOptions.isEmpty {
             return [
                 StaticSection(header: .title("Loading...".localized()), rows: [
-                    StaticRow(text: "Loading...")
+                    StaticRow(text: "Loading...".localized())
                 ], footer: .none, indexTitle: "", uuid: "loading")
             ]
         }

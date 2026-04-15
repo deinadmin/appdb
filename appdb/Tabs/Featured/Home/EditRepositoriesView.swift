@@ -120,10 +120,15 @@ struct EditRepositoriesView: SwiftUI.View {
             List {
                 ForEach(Array(repos.enumerated()), id: \.element.id) { _, repo in
                     repoRow(repo)
+                        .listRowBackground(SColor.clear)
+                        .listRowSeparator(.hidden)
                 }
                 .onDelete(perform: deleteRepos)
             }
+            .listStyle(.plain)
             .contentMargins(.top, 0, for: .scrollContent)
+            .background(SColor.clear)
+            .modifier(HideListBackgroundCompat())
         }
     }
 
@@ -138,8 +143,7 @@ struct EditRepositoriesView: SwiftUI.View {
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
             HStack(spacing: 12) {
-                let appsText: String = String(repo.totalApps) + " Apps"
-                Text(appsText)
+                Text("%@ Apps".localizedFormat("\(repo.totalApps)"))
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
                 Text(repo.lastCheckedAt)
@@ -221,5 +225,15 @@ struct SignInToAppDBView: SwiftUI.View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+private struct HideListBackgroundCompat: ViewModifier {
+    func body(content: Content) -> some SwiftUI.View {
+        if #available(iOS 16.0, *) {
+            content.scrollContentBackground(.hidden)
+        } else {
+            content
+        }
     }
 }

@@ -75,7 +75,7 @@ extension AltStoreRepos {
                 Messages.shared.showSuccess(message: "Repository was added successfully".localized(), context: .viewController(self))
                 self.loadRepos()
             } fail: { error in
-                Messages.shared.showError(message: "An error occurred while adding the new repository".localized(), context: .viewController(self))
+                Messages.shared.showError(message: "An error occurred while adding the new repository.".localized(), context: .viewController(self))
             }
         })
         alertController.addAction(addAction)
