@@ -313,6 +313,7 @@
 		81D4AC272E6789AB00CCFF2D /* HomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC222E6789AB00CCFF28 /* HomeHostingController.swift */; };
 		81D4AC282E6789AB00CCFF2E /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC232E6789AB00CCFF29 /* HomeView.swift */; };
 		81D4AC372E6789AB00CCFF37 /* CategoryGenreCardChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC362E6789AB00CCFF36 /* CategoryGenreCardChrome.swift */; };
+		81D4AC3C2E6789AB00CCFF3C /* AllCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC3B2E6789AB00CCFF3B /* AllCategoriesView.swift */; };
 		81D4AC292E6789AB00CCFF2F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC242E6789AB00CCFF2A /* HomeViewModel.swift */; };
 		81D4AC2A2E6789AB00CCFF30 /* BannerSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC252E6789AB00CCFF2B /* BannerSliderView.swift */; };
 		81D4AC2B2E6789AB00CCFF31 /* AppSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4AC262E6789AB00CCFF2C /* AppSectionView.swift */; };
@@ -716,6 +717,7 @@
 		81D4AC252E6789AB00CCFF2B /* BannerSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerSliderView.swift; sourceTree = "<group>"; };
 		81D4AC262E6789AB00CCFF2C /* AppSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSectionView.swift; sourceTree = "<group>"; };
 		81D4AC362E6789AB00CCFF36 /* CategoryGenreCardChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryGenreCardChrome.swift; sourceTree = "<group>"; };
+		81D4AC3B2E6789AB00CCFF3B /* AllCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCategoriesView.swift; sourceTree = "<group>"; };
 		81D661751E5A0B6C00BB6461 /* Details+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Details+Extension.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		81D873332365BAD800F7240E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		81DAB7DE2298895C00729424 /* IgnoredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IgnoredApp.swift; sourceTree = "<group>"; };
@@ -1750,6 +1752,7 @@
 			children = (
 				81D4AC222E6789AB00CCFF28 /* HomeHostingController.swift */,
 				81D4AC232E6789AB00CCFF29 /* HomeView.swift */,
+				81D4AC3B2E6789AB00CCFF3B /* AllCategoriesView.swift */,
 				81D4AC362E6789AB00CCFF36 /* CategoryGenreCardChrome.swift */,
 				81D4AC242E6789AB00CCFF2A /* HomeViewModel.swift */,
 				81D4AC252E6789AB00CCFF2B /* BannerSliderView.swift */,
@@ -2680,6 +2683,7 @@
 				81D4AC272E6789AB00CCFF2D /* HomeHostingController.swift in Sources */,
 				81D4AC282E6789AB00CCFF2E /* HomeView.swift in Sources */,
 				81D4AC372E6789AB00CCFF37 /* CategoryGenreCardChrome.swift in Sources */,
+				81D4AC3C2E6789AB00CCFF3C /* AllCategoriesView.swift in Sources */,
 				81D4AC292E6789AB00CCFF2F /* HomeViewModel.swift in Sources */,
 				81D4AC2A2E6789AB00CCFF30 /* BannerSliderView.swift in Sources */,
 				81D4AC2B2E6789AB00CCFF31 /* AppSectionView.swift in Sources */,

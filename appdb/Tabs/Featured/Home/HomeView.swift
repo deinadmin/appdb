@@ -24,6 +24,7 @@ struct HomeView: SwiftUI.View {
     var onSeeAllRepo: ((AltStoreRepo) -> Void)?
     var onBannerTap: ((String) -> Void)?
     var onCategoryTap: ((String, ItemType, String) -> Void)?
+    var onShowAllCategories: (([Genre]) -> Void)?
     var onEditRepos: (() -> Void)?
 
     // Delayed spinner — only visible if loading takes > 2 seconds
@@ -62,7 +63,8 @@ struct HomeView: SwiftUI.View {
                 if !viewModel.genres.isEmpty {
                     GenreSectionView(
                         genres: viewModel.genres,
-                        onCategoryTap: onCategoryTap
+                        onCategoryTap: onCategoryTap,
+                        onShowAll: { onShowAllCategories?(viewModel.genres) }
                     )
                 }
 
@@ -174,10 +176,10 @@ struct HomeView: SwiftUI.View {
     private var errorView: some SwiftUI.View {
         VStack(spacing: 16) {
             Spacer()
-            Image(systemName: "wifi.slash")
+            Image(systemName: "exclamationmark.circle")
                 .font(.system(size: 48))
                 .foregroundStyle(.secondary)
-            Text("Cannot connect".localized())
+            Text("An error occured.".localized())
                 .font(.headline)
             Text(viewModel.errorMessage)
                 .font(.subheadline)
@@ -204,14 +206,34 @@ struct HomeView: SwiftUI.View {
 struct GenreSectionView: SwiftUI.View {
     let genres: [Genre]
     var onCategoryTap: ((String, ItemType, String) -> Void)?
+    var onShowAll: (() -> Void)?
 
     var body: some SwiftUI.View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Categories".localized())
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundStyle(.primary)
+            if let onShowAll {
+                Button(action: onShowAll) {
+                    HStack(alignment: .center, spacing: 4) {
+                        Text("Categories".localized())
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.primary)
+
+                        Image(systemName: "chevron.right")
+                            .font(.title2.weight(.bold))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .buttonStyle(.plain)
                 .padding(.horizontal, 20)
+            } else {
+                HStack(alignment: .center, spacing: 4) {
+                    Text("Categories".localized())
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+                }
+                .padding(.horizontal, 20)
+            }
 
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 14) {

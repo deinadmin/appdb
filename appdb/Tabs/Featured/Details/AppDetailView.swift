@@ -146,10 +146,10 @@ struct AppDetailView: SwiftUI.View {
     private func errorView(title: String, message: String) -> some SwiftUI.View {
         VStack(spacing: 16) {
             Spacer()
-            Image(systemName: "wifi.slash")
+            Image(systemName: "exclamationmark.circle")
                 .font(.system(size: 48))
                 .foregroundStyle(.secondary)
-            Text(title)
+            Text("An error occured.".localized())
                 .font(.title2)
                 .fontWeight(.semibold)
             Text(message)

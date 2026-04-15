@@ -135,10 +135,10 @@ struct SearchCategoryListView: SwiftUI.View {
     private var errorView: some SwiftUI.View {
         VStack(spacing: 16) {
             Spacer()
-            Image(systemName: "wifi.slash")
+            Image(systemName: "exclamationmark.circle")
                 .font(.system(size: 44))
                 .foregroundStyle(.secondary)
-            Text("Cannot connect".localized())
+            Text("An error occured.".localized())
                 .font(.headline)
             Spacer()
         }

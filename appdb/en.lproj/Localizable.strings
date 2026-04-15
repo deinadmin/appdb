@@ -27,6 +27,7 @@
 //////////////////////
 
 "Cannot connect" = "Cannot connect";
+"An error occured." = "An error occured.";
 "Retry" = "Retry";
 "Waiting..." = "Waiting...";
 "Checking..." = "Checking...";

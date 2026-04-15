@@ -100,6 +100,33 @@ class HomeHostingController: UIViewController {
                 self?.navigationController?.pushViewController(seeAllViewController, animated: true)
             }
         }
+        homeView.onShowAllCategories = { [weak self] genres in
+            guard let self = self else { return }
+
+            if Global.isIpad {
+                weak var navRef: UINavigationController?
+                let view = AllCategoriesView(genres: genres, onSelectGenre: { [weak self] genre in
+                    guard let self = self else { return }
+                    let vc = self.makeSeeAllForCategoryFromHome(genre: genre)
+                    navRef?.pushViewController(vc, animated: true)
+                })
+                let vc = UIHostingController(rootView: view)
+                vc.title = "Categories".localized()
+
+                let nav = DismissableModalNavController(rootViewController: vc)
+                navRef = nav
+                nav.modalPresentationStyle = .formSheet
+                self.navigationController?.present(nav, animated: true)
+            } else {
+                let view = AllCategoriesView(genres: genres, onSelectGenre: { [weak self] genre in
+                    guard let self = self else { return }
+                    let vc = self.makeSeeAllForCategoryFromHome(genre: genre)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                })
+                let vc = UIHostingController(rootView: view)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
         homeView.onEditRepos = { [weak self] in
             self?.presentReposSheet()
         }
@@ -255,6 +282,24 @@ class HomeHostingController: UIViewController {
         } else {
             navigationController?.pushViewController(seeAllViewController, animated: true)
         }
+    }
+
+    private func makeSeeAllForCategoryFromHome(genre: Genre) -> UIViewController {
+        let isAll = genre.id == "0"
+        let viewModel = SeeAllViewModel(
+            title: genre.name,
+            type: .ios,
+            category: genre.id,
+            price: .all,
+            order: isAll ? .added : .all,
+            isAllCategories: isAll
+        )
+        let seeAllView = SeeAllView(viewModel: viewModel, onSelectItem: { [weak self] item in
+            self?.pushDetails(for: item)
+        })
+        let vc = UIHostingController(rootView: seeAllView)
+        vc.title = genre.name
+        return vc
     }
 
     private func pushRepoApps(repo: AltStoreRepo) {
