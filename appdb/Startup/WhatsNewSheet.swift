@@ -27,6 +27,19 @@ struct WhatsNewSheet: SwiftUI.View {
         cardCornerRadius - buttonHPadding
     }
 
+    private var authorAttributionText: AttributedString {
+        let localized = "This update was developed by [@deinadmin](https://github.com/deinadmin) to support Apple's new Liquid Glass design language and AppDB API v1.7".localized()
+
+        if let markdown = try? AttributedString(
+            markdown: localized,
+            options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)
+        ) {
+            return markdown
+        }
+
+        return AttributedString(localized)
+    }
+
     var body: some SwiftUI.View {
         ZStack {
             SColor.black.opacity(appeared ? 0.35 : 0)
@@ -107,8 +120,7 @@ struct WhatsNewSheet: SwiftUI.View {
                     .font(.title2.bold())
                     .multilineTextAlignment(.center)
 
-                // Markdown link renders @deinadmin as a tappable blue link.
-                Text("This update was developed by [@deinadmin](https://github.com/deinadmin) to support Apple's new Liquid Glass design language and AppDB API v1.7".localized())
+                Text(authorAttributionText)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

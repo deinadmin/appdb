@@ -279,6 +279,7 @@ struct DeviceLinkSheet: SwiftUI.View {
                             SColor.clear
                                 .glassEffect(.regular.interactive(), in: .rect(cornerRadius: buttonCornerRadius))
                         }
+                        .contentShape(.rect)
                 }
                 .buttonStyle(.plain)
 
